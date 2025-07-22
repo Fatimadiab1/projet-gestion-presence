@@ -7,7 +7,27 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+
+
+
 ## About Laravel
+
+## Note sur les commits
+J’ai décidé de reprendre entièrement ce projet à zéro, car mon ancien dossier contenait des problèmes techniques (structure mal organisée et fichiers corrompus).
+
+C’est pourquoi les premiers commits peuvent sembler nombreux et rapprochés: je suis en train de reconstruire proprement tout le projet étape par étape.
+
+Cette reprise manuelle inclut :
+- La reconfiguration du projet Laravel
+- Le réimport de mes fichiers antérieurs
+- La correction des erreurs précédentes
+
+Merci de votre compréhension.
+
+
+
+
+
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
