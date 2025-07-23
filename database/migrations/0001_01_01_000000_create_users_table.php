@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('nom');
             $table->string('prenom');
             $table->string('email')->unique();
-            $table->string('mot_de_passe');
+            $table->string('password');
             $table->string('photo')->nullable();
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
             $table->rememberToken();

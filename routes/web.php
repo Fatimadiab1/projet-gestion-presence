@@ -1,16 +1,42 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsEtudiant;
+use App\Http\Middleware\IsProfesseur;
+use App\Http\Middleware\IsParent;
+use App\Http\Middleware\IsCoordinateur;
 
-// 🌐 Redirection automatique vers le formulaire de connexion
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// 🔐 Redirection après connexion (déjà gérée dans le contrôleur via le rôle)
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
 
-// 📂 Inclusion des routes d'authentification Breeze (login, logout, etc.)
+    // Dashboard admin
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->middleware(IsAdmin::class)->name('admin.dashboard');
+
+    // Dashboard étudiant
+    Route::get('/etudiant/dashboard', function () {
+        return view('etudiant.dashboard');
+    })->middleware(IsEtudiant::class)->name('etudiant.dashboard');
+
+    // Dashboard professeur
+    Route::get('/professeur/dashboard', function () {
+        return view('professeur.dashboard');
+    })->middleware(IsProfesseur::class)->name('professeur.dashboard');
+
+    // Dashboard parent
+    Route::get('/parent/dashboard', function () {
+        return view('parent.dashboard');
+    })->middleware(IsParent::class)->name('parent.dashboard');
+
+    // Dashboard coordinateur
+    Route::get('/coordinateur/dashboard', function () {
+        return view('coordinateur.dashboard');
+    })->middleware(IsCoordinateur::class)->name('coordinateur.dashboard');
+});
+
 require __DIR__.'/auth.php';
