@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SuiviEtudiant extends Model
 {
     use HasFactory;
+protected $table = 'suivi_etudiant';
 
     protected $fillable = [
         'inscription_id',
@@ -20,8 +21,9 @@ class SuiviEtudiant extends Model
         return $this->belongsTo(Inscription::class);
     }
 
-    public function statut()
-    {
-        return $this->belongsTo(StatutSuivi::class, 'statut_suivi_id');
-    }
+public function statutSuivi()
+{
+    return $this->belongsTo(StatutSuivi::class, 'statut_suivi_id');
+}
+
 }

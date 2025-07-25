@@ -1,0 +1,88 @@
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.titre-tableau {
+    font-size: 28px;
+    font-weight: bold;
+    color: #151836;
+    margin-bottom: 30px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+/* Formulaire  */
+.form-filtres {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.label-filtre {
+    font-weight: 500;
+    color: #151836;
+    font-size: 15px;
+}
+
+.select-filtre {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    min-width: 160px;
+}
+
+/* Tableau */
+.tableau-container {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+.tableau-donnees {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #151836;
+    margin-top: 10px;
+}
+
+.tableau-donnees th,
+.tableau-donnees td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.tableau-donnees th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+}
+
+.tableau-donnees tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+.lien-modifier {
+    color: #1B4B65;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.lien-modifier:hover {
+    color: #FF0047;
+}

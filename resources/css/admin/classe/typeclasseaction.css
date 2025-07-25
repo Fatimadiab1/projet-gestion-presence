@@ -1,0 +1,59 @@
+.annee-container h2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #151836;
+    margin-bottom: 30px;
+}
+
+
+.typeclasse-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    max-width: 500px;
+    margin: 0 auto;
+}
+/* Formulaire */
+.form-group {
+    margin-bottom: 20px;
+    padding: 0;
+}
+
+.form-box label {
+    display: block;
+    font-weight: 600;
+    color: #151836;
+    margin-bottom: 10px;
+}
+.form-box input[type="text"] {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.form-box input[type="text"]:focus {
+    border-color: #151836;
+    outline: none;
+}
+
+/* Bouton */
+.form-box .btn-ajouter {
+    width: 100%;
+    background-color: #151836;
+    color: white;
+    padding: 12px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.form-box .btn-ajouter:hover {
+    background-color: #FF0047;
+}

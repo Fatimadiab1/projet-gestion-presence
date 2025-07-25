@@ -1,0 +1,70 @@
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* formulaire */
+.formulaire-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+
+.form-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #151836;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+
+.form-alert {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+
+label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+    color: #333;
+}
+
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+
+button {
+    width: 100%;
+    background-color: #151836;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #FF0047;
+}

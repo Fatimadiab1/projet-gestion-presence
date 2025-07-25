@@ -9,6 +9,7 @@ class AnneeAcademique extends Model
 {
     use HasFactory;
 
+    protected $table = 'annees_academiques';
     protected $fillable = ['annee', 'date_debut', 'date_fin'];
 
     public function trimestres()
@@ -20,4 +21,18 @@ class AnneeAcademique extends Model
     {
         return $this->hasMany(ClasseAnnee::class);
     }
+    // AnneeAcademique.php
+
+public function inscriptions()
+{
+    return $this->hasManyThrough(
+        Inscription::class,
+        ClasseAnnee::class,
+        'annee_academique_id', // Foreign key sur classe_annees
+        'classe_annee_id',     // Foreign key sur inscriptions
+        'id',                  // Local key sur annees_academiques
+        'id'                   // Local key sur classe_annees
+    );
+}
+
 }

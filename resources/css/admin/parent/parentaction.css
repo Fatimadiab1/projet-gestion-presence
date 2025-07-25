@@ -1,0 +1,76 @@
+/* Formulaire */
+.form-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #1B1C3A;
+    margin-bottom: 30px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.09);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-container label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin-top: 12px;
+}
+
+.form-container input,
+.form-container select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-container select[multiple] {
+    height: 140px;
+    padding: 10px;
+}
+
+.form-container button {
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #1B1C3A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.form-container button:hover {
+    background-color: #FF0047;
+}
+
+.btn-secondary {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 16px;
+    background-color: #ccc;
+    color: #1B1C3A;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.3s;
+    text-align: center;
+}
+.btn-secondary:hover {
+    background-color: #999;
+}

@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Matiere;
+use Illuminate\Http\Request;
+
+class MatiereController extends Controller
+{
+    // Afficher la liste des matières
+    public function index()
+    {
+        $matieres = Matiere::orderByDesc('created_at')->get();
+        return view('admin.matieres.index', compact('matieres'));
+    }
+
+    // Créer une matière
+    public function create()
+    {
+        return view('admin.matieres.create');
+    }
+
+    // Enregistrer une matière
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'volume_horaire_prevu' => 'required|integer|min:1',
+        ]);
+
+        Matiere::create([
+            'nom' => $request->nom,
+            'volume_horaire_prevu' => $request->volume_horaire_prevu,
+        ]);
+
+        return redirect()->route('admin.matieres.index')->with('success', 'Matière ajoutée avec succès.');
+    }
+
+    // Modifier une matière
+    public function edit(Matiere $matiere)
+    {
+        return view('admin.matieres.edit', compact('matiere'));
+    }
+
+    // Mise à jour d'une matière
+    public function update(Request $request, Matiere $matiere)
+    {
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'volume_horaire_prevu' => 'required|integer|min:1',
+        ]);
+
+        $matiere->update([
+            'nom' => $request->nom,
+            'volume_horaire_prevu' => $request->volume_horaire_prevu,
+        ]);
+
+        return redirect()->route('admin.matieres.index')->with('success', 'Matière modifiée avec succès.');
+    }
+
+    // Supprimer une matière
+    public function destroy(Matiere $matiere)
+    {
+        $matiere->delete();
+        return redirect()->route('admin.matieres.index')->with('success', 'Matière supprimée.');
+    }
+}

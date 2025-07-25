@@ -1,0 +1,75 @@
+.annee-container {
+    font-family: 'Reddit Sans', sans-serif;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #151836;
+    margin-bottom: 30px;
+}
+
+.alert-danger {
+    background-color: #fde2e2;
+    color: #9d1c1c;
+    border: 1px solid #f5c2c2;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.typeclasse-form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+/* Formulaire */
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-box label {
+    display: block;
+    font-weight: 600;
+    color: #151836;
+    margin-bottom: 10px;
+}
+
+.form-box input[type="text"],
+.form-box select {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.form-box input[type="text"]:focus,
+.form-box select:focus {
+    border-color: #151836;
+    outline: none;
+}
+
+.btn-ajouter {
+    width: 100%;
+    background-color: #151836;
+    color: white;
+    padding: 12px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-ajouter:hover {
+    background-color: #FF0047;
+}

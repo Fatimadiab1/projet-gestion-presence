@@ -33,25 +33,27 @@
             <p>Accédez à votre espace personnel IFRAN</p>
         </div>
 
-        <div class="login-box">
-            <h2>Connexion</h2>
+  <!-- ... partie haute identique ... -->
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+<div class="login-box">
+    <h2>Connexion</h2>
 
-                <label for="email">Identifiant</label>
-                <input type="email" id="email" name="email" required placeholder="ex : nom@exemple.com">
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
 
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required placeholder="Votre mot de passe">
+        <label for="email">Identifiant</label>
+        <input class="fill" type="email" id="email" name="email" required placeholder="ex : nom@exemple.com">
 
-                <div class="forgot">
-                    <a href="{{ route('password.request') }}">Mot de passe oublié ?</a>
-                </div>
-
-                <button type="submit">Se connecter</button>
-            </form>
+        <label for="password">Mot de passe</label>
+        <div class="input-password">
+            <input class="fill" type="password" id="password" name="password" required placeholder="Votre mot de passe">
+            <i class="fas fa-lock lock-icon"></i>
         </div>
+
+        <button type="submit">Se connecter</button>
+    </form>
+</div>
+
     </main>
 </body>
 </html>

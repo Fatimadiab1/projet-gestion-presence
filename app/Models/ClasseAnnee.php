@@ -9,7 +9,7 @@ class ClasseAnnee extends Model
 {
     use HasFactory;
 
-    protected $table = 'classe_annees';
+    protected $table = 'classe_annee';
 
     protected $fillable = ['classe_id', 'annee_academique_id', 'coordinateur_id'];
 
