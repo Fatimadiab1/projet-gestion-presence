@@ -28,10 +28,10 @@ public function inscriptions()
     return $this->hasManyThrough(
         Inscription::class,
         ClasseAnnee::class,
-        'annee_academique_id', // Foreign key sur classe_annees
-        'classe_annee_id',     // Foreign key sur inscriptions
-        'id',                  // Local key sur annees_academiques
-        'id'                   // Local key sur classe_annees
+        'annee_academique_id', 
+        'classe_annee_id',     
+        'id',               
+        'id' 
     );
 }
 

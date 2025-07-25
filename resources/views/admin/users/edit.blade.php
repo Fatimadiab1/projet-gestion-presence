@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title', 'Modifier un utilisateur')
-
+  @vite(['resources/css/admin/user/useraction.css'])
 @section('content')
     <h2 class="form-title">Modifier l’utilisateur : {{ $user->prenom }} {{ $user->nom }}</h2>
 
