@@ -32,26 +32,23 @@ class StatutSuiviController extends Controller
         return redirect()->route('admin.statuts-suivi.index')->with('success', 'Statut de suivi ajouté.');
     }
     // Modifier un statut de suivi
-    public function edit(StatutSuivi $statut)
-    {
-        return view('admin.statuts-suivi.edit', compact('statut'));
-    }
+ public function edit(StatutSuivi $statutSuivi)
+{
+    return view('admin.statuts-suivi.edit', compact('statutSuivi'));
+}
+
     // Mise à jour d'un statut de suivi
-    public function update(Request $request, StatutSuivi $statut)
-    {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-        ]);
+ public function update(Request $request, StatutSuivi $statutSuivi)
+{
+    // ...
+    $statutSuivi->update($request->only('nom'));
+    return redirect()->route('admin.statuts-suivi.index')->with('success', 'Statut modifié.');
+}
 
-        $statut->update($request->only('nom'));
+public function destroy(StatutSuivi $statutSuivi)
+{
+    $statutSuivi->delete();
+    return redirect()->route('admin.statuts-suivi.index')->with('success', 'Statut supprimé.');
+}
 
-        return redirect()->route('admin.statuts-suivi.index')->with('success', 'Statut de suivi modifié.');
-    }
-    // Supprimer un statut de suivi
-    public function destroy(StatutSuivi $statut)
-    {
-        $statut->delete();
-
-        return redirect()->route('admin.statuts-suivi.index')->with('success', 'Statut de suivi supprimé.');
-    }
 }

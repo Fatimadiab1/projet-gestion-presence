@@ -33,20 +33,36 @@
                         <td>{{ $annee->date_debut }}</td>
                         <td>{{ $annee->date_fin }}</td>
                         <td>
-                            <div class="table-actions">
-                                <a href="{{ route('admin.annees-academiques.edit', $annee->id) }}" class="btn-edit" title="Modifier">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
+    <div class="table-actions">
+        <a href="{{ route('admin.annees-academiques.edit', $annee->id) }}" class="btn-edit" title="Modifier">
+            <i class="bi bi-pencil-square"></i>
+        </a>
 
-                                <form action="{{ route('admin.annees-academiques.destroy', $annee->id) }}" method="POST" onsubmit="return confirm('Supprimer cette année ?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn-delete" title="Supprimer">
-                                        <i class="bi bi-trash" style="color: red"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
+      
+        @if ($annee->est_active)
+            <span class="etat-en-cours">Année en cours</span>
+        @else
+            <form action="{{ route('admin.annees-academiques.activer', $annee->id) }}" method="POST" style="display:inline;">
+                @csrf
+                @method('PATCH')
+                <button type="submit" class="etat-inactive" title="Définir comme année en cours">
+                    Activer
+                </button>
+            </form>
+        @endif
+
+       
+        <form action="{{ route('admin.annees-academiques.destroy', $annee->id) }}" method="POST" onsubmit="return confirm('Supprimer cette année ?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn-delete" title="Supprimer">
+                <i class="bi bi-trash-fill"></i>
+            </button>
+        </form>
+    </div>
+</td>
+
+
                     </tr>
                 @empty
                     <tr>

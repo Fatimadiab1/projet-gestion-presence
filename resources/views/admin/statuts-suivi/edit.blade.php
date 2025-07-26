@@ -19,12 +19,12 @@
 @endif
 {{-- formulaire --}}
 <div class="formulaire-container">
-    <form action="{{ route('admin.statuts-suivi.update', $statut) }}" method="POST">
+    <form action="{{ route('admin.statuts-suivi.update', $statutSuivi) }}" method="POST">
         @csrf
         @method('PUT')
 
         <label for="nom">Nom du statut</label>
-        <input type="text" name="nom" id="nom" value="{{ old('nom', $statut->nom) }}" required>
+        <input type="text" name="nom" id="nom" value="{{ old('nom', $statutSuivi->nom) }}" required>
 
         <button type="submit">Mettre à jour</button>
     </form>

@@ -23,7 +23,7 @@
             <nav class="nav-links">
                 <a href="{{ route('coordinateur.dashboard') }}"><i class="bi bi-house-door-fill"></i> Accueil</a>
                 <a href="{{ route('coordinateur.seances.index') }}"><i class="bi bi-easel2"></i> Séances</a>
-                <a href=""><i class="bi bi-check-square"></i> Présences</a>
+                <a href="{{ route('coordinateur.presences.index') }}"><i class="bi bi-check-square"></i> Présences</a>
                 <a href=""><i class="bi bi-file-earmark-text"></i> Justifications</a>
                 <a href=""><i class="bi bi-bar-chart"></i> Statistiques</a>
             </nav>

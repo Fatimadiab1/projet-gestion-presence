@@ -6,9 +6,14 @@
 
     <h2 class="title-users">Liste des utilisateurs</h2>
 
-    @if (session('success'))
-        <div class="alert-success">{{ session('success') }}</div>
-    @endif
+   @if (session('success'))
+    <div class="alert-success">{{ session('success') }}</div>
+@endif
+
+@if (session('error'))
+    <div class="alert-success">{{ session('error') }}</div>
+@endif
+
 
     {{-- Filtre et pagination --}}
     <form method="GET" action="{{ route('admin.users.index') }}">
@@ -28,6 +33,16 @@
                     </option>
                 @endforeach
             </select>
+            <label for="classe_annee_id">Filtrer par classe :</label>
+<select name="classe_annee_id" id="classe_annee_id" onchange="this.form.submit()">
+    <option value="">Toutes</option>
+    @foreach ($classeAnnees as $ca)
+        <option value="{{ $ca->id }}" {{ request('classe_annee_id') == $ca->id ? 'selected' : '' }}>
+            {{ $ca->classe->nom }} - {{ $ca->anneeAcademique->annee }}
+        </option>
+    @endforeach
+</select>
+
 
             <label for="entries">Nombre à afficher :</label>
             <input type="number" name="entries" id="entries" min="1" value="{{ $limiteParPage }}"

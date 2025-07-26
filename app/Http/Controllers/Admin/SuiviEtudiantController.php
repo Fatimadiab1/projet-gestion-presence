@@ -46,33 +46,35 @@ class SuiviEtudiantController extends Controller
     }
 
     // Affiche le formulaire de modification
-    public function edit(SuiviEtudiant $suivi)
-    {
-        $inscriptions = Inscription::with('etudiant.user')->get();
-        $statuts = StatutSuivi::all();
+   // Affiche le formulaire de modification
+public function edit(SuiviEtudiant $suiviEtudiant)
+{
+    $inscriptions = Inscription::with('etudiant.user')->get();
+    $statuts = StatutSuivi::all();
 
-        return view('admin.suivis.edit', compact('suivi', 'inscriptions', 'statuts'));
-    }
+    return view('admin.suivis.edit', compact('suiviEtudiant', 'inscriptions', 'statuts'));
+}
 
-    // Met à jour un suivi
-    public function update(Request $request, SuiviEtudiant $suivi)
-    {
-        $request->validate([
-            'inscription_id' => 'required|exists:inscriptions,id',
-            'statut_suivi_id' => 'required|exists:statuts_suivi,id',
-            'date_decision' => 'required|date',
-        ]);
+// Met à jour un suivi
+public function update(Request $request, SuiviEtudiant $suiviEtudiant)
+{
+    $request->validate([
+        'inscription_id' => 'required|exists:inscriptions,id',
+        'statut_suivi_id' => 'required|exists:statuts_suivi,id',
+        'date_decision' => 'required|date',
+    ]);
 
-        $suivi->update($request->only(['inscription_id', 'statut_suivi_id', 'date_decision']));
+    $suiviEtudiant->update($request->only(['inscription_id', 'statut_suivi_id', 'date_decision']));
 
-        return redirect()->route('admin.suivi-etudiants.index')->with('success', 'Suivi mis à jour avec succès.');
-    }
+    return redirect()->route('admin.suivi-etudiants.index')->with('success', 'Suivi mis à jour avec succès.');
+}
 
-    // Supprime un suivi
-    public function destroy(SuiviEtudiant $suivi)
-    {
-        $suivi->delete();
+// Supprime un suivi
+public function destroy(SuiviEtudiant $suiviEtudiant)
+{
+    $suiviEtudiant->delete();
 
-        return redirect()->route('admin.suivi-etudiants.index')->with('success', 'Suivi supprimé.');
-    }
+    return redirect()->route('admin.suivi-etudiants.index')->with('success', 'Suivi supprimé.');
+}
+
 }

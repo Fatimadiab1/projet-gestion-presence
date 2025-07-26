@@ -32,30 +32,30 @@ class StatutSeanceController extends Controller
 
         return redirect()->route('admin.statuts-seance.index')->with('success', 'Statut ajouté.');
     }
+// Modifier un statut de séance
+public function edit(StatutSeance $statutSeance)
+{
+    return view('admin.statuts-seance.edit', compact('statutSeance'));
+}
 
-    // Modifier un statut de séance
-    public function edit(StatutSeance $statut)
-    {
-        return view('admin.statuts-seance.edit', compact('statut'));
-    }
+// Mise à jour d'un statut de séance
+public function update(Request $request, StatutSeance $statutSeance)
+{
+    $request->validate([
+        'nom' => 'required|string|max:255',
+    ]);
 
-    // Mise à jour d'un statut de séance
-    public function update(Request $request, StatutSeance $statut)
-    {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-        ]);
+    $statutSeance->update($request->all());
 
-        $statut->update($request->all());
+    return redirect()->route('admin.statuts-seance.index')->with('success', 'Statut modifié.');
+}
 
-        return redirect()->route('admin.statuts-seance.index')->with('success', 'Statut modifié.');
-    }
+// Supprimer un statut de séance
+public function destroy(StatutSeance $statutSeance)
+{
+    $statutSeance->delete();
 
-    // Supprimer un statut de séance
-    public function destroy(StatutSeance $statut)
-    {
-        $statut->delete();
+    return redirect()->route('admin.statuts-seance.index')->with('success', 'Statut supprimé.');
+}
 
-        return redirect()->route('admin.statuts-seance.index')->with('success', 'Statut supprimé.');
-    }
 }

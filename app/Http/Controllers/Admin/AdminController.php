@@ -36,7 +36,8 @@ class AdminController extends Controller
             ? User::where('role_id', $filtre)->get()
             : User::all();
 
-        $anneeActuelle = AnneeAcademique::latest('date_debut')->first();
+        $anneeActuelle = AnneeAcademique::where('est_active', true)->first();
+
 
         return view('admin.dashboard', compact(
             'nombreClasses',

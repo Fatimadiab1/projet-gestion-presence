@@ -6,14 +6,14 @@
 @section('content')
 <div class="suivi-container">
     <h2>Suivi des étudiants</h2>
+
     {{-- message --}}
     @if(session('success'))
         <div class="alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('admin.suivi-etudiants.create') }}" class="btn-ajouter">
-        <i class="bi bi-plus-circle"></i> Ajouter un suivi
-    </a>
+    <a href="{{ route('admin.suivi-etudiants.create') }}" class="btn-ajouter">+ Ajouter un suivi</a>
+
     {{-- tableau --}}
     <table class="table">
         <thead>
@@ -25,16 +25,16 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($suivis as $suivi)
+            @forelse ($suivis as $suiviEtudiant)
                 <tr>
-                    <td>{{ $suivi->inscription->etudiant->user->nom }} {{ $suivi->inscription->etudiant->user->prenom }}</td>
-                    <td>{{ $suivi->statutSuivi->nom }}</td>
-                    <td>{{ \Carbon\Carbon::parse($suivi->date_decision)->format('d/m/Y') }}</td>
+                    <td>{{ $suiviEtudiant->inscription->etudiant->user->nom }} {{ $suiviEtudiant->inscription->etudiant->user->prenom }}</td>
+                    <td>{{ $suiviEtudiant->statutSuivi->nom }}</td>
+                    <td>{{ \Carbon\Carbon::parse($suiviEtudiant->date_decision)->format('d/m/Y') }}</td>
                     <td class="table-actions">
-                        <a href="{{ route('admin.suivi-etudiants.edit', $suivi) }}" class="btn-edit" title="Modifier">
+                        <a href="{{ route('admin.suivi-etudiants.edit', $suiviEtudiant) }}" class="btn-edit" title="Modifier">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <form action="{{ route('admin.suivi-etudiants.destroy', $suivi) }}" method="POST" onsubmit="return confirm('Supprimer ce suivi ?')" style="display:inline;">
+                        <form action="{{ route('admin.suivi-etudiants.destroy', $suiviEtudiant) }}" method="POST" onsubmit="return confirm('Supprimer ce suivi ?')" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete" title="Supprimer">

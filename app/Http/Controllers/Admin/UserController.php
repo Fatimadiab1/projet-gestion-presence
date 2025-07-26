@@ -6,43 +6,61 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
-// Modèles
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Etudiant;
 use App\Models\Professeur;
 use App\Models\ParentModel;
 use App\Models\Coordinateur;
+use App\Models\ClasseAnnee;
+
+
 
 class UserController extends Controller
 {
     // Afficher la liste des users
-    public function index(Request $request)
-    {
-        $filtreRole = $request->input('role');
+public function index(Request $request)
+{
+    $filtreRole = $request->input('role');
+    $classeAnneeId = $request->input('classe_annee_id');
+    $limiteParPage = $request->input('entries', 10);
 
-        $limiteParPage = $request->input('entries', 10);
+    $utilisateursFiltres = User::with('role')->orderBy('created_at', 'desc');
 
-        $requete = User::with('role')->orderBy('created_at', 'desc');
+    if (!empty($filtreRole)) {
+        $utilisateursFiltres->whereHas('role', function ($filtrageParRole) use ($filtreRole) {
+            $filtrageParRole->where('nom', $filtreRole);
+        });
 
-        if (!empty($filtreRole)) {
-            $requete->whereHas('role', function ($filtration) use ($filtreRole) {
-                $filtration->where('nom', $filtreRole);
+        // Si on filtre les étudiants par classe_annee_id
+        if ($classeAnneeId && $filtreRole === 'etudiant') {
+            $utilisateursFiltres->whereHas('etudiant.inscriptions', function ($filtrageEtudiant) use ($classeAnneeId) {
+                $filtrageEtudiant->where('classe_annee_id', $classeAnneeId);
             });
         }
 
-        $utilisateurs = $requete->paginate($limiteParPage);
-
-        $roles = Role::where('nom', '!=', 'admin')->get();
-
-        return view('admin.users.index', [
-            'utilisateurs' => $utilisateurs,
-            'roles' => $roles,
-            'filtreRole' => $filtreRole,
-            'limiteParPage' => $limiteParPage
-        ]);
+        // Si on filtre les coordinateurs par classe_annee_id
+        if ($classeAnneeId && $filtreRole === 'coordinateur') {
+            $utilisateursFiltres->whereHas('coordinateur.classeAnnees', function ($filtrageCoordinateur) use ($classeAnneeId) {
+                $filtrageCoordinateur->where('id', $classeAnneeId);
+            });
+        }
     }
+
+    $utilisateurs = $utilisateursFiltres->paginate($limiteParPage);
+    $roles = Role::where('nom', '!=', 'admin')->get();
+    $classeAnnees = ClasseAnnee::with(['classe', 'anneeAcademique'])->get();
+
+    return view('admin.users.index', [
+        'utilisateurs' => $utilisateurs,
+        'roles' => $roles,
+        'classeAnnees' => $classeAnnees,
+        'filtreRole' => $filtreRole,
+        'limiteParPage' => $limiteParPage
+    ]);
+}
+
+
 
     // Creation du user
     public function create()

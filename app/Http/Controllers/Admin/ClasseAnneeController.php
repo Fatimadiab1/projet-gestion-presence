@@ -78,38 +78,39 @@ public function index(Request $request)
         return redirect()->route('admin.classes.index')->with('success', 'Classe associée à une année avec succès.');
     }
 
-    // Modifier une association
-    public function edit(ClasseAnnee $classe)
-    {
-        $classes = Classe::orderBy('nom')->get();
-        $annees = AnneeAcademique::orderByDesc('date_debut')->get();
-        $coordinateurs = Coordinateur::with('user')->get();
+// Modifier une association
+public function edit(ClasseAnnee $classeAnnee)
+{
+    $classes = Classe::orderBy('nom')->get();
+    $annees = AnneeAcademique::orderByDesc('date_debut')->get();
+    $coordinateurs = Coordinateur::with('user')->get();
 
-        return view('admin.classes.edit', compact('classe', 'classes', 'annees', 'coordinateurs'));
-    }
+    return view('admin.classes.edit', compact('classeAnnee', 'classes', 'annees', 'coordinateurs'));
+}
 
-    // Mise à jour d'une association
-    public function update(Request $request, ClasseAnnee $classe)
-    {
-        $request->validate([
-            'classe_id' => 'required|exists:classes,id',
-            'annee_academique_id' => 'required|exists:annees_academiques,id',
-            'coordinateur_id' => 'required|exists:coordinateurs,id',
-        ]);
+// Mise à jour de l'association
+public function update(Request $request, ClasseAnnee $classeAnnee)
+{
+    $request->validate([
+        'classe_id' => 'required|exists:classes,id',
+        'annee_academique_id' => 'required|exists:annees_academiques,id',
+        'coordinateur_id' => 'required|exists:coordinateurs,id',
+    ]);
 
-        $classe->update([
-            'classe_id' => $request->classe_id,
-            'annee_academique_id' => $request->annee_academique_id,
-            'coordinateur_id' => $request->coordinateur_id,
-        ]);
+    $classeAnnee->update([
+        'classe_id' => $request->classe_id,
+        'annee_academique_id' => $request->annee_academique_id,
+        'coordinateur_id' => $request->coordinateur_id,
+    ]);
 
-        return redirect()->route('admin.classes.index')->with('success', 'Classe modifiée avec succès.');
-    }
+    return redirect()->route('admin.classes.index')->with('success', 'Classe modifiée avec succès.');
+}
 
-    // Supprimer une association
-    public function destroy(ClasseAnnee $classe)
-    {
-        $classe->delete();
-        return redirect()->route('admin.classes.index')->with('success', 'Classe supprimée.');
-    }
+// Supprimer une association
+public function destroy(ClasseAnnee $classeAnnee)
+{
+    $classeAnnee->delete();
+    return redirect()->route('admin.classes.index')->with('success', 'Classe supprimée.');
+}
+
 }

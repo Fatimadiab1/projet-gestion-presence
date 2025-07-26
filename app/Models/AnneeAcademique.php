@@ -10,7 +10,7 @@ class AnneeAcademique extends Model
     use HasFactory;
 
     protected $table = 'annees_academiques';
-    protected $fillable = ['annee', 'date_debut', 'date_fin'];
+    protected $fillable = ['annee', 'date_debut', 'date_fin', 'est_active'];
 
     public function trimestres()
     {

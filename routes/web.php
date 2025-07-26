@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// Controlleur
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ParentEtudiantController;
 use App\Http\Controllers\Admin\AnneeAcademiqueController;
 use App\Http\Controllers\Admin\TrimestreController;
+use App\Http\Controllers\Admin\ClasseController;
 use App\Http\Controllers\Admin\ClasseAnneeController;
 use App\Http\Controllers\Admin\MatiereController;
 use App\Http\Controllers\Admin\TypeCoursController;
@@ -14,196 +14,166 @@ use App\Http\Controllers\Admin\StatutSeanceController;
 use App\Http\Controllers\Admin\StatutPresenceController;
 use App\Http\Controllers\Admin\StatutSuiviController;
 use App\Http\Controllers\Admin\InscriptionController;
-use App\Http\Controllers\Admin\ClasseController;
 use App\Http\Controllers\Admin\ProfesseurMatiereController;
 use App\Http\Controllers\Admin\SuiviEtudiantController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Coordinateur\SeanceController;
-// Middlewares
+use App\Http\Controllers\Coordinateur\PresenceController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEtudiant;
 use App\Http\Middleware\IsProfesseur;
 use App\Http\Middleware\IsParent;
 use App\Http\Middleware\IsCoordinateur;
 
-
-
-// Accueil
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Dashboard pour chaque role
-Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->middleware(IsAdmin::class)->name('admin.dashboard');
-
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->middleware(IsAdmin::class)->name('admin.dashboard');
+    
     Route::get('/etudiant/dashboard', function () {
         return view('etudiant.dashboard');
     })->middleware(IsEtudiant::class)->name('etudiant.dashboard');
-
+    
     Route::get('/professeur/dashboard', function () {
         return view('professeur.dashboard');
     })->middleware(IsProfesseur::class)->name('professeur.dashboard');
-
+    
     Route::get('/parent/dashboard', function () {
         return view('parent.dashboard');
     })->middleware(IsParent::class)->name('parent.dashboard');
-
     Route::get('/coordinateur/dashboard', function () {
         return view('coordinateur.dashboard');
     })->middleware(IsCoordinateur::class)->name('coordinateur.dashboard');
 });
 
+Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
 
-// Route pour dashboard admin
-Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-    // role
-    Route::get('/admin/roles', [RoleController::class, 'index'])->name('admin.roles.index');
+    Route::get('parents', [ParentEtudiantController::class, 'index'])->name('parents.index');
+    Route::get('parents/create', [ParentEtudiantController::class, 'create'])->name('parents.create');
+    Route::post('parents', [ParentEtudiantController::class, 'store'])->name('parents.store');
+    Route::get('parents/{parent}/edit', [ParentEtudiantController::class, 'edit'])->name('parents.edit');
+    Route::put('parents/{parent}', [ParentEtudiantController::class, 'update'])->name('parents.update');
+    Route::delete('parents/{parent}', [ParentEtudiantController::class, 'destroy'])->name('parents.destroy');
 
-    // users
-    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::get('/admin/users/create', [UserController::class, 'create'])->name('admin.users.create');
-    Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
-    Route::get('/admin/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
-    Route::put('/admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::get('annees-academiques', [AnneeAcademiqueController::class, 'index'])->name('annees-academiques.index');
+    Route::get('annees-academiques/create', [AnneeAcademiqueController::class, 'create'])->name('annees-academiques.create');
+    Route::post('annees-academiques', [AnneeAcademiqueController::class, 'store'])->name('annees-academiques.store');
+    Route::get('annees-academiques/{annee}/edit', [AnneeAcademiqueController::class, 'edit'])->name('annees-academiques.edit');
+    Route::put('annees-academiques/{annee}', [AnneeAcademiqueController::class, 'update'])->name('annees-academiques.update');
+    Route::delete('annees-academiques/{annee}', [AnneeAcademiqueController::class, 'destroy'])->name('annees-academiques.destroy');
+    Route::patch('annees-academiques/{annee}/activer', [AnneeAcademiqueController::class, 'activer'])->name('annees-academiques.activer');
 
-    // parent-enfant
-    Route::get('/admin/parents/index', [ParentEtudiantController::class, 'index'])->name('admin.parents.index');
-    Route::get('/admin/parents/create', [ParentEtudiantController::class, 'create'])->name('admin.parents.create');
-    Route::post('/admin/parents/create', [ParentEtudiantController::class, 'store'])->name('admin.parents.store');
-    Route::get('/admin/parents/{id}/edit', [ParentEtudiantController::class, 'edit'])->name('admin.parents.edit');
-    Route::put('/admin/parents/{id}', [ParentEtudiantController::class, 'update'])->name('admin.parents.update');
+    Route::get('classes', [ClasseController::class, 'index'])->name('typeclasse.index');
+    Route::get('classes/create', [ClasseController::class, 'create'])->name('typeclasse.create');
+    Route::post('classes', [ClasseController::class, 'store'])->name('typeclasse.store');
+    Route::get('classes/{classe}/edit', [ClasseController::class, 'edit'])->name('typeclasse.edit');
+    Route::put('classes/{classe}', [ClasseController::class, 'update'])->name('typeclasse.update');
+    Route::delete('classes/{classe}', [ClasseController::class, 'destroy'])->name('typeclasse.destroy');
 
-    // annee academiques
-    Route::get('/admin/annees-academiques', [AnneeAcademiqueController::class, 'index'])->name('admin.annees-academiques.index');
-    Route::get('/admin/annees-academiques/create', [AnneeAcademiqueController::class, 'create'])->name('admin.annees-academiques.create');
-    Route::post('/admin/annees-academiques', [AnneeAcademiqueController::class, 'store'])->name('admin.annees-academiques.store');
-    Route::get('/admin/annees-academiques/{annee}/edit', [AnneeAcademiqueController::class, 'edit'])->name('admin.annees-academiques.edit');
-    Route::put('/admin/annees-academiques/{annee}', [AnneeAcademiqueController::class, 'update'])->name('admin.annees-academiques.update');
-    Route::delete('/admin/annees-academiques/{annee}', [AnneeAcademiqueController::class, 'destroy'])->name('admin.annees-academiques.destroy');
+    Route::get('matieres', [MatiereController::class, 'index'])->name('matieres.index');
+    Route::get('matieres/create', [MatiereController::class, 'create'])->name('matieres.create');
+    Route::post('matieres', [MatiereController::class, 'store'])->name('matieres.store');
+    Route::get('matieres/{matiere}/edit', [MatiereController::class, 'edit'])->name('matieres.edit');
+    Route::put('matieres/{matiere}', [MatiereController::class, 'update'])->name('matieres.update');
+    Route::delete('matieres/{matiere}', [MatiereController::class, 'destroy'])->name('matieres.destroy');
 
-    // trimestres
-    Route::get('/admin/trimestres', [TrimestreController::class, 'index'])->name('admin.trimestres.index');
-    Route::get('/admin/trimestres/create', [TrimestreController::class, 'create'])->name('admin.trimestres.create');
-    Route::post('/admin/trimestres', [TrimestreController::class, 'store'])->name('admin.trimestres.store');
-    Route::get('/admin/trimestres/{trimestre}/edit', [TrimestreController::class, 'edit'])->name('admin.trimestres.edit');
-    Route::put('/admin/trimestres/{trimestre}', [TrimestreController::class, 'update'])->name('admin.trimestres.update');
-    Route::delete('/admin/trimestres/{trimestre}', [TrimestreController::class, 'destroy'])->name('admin.trimestres.destroy');
+    Route::get('trimestres', [TrimestreController::class, 'index'])->name('trimestres.index');
+    Route::get('trimestres/create', [TrimestreController::class, 'create'])->name('trimestres.create');
+    Route::post('trimestres', [TrimestreController::class, 'store'])->name('trimestres.store');
+    Route::get('trimestres/{trimestre}/edit', [TrimestreController::class, 'edit'])->name('trimestres.edit');
+    Route::put('trimestres/{trimestre}', [TrimestreController::class, 'update'])->name('trimestres.update');
+    Route::delete('trimestres/{trimestre}', [TrimestreController::class, 'destroy'])->name('trimestres.destroy');
 
-    // classes
-    Route::get('/admin/classes', [ClasseController::class, 'index'])->name('admin.typeclasse.index');
-    Route::get('/admin/classes/create', [ClasseController::class, 'create'])->name('admin.typeclasse.create');
-    Route::post('/admin/classes', [ClasseController::class, 'store'])->name('admin.typeclasse.store');
-    Route::get('/admin/classes/{classe}/edit', [ClasseController::class, 'edit'])->name('admin.typeclasse.edit');
-    Route::put('/admin/classes/{classe}', [ClasseController::class, 'update'])->name('admin.typeclasse.update');
-    Route::delete('/admin/classes/{classe}', [ClasseController::class, 'destroy'])->name('admin.typeclasse.destroy');
+    Route::get('types-cours', [TypeCoursController::class, 'index'])->name('types-cours.index');
+    Route::get('types-cours/create', [TypeCoursController::class, 'create'])->name('types-cours.create');
+    Route::post('types-cours', [TypeCoursController::class, 'store'])->name('types-cours.store');
+    Route::put('types-cours/{type}', [TypeCoursController::class, 'update'])->name('types-cours.update');
+Route::get('types-cours/{type}/edit', [TypeCoursController::class, 'edit'])->name('types-cours.edit');
+Route::delete('types-cours/{type}', [TypeCoursController::class, 'destroy'])->name('types-cours.destroy');
 
-    // annee-classe
-    Route::get('/admin/annees-classes', [ClasseAnneeController::class, 'index'])->name('admin.classes.index');
-    Route::get('/admin/annees-classes/create', [ClasseAnneeController::class, 'create'])->name('admin.classes.create');
-    Route::post('/admin/annees-classes', [ClasseAnneeController::class, 'store'])->name('admin.classes.store');
-    Route::get('/admin/annees-classes/{classe}/edit', [ClasseAnneeController::class, 'edit'])->name('admin.classes.edit');
-    Route::put('/admin/annees-classes/{classe}', [ClasseAnneeController::class, 'update'])->name('admin.classes.update');
-    Route::delete('/admin/annees-classes/{classe}', [ClasseAnneeController::class, 'destroy'])->name('admin.classes.destroy');
+    Route::get('statuts-seance', [StatutSeanceController::class, 'index'])->name('statuts-seance.index');
+    Route::get('statuts-seance/create', [StatutSeanceController::class, 'create'])->name('statuts-seance.create');
+    Route::post('statuts-seance', [StatutSeanceController::class, 'store'])->name('statuts-seance.store');
+    Route::get('statuts-seance/{statutSeance}/edit', [StatutSeanceController::class, 'edit'])->name('statuts-seance.edit');
+    Route::put('statuts-seance/{statutSeance}', [StatutSeanceController::class, 'update'])->name('statuts-seance.update');
+    Route::delete('statuts-seance/{statutSeance}', [StatutSeanceController::class, 'destroy'])->name('statuts-seance.destroy');
 
-    // matieres
-    Route::get('/admin/matieres', [MatiereController::class, 'index'])->name('admin.matieres.index');
-    Route::get('/admin/matieres/create', [MatiereController::class, 'create'])->name('admin.matieres.create');
-    Route::post('/admin/matieres', [MatiereController::class, 'store'])->name('admin.matieres.store');
-    Route::get('/admin/matieres/{matiere}/edit', [MatiereController::class, 'edit'])->name('admin.matieres.edit');
-    Route::put('/admin/matieres/{matiere}', [MatiereController::class, 'update'])->name('admin.matieres.update');
-    Route::delete('/admin/matieres/{matiere}', [MatiereController::class, 'destroy'])->name('admin.matieres.destroy');
+    Route::get('statuts-presence', [StatutPresenceController::class, 'index'])->name('statuts-presence.index');
+    Route::get('statuts-presence/create', [StatutPresenceController::class, 'create'])->name('statuts-presence.create');
+    Route::post('statuts-presence', [StatutPresenceController::class, 'store'])->name('statuts-presence.store');
+    Route::get('statuts-presence/{statutPresence}/edit', [StatutPresenceController::class, 'edit'])->name('statuts-presence.edit');
+    Route::put('statuts-presence/{statutPresence}', [StatutPresenceController::class, 'update'])->name('statuts-presence.update');
+    Route::delete('statuts-presence/{statutPresence}', [StatutPresenceController::class, 'destroy'])->name('statuts-presence.destroy');
 
-    // type de cours
-    Route::get('/admin/types-cours', [TypeCoursController::class, 'index'])->name('admin.types-cours.index');
-    Route::get('/admin/types-cours/create', [TypeCoursController::class, 'create'])->name('admin.types-cours.create');
-    Route::post('/admin/types-cours', [TypeCoursController::class, 'store'])->name('admin.types-cours.store');
-    Route::get('/admin/types-cours/{type}/edit', [TypeCoursController::class, 'edit'])->name('admin.types-cours.edit');
-    Route::put('/admin/types-cours/{type}', [TypeCoursController::class, 'update'])->name('admin.types-cours.update');
-    Route::delete('/admin/types-cours/{type}', [TypeCoursController::class, 'destroy'])->name('admin.types-cours.destroy');
+    Route::get('statuts-suivi', [StatutSuiviController::class, 'index'])->name('statuts-suivi.index');
+    Route::get('statuts-suivi/create', [StatutSuiviController::class, 'create'])->name('statuts-suivi.create');
+    Route::post('statuts-suivi', [StatutSuiviController::class, 'store'])->name('statuts-suivi.store');
+    Route::get('statuts-suivi/{statutSuivi}/edit', [StatutSuiviController::class, 'edit'])->name('statuts-suivi.edit');
+    Route::put('statuts-suivi/{statutSuivi}', [StatutSuiviController::class, 'update'])->name('statuts-suivi.update');
+    Route::delete('statuts-suivi/{statutSuivi}', [StatutSuiviController::class, 'destroy'])->name('statuts-suivi.destroy');
 
-    // statut seance presence suivi
-    Route::get('/admin/statuts-seance', [StatutSeanceController::class, 'index'])->name('admin.statuts-seance.index');
-    Route::get('/admin/statuts-seance/create', [StatutSeanceController::class, 'create'])->name('admin.statuts-seance.create');
-    Route::post('/admin/statuts-seance', [StatutSeanceController::class, 'store'])->name('admin.statuts-seance.store');
-    Route::get('/admin/statuts-seance/{statut}/edit', [StatutSeanceController::class, 'edit'])->name('admin.statuts-seance.edit');
-    Route::put('/admin/statuts-seance/{statut}', [StatutSeanceController::class, 'update'])->name('admin.statuts-seance.update');
-    Route::delete('/admin/statuts-seance/{statut}', [StatutSeanceController::class, 'destroy'])->name('admin.statuts-seance.destroy');
+   Route::get('professeurs-matieres', [ProfesseurMatiereController::class, 'index'])->name('professeurs-matieres.index');
+Route::get('professeurs-matieres/create', [ProfesseurMatiereController::class, 'create'])->name('professeurs-matieres.create');
+Route::post('professeurs-matieres', [ProfesseurMatiereController::class, 'store'])->name('professeurs-matieres.store');
+Route::get('professeurs-matieres/edit/{professeur_id}/{matiere_id}', [ProfesseurMatiereController::class, 'edit'])->name('professeurs-matieres.edit');
+Route::put('professeurs-matieres/update/{professeur_id}/{matiere_id}', [ProfesseurMatiereController::class, 'update'])->name('professeurs-matieres.update');
 
-    Route::get('/admin/statuts-presence', [StatutPresenceController::class, 'index'])->name('admin.statuts-presence.index');
-    Route::get('/admin/statuts-presence/create', [StatutPresenceController::class, 'create'])->name('admin.statuts-presence.create');
-    Route::post('/admin/statuts-presence', [StatutPresenceController::class, 'store'])->name('admin.statuts-presence.store');
-    Route::get('/admin/statuts-presence/{statut}/edit', [StatutPresenceController::class, 'edit'])->name('admin.statuts-presence.edit');
-    Route::put('/admin/statuts-presence/{statut}', [StatutPresenceController::class, 'update'])->name('admin.statuts-presence.update');
-    Route::delete('/admin/statuts-presence/{statut}', [StatutPresenceController::class, 'destroy'])->name('admin.statuts-presence.destroy');
+    Route::get('inscriptions', [InscriptionController::class, 'index'])->name('inscriptions.index');
+    Route::get('inscriptions/create', [InscriptionController::class, 'create'])->name('inscriptions.create');
+    Route::post('inscriptions', [InscriptionController::class, 'store'])->name('inscriptions.store');
+    Route::get('inscriptions/{inscription}/edit', [InscriptionController::class, 'edit'])->name('inscriptions.edit');
+    Route::put('inscriptions/{inscription}', [InscriptionController::class, 'update'])->name('inscriptions.update');
+    Route::delete('inscriptions/{inscription}', [InscriptionController::class, 'destroy'])->name('inscriptions.destroy');
+    Route::get('inscriptions/non-reinscrits', [InscriptionController::class, 'nonReinscrits'])->name('inscriptions.non_reinscrits');
+Route::get('inscriptions/{etudiant}/reinscrire', [InscriptionController::class, 'reinscrire'])->name('inscriptions.reinscrire');
+Route::post('inscriptions/{etudiant}/reinscrire', [InscriptionController::class, 'reinscrireStore'])->name('inscriptions.reinscrire.store');
 
-    Route::get('/admin/statuts-suivi', [StatutSuiviController::class, 'index'])->name('admin.statuts-suivi.index');
-    Route::get('/admin/statuts-suivi/create', [StatutSuiviController::class, 'create'])->name('admin.statuts-suivi.create');
-    Route::post('/admin/statuts-suivi', [StatutSuiviController::class, 'store'])->name('admin.statuts-suivi.store');
-    Route::get('/admin/statuts-suivi/{statut}/edit', [StatutSuiviController::class, 'edit'])->name('admin.statuts-suivi.edit');
-    Route::put('/admin/statuts-suivi/{statut}', [StatutSuiviController::class, 'update'])->name('admin.statuts-suivi.update');
-    Route::delete('/admin/statuts-suivi/{statut}', [StatutSuiviController::class, 'destroy'])->name('admin.statuts-suivi.destroy');
 
-  // professeur-matiere
-Route::get('/admin/professeurs-matieres', [ProfesseurMatiereController::class, 'index'])->name('admin.professeurs-matieres.index');
-Route::get('/admin/professeurs-matieres/create', [ProfesseurMatiereController::class, 'create'])->name('admin.professeurs-matieres.create');
-Route::post('/admin/professeurs-matieres', [ProfesseurMatiereController::class, 'store'])->name('admin.professeurs-matieres.store');
-Route::get('/admin/professeurs-matieres/{professeur_id}/{matiere_id}/edit', [ProfesseurMatiereController::class, 'edit'])->name('admin.professeurs-matieres.edit');
-Route::put('/admin/professeurs-matieres/{professeur_id}/{matiere_id}', [ProfesseurMatiereController::class, 'update'])->name('admin.professeurs-matieres.update'); // ✅ ICI
 
-    // Inscription et reinscription
-    Route::get('/admin/inscriptions', [InscriptionController::class, 'index'])->name('admin.inscriptions.index');
-    Route::get('/admin/inscriptions/create', [InscriptionController::class, 'create'])->name('admin.inscriptions.create');
-    Route::post('/admin/inscriptions', [InscriptionController::class, 'store'])->name('admin.inscriptions.store');
-    Route::get('/admin/inscriptions/{inscription}/edit', [InscriptionController::class, 'edit'])->name('admin.inscriptions.edit');
-    Route::put('/admin/inscriptions/{inscription}', [InscriptionController::class, 'update'])->name('admin.inscriptions.update');
-    Route::delete('/admin/inscriptions/{inscription}', [InscriptionController::class, 'destroy'])->name('admin.inscriptions.destroy');
+   Route::get('annees-classes', [ClasseAnneeController::class, 'index'])->name('classes.index');
+Route::get('annees-classes/create', [ClasseAnneeController::class, 'create'])->name('classes.create');
+Route::post('annees-classes', [ClasseAnneeController::class, 'store'])->name('classes.store');
+Route::get('annees-classes/{classeAnnee}/edit', [ClasseAnneeController::class, 'edit'])->name('classes.edit');
+Route::put('annees-classes/{classeAnnee}', [ClasseAnneeController::class, 'update'])->name('classes.update');
+Route::delete('annees-classes/{classeAnnee}', [ClasseAnneeController::class, 'destroy'])->name('classes.destroy');
 
-    Route::get('/admin/inscriptions/{etudiant}/reinscrire', [InscriptionController::class, 'reinscrire'])->name('admin.inscriptions.reinscrire');
-    Route::post('/admin/inscriptions/{etudiant}/reinscrire', [InscriptionController::class, 'reinscrireStore'])->name('admin.inscriptions.reinscrire.store');
-    Route::get('/admin/inscriptions/non-reinscrits', [InscriptionController::class, 'nonReinscrits'])->name('admin.inscriptions.non_reinscrits');
+    Route::get('suivi-etudiants', [SuiviEtudiantController::class, 'index'])->name('suivi-etudiants.index');
+    Route::get('suivi-etudiants/create', [SuiviEtudiantController::class, 'create'])->name('suivi-etudiants.create');
+    Route::post('suivi-etudiants', [SuiviEtudiantController::class, 'store'])->name('suivi-etudiants.store');
+    Route::get('suivi-etudiants/{suiviEtudiant}/edit', [SuiviEtudiantController::class, 'edit'])->name('suivi-etudiants.edit');
+    Route::put('suivi-etudiants/{suiviEtudiant}', [SuiviEtudiantController::class, 'update'])->name('suivi-etudiants.update');
+    Route::delete('suivi-etudiants/{suiviEtudiant}', [SuiviEtudiantController::class, 'destroy'])->name('suivi-etudiants.destroy');
 
-    // suivi etudiant
-    Route::get('/admin/suivi-etudiants', [SuiviEtudiantController::class, 'index'])->name('admin.suivi-etudiants.index');
-    Route::get('/admin/suivi-etudiants/create', [SuiviEtudiantController::class, 'create'])->name('admin.suivi-etudiants.create');
-    Route::post('/admin/suivi-etudiants', [SuiviEtudiantController::class, 'store'])->name('admin.suivi-etudiants.store');
-    Route::get('/admin/suivi-etudiants/{suivi}/edit', [SuiviEtudiantController::class, 'edit'])->name('admin.suivi-etudiants.edit');
-    Route::put('/admin/suivi-etudiants/{suivi}', [SuiviEtudiantController::class, 'update'])->name('admin.suivi-etudiants.update');
-    Route::delete('/admin/suivi-etudiants/{suivi}', [SuiviEtudiantController::class, 'destroy'])->name('admin.suivi-etudiants.destroy');
-
-    // Dashboard admin
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
+
 Route::middleware(['auth', IsCoordinateur::class])->prefix('coordinateur')->name('coordinateur.')->group(function () {
+    Route::get('seances', [SeanceController::class, 'index'])->name('seances.index');
+    Route::get('seances/create', [SeanceController::class, 'create'])->name('seances.create');
+    Route::post('seances', [SeanceController::class, 'store'])->name('seances.store');
+    Route::get('seances/{seance}/edit', [SeanceController::class, 'edit'])->name('seances.edit');
+    Route::put('seances/{seance}', [SeanceController::class, 'update'])->name('seances.update');
+    Route::delete('seances/{seance}', [SeanceController::class, 'destroy'])->name('seances.destroy');
 
-    // 🏠 Dashboard coordinateur
-    Route::get('/dashboard', function () {
-        return view('coordinateur.dashboard');
-    })->name('dashboard');
-
-    // 📅 Liste des séances
-    Route::get('/seances', [SeanceController::class, 'index'])->name('seances.index');
-
-    // ➕ Formulaire de création
-    Route::get('/seances/create', [SeanceController::class, 'create'])->name('seances.create');
-
-    // 💾 Enregistrer une nouvelle séance
-    Route::post('/seances', [SeanceController::class, 'store'])->name('seances.store');
-
-    // ✏️ Formulaire d’édition
-    Route::get('/seances/{seance}/edit', [SeanceController::class, 'edit'])->name('seances.edit');
-
-    // ✅ Mettre à jour une séance
-    Route::put('/seances/{seance}', [SeanceController::class, 'update'])->name('seances.update');
-
-    // ❌ Supprimer une séance (optionnel)
-    Route::delete('/seances/{seance}', [SeanceController::class, 'destroy'])->name('seances.destroy');
+    Route::get('presences', [PresenceController::class, 'index'])->name('presences.index');
+    Route::get('presences/{seance}/edit', [PresenceController::class, 'edit'])->name('presences.edit');
+    Route::put('presences/{seance}', [PresenceController::class, 'update'])->name('presences.update');
 });
 
 
-// auth de laravel breeze
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+
+
+
+

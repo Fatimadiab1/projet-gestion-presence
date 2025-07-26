@@ -31,26 +31,29 @@ class StatutPresenceController extends Controller
         return redirect()->route('admin.statuts-presence.index')->with('success', 'Statut ajouté.');
     }
     // Modifier un statut de présence
-    public function edit(StatutPresence $statut)
-    {
-        return view('admin.statuts-presence.edit', compact('statut'));
-    }
-    // Mise à jour d'un statut de présence
-    public function update(Request $request, StatutPresence $statut)
-    {
-        $request->validate([
-            'nom' => 'required|string|max:255',
-        ]);
+public function edit(StatutPresence $statutPresence)
+{
+    return view('admin.statuts-presence.edit', compact('statutPresence'));
+}
 
-        $statut->update($request->all());
+// Mise à jour d'un statut de présence
+public function update(Request $request, StatutPresence $statutPresence)
+{
+    $request->validate([
+        'nom' => 'required|string|max:255',
+    ]);
 
-        return redirect()->route('admin.statuts-presence.index')->with('success', 'Statut modifié.');
-    }
-    // Supprimer un statut de présence
-    public function destroy(StatutPresence $statut)
-    {
-        $statut->delete();
+    $statutPresence->update($request->only('nom'));
 
-        return redirect()->route('admin.statuts-presence.index')->with('success', 'Statut supprimé.');
-    }
+    return redirect()->route('admin.statuts-presence.index')->with('success', 'Statut modifié.');
+}
+
+// Supprimer un statut de présence
+public function destroy(StatutPresence $statutPresence)
+{
+    $statutPresence->delete();
+
+    return redirect()->route('admin.statuts-presence.index')->with('success', 'Statut supprimé.');
+}
+
 }

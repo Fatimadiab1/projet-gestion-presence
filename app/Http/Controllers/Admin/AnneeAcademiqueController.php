@@ -73,4 +73,14 @@ class AnneeAcademiqueController extends Controller
 
         return redirect()->route('admin.annees-academiques.index')->with('success', 'Année supprimée.');
     }
+    
+    public function activer(AnneeAcademique $annee)
+{
+    AnneeAcademique::where('est_active', true)->update(['est_active' => false]);
+
+    $annee->update(['est_active' => true]);
+    return redirect()->route('admin.annees-academiques.index')
+        ->with('success', "L'année {$annee->annee} est maintenant l'année en cours.");
+}
+
 }

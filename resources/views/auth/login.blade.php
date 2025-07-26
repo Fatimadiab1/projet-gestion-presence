@@ -29,8 +29,9 @@
     <!-- Contenu principal -->
     <main class="main-content">
         <div class="title-box">
-            <h1>Espace <span class="highlight">IFRAN</span></h1>
-            <p>Accédez à votre espace personnel IFRAN</p>
+          <h1><span class="highlight">MonPortail</span> IFRAN</h1>
+        <p>Votre espace personnel pour le suivi des présences</p>
+
         </div>
 
   <!-- ... partie haute identique ... -->
@@ -50,7 +51,7 @@
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <label for="email">Identifiant</label>
+        <label for="email">Email</label>
         <input class="fill" type="email" id="email" name="email" required placeholder="ex : nom@exemple.com">
 
         <label for="password">Mot de passe</label>
