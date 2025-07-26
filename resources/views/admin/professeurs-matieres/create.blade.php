@@ -1,5 +1,3 @@
-
-
 @extends('layouts.admin')
 
 @section('title', 'Associer une matière à un professeur')
@@ -8,7 +6,7 @@
 
 @section('content')
 <h2 class="form-title">Associer une matière</h2>
-{{-- message --}}
+
 @if ($errors->any())
     <div class="form-alert">
         <ul>
@@ -18,7 +16,7 @@
         </ul>
     </div>
 @endif
-{{-- tableau --}}
+
 <div class="formulaire-container">
     <form method="POST" action="{{ route('admin.professeurs-matieres.store') }}">
         @csrf

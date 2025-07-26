@@ -25,7 +25,8 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($types as $type)
+                @foreach($typesCours as $type)
+
                     <tr>
                         <td>{{ $type->nom }}</td>
                         <td class="table-actions">

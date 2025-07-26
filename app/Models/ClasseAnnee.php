@@ -33,8 +33,8 @@ class ClasseAnnee extends Model
         return $this->hasMany(Inscription::class);
     }
 
-    public function emploiTemps()
+    public function seances()
     {
-        return $this->hasMany(EmploiTemps::class);
+        return $this->hasMany(Seance::class);
     }
 }

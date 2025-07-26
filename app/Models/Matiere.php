@@ -16,8 +16,8 @@ class Matiere extends Model
         return $this->belongsToMany(Professeur::class, 'professeur_matiere');
     }
 
-    public function emploiTemps()
+    public function seances()
     {
-        return $this->hasMany(EmploiTemps::class);
+        return $this->hasMany(Seance::class);
     }
 }

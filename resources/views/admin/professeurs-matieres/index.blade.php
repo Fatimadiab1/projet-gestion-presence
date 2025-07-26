@@ -27,14 +27,19 @@
         </thead>
         <tbody>
             @forelse ($professeurs as $prof)
-                @foreach ($prof->matieres as $matiere)
-                    <tr>
-                        <td>{{ $prof->user->nom }} {{ $prof->user->prenom }}</td>
-                        <td>{{ $matiere->nom }}</td>
-                        <td>{{ $matiere->volume_horaire_prevu }} h</td>
-                        <td><!-- actions ici si besoin --></td>
-                    </tr>
-                @endforeach
+              @foreach ($prof->matieres as $matiere)
+    <tr>
+        <td>{{ $prof->user->nom }} {{ $prof->user->prenom }}</td>
+        <td>{{ $matiere->nom }}</td>
+        <td>{{ $matiere->volume_horaire_prevu }} h</td>
+        <td class="table-actions">
+            <a href="{{ route('admin.professeurs-matieres.edit', ['professeur_id' => $prof->id, 'matiere_id' => $matiere->id]) }}" class="btn-edit" title="Modifier">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+        </td>
+    </tr>
+@endforeach
+
             @empty
                 <tr>
                     <td colspan="4" class="text-center">Aucune association trouvée.</td>

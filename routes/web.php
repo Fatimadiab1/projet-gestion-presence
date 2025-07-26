@@ -18,12 +18,16 @@ use App\Http\Controllers\Admin\ClasseController;
 use App\Http\Controllers\Admin\ProfesseurMatiereController;
 use App\Http\Controllers\Admin\SuiviEtudiantController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Coordinateur\SeanceController;
 // Middlewares
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEtudiant;
 use App\Http\Middleware\IsProfesseur;
 use App\Http\Middleware\IsParent;
 use App\Http\Middleware\IsCoordinateur;
+
+
+
 // Accueil
 Route::get('/', function () {
     return redirect()->route('login');
@@ -144,10 +148,12 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::put('/admin/statuts-suivi/{statut}', [StatutSuiviController::class, 'update'])->name('admin.statuts-suivi.update');
     Route::delete('/admin/statuts-suivi/{statut}', [StatutSuiviController::class, 'destroy'])->name('admin.statuts-suivi.destroy');
 
-    // professeur-matiere
-    Route::get('/admin/professeurs-matieres', [ProfesseurMatiereController::class, 'index'])->name('admin.professeurs-matieres.index');
-    Route::get('/admin/professeurs-matieres/create', [ProfesseurMatiereController::class, 'create'])->name('admin.professeurs-matieres.create');
-    Route::post('/admin/professeurs-matieres', [ProfesseurMatiereController::class, 'store'])->name('admin.professeurs-matieres.store');
+  // professeur-matiere
+Route::get('/admin/professeurs-matieres', [ProfesseurMatiereController::class, 'index'])->name('admin.professeurs-matieres.index');
+Route::get('/admin/professeurs-matieres/create', [ProfesseurMatiereController::class, 'create'])->name('admin.professeurs-matieres.create');
+Route::post('/admin/professeurs-matieres', [ProfesseurMatiereController::class, 'store'])->name('admin.professeurs-matieres.store');
+Route::get('/admin/professeurs-matieres/{professeur_id}/{matiere_id}/edit', [ProfesseurMatiereController::class, 'edit'])->name('admin.professeurs-matieres.edit');
+Route::put('/admin/professeurs-matieres/{professeur_id}/{matiere_id}', [ProfesseurMatiereController::class, 'update'])->name('admin.professeurs-matieres.update'); // ✅ ICI
 
     // Inscription et reinscription
     Route::get('/admin/inscriptions', [InscriptionController::class, 'index'])->name('admin.inscriptions.index');
@@ -172,6 +178,32 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     // Dashboard admin
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
+Route::middleware(['auth', IsCoordinateur::class])->prefix('coordinateur')->name('coordinateur.')->group(function () {
+
+    // 🏠 Dashboard coordinateur
+    Route::get('/dashboard', function () {
+        return view('coordinateur.dashboard');
+    })->name('dashboard');
+
+    // 📅 Liste des séances
+    Route::get('/seances', [SeanceController::class, 'index'])->name('seances.index');
+
+    // ➕ Formulaire de création
+    Route::get('/seances/create', [SeanceController::class, 'create'])->name('seances.create');
+
+    // 💾 Enregistrer une nouvelle séance
+    Route::post('/seances', [SeanceController::class, 'store'])->name('seances.store');
+
+    // ✏️ Formulaire d’édition
+    Route::get('/seances/{seance}/edit', [SeanceController::class, 'edit'])->name('seances.edit');
+
+    // ✅ Mettre à jour une séance
+    Route::put('/seances/{seance}', [SeanceController::class, 'update'])->name('seances.update');
+
+    // ❌ Supprimer une séance (optionnel)
+    Route::delete('/seances/{seance}', [SeanceController::class, 'destroy'])->name('seances.destroy');
+});
+
 
 // auth de laravel breeze
 require __DIR__.'/auth.php';

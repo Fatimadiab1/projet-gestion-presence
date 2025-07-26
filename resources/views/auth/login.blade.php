@@ -37,6 +37,15 @@
 
 <div class="login-box">
     <h2>Connexion</h2>
+@if ($errors->any())
+    <div class="form-alert">
+        <ul>
+            @foreach ($errors->all() as $message)
+                <li>{{ $message }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
     <form method="POST" action="{{ route('login') }}">
         @csrf

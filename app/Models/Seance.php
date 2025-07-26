@@ -2,26 +2,47 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Seance extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'emploi_temps_id',
         'date',
+        'jour_semaine',
         'heure_debut',
         'heure_fin',
+        'classe_annee_id',
+        'matiere_id',
+        'professeur_id',
+        'type_cours_id',
         'statut_seance_id',
         'trimestre_id',
         'seance_reportee_de_id'
     ];
 
-    public function emploiTemps()
+    // Relations
+
+    public function classeAnnee()
     {
-        return $this->belongsTo(EmploiTemps::class);
+        return $this->belongsTo(ClasseAnnee::class);
+    }
+
+    public function matiere()
+    {
+        return $this->belongsTo(Matiere::class);
+    }
+
+    public function professeur()
+    {
+        return $this->belongsTo(Professeur::class);
+    }
+
+    public function typeCours()
+    {
+        return $this->belongsTo(TypeCours::class);
     }
 
     public function statut()

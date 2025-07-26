@@ -13,8 +13,8 @@ class TypeCours extends Model
 
     protected $fillable = ['nom'];
 
-    public function emploiTemps()
+    public function seances()
     {
-        return $this->hasMany(EmploiTemps::class);
+        return $this->hasMany(Seance::class);
     }
 }
