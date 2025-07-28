@@ -1,0 +1,143 @@
+.dashboard-container {
+    padding: 20px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+.stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+    justify-content: space-between;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 100px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding:16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+.stat-card .icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    color: #FF0047;
+}
+
+.stat-card p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+      margin-top:10px;
+}
+
+.stat-card h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0a0a37;
+    margin-top:10px;
+}
+
+.stat-card:hover {
+    background: #0a0a37;
+}
+.stat-card:hover p,
+.stat-card:hover h2 {
+    color: white;
+}
+
+
+.cours-jour-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+}
+
+.cours-jour-box h4 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #0a0c3c;
+}
+
+.cours-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cours-list li {
+    display: grid;
+    grid-template-columns: 120px 1fr 80px 80px 120px 160px;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    align-items: center;
+}
+
+.cours-list li span {
+    color: #444;
+}
+
+.cours-list .classe {
+    font-weight: bold;
+    color: #0a0a37;
+}
+
+.cours-list .matiere {
+    font-weight: 500;
+    color: #FF0047;
+}
+
+.cours-list .statut {
+    font-weight: bold;
+    color: #FF0047;
+}
+
+.cours-list .report {
+    font-style: italic;
+    color: #666;
+}
+
+
+.matieres-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 40px;
+}
+
+.matieres-box h4 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #0a0c3c;
+}
+
+.matiere-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.matiere-list li {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #0a0a37;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.matiere-list li i {
+    color: #FF0047;
+    font-size: 18px;
+}
+

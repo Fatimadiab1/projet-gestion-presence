@@ -1,0 +1,129 @@
+.form-title {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #0a0a37;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-alert {
+    background-color: #ffe0e0;
+    color: #a30000;
+    padding: 12px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.formulaire-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #f8f8f8;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.presence-table {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.presence-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.etudiant-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.etudiant-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.etudiant-nom {
+    font-weight: bold;
+    font-size: 16px;
+    color: #0a0a37;
+}
+
+.statut-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.checkbox-statut {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.checkbox-statut input[type="radio"] {
+    accent-color: #0a0a37;
+    cursor: pointer;
+}
+
+/* Couleurs des statuts */
+.present {
+    background-color: #c6f7d0;
+    color: #0a7a35;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.absent {
+    background-color: #ffe0e0;
+    color: #a30000;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.retard {
+    background-color: #fff2cc;
+    color: #a36d00;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.no-student {
+    text-align: center;
+    font-style: italic;
+    color: #777;
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.btn-submit {
+    background-color: #0a0a37;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #111152;
+}

@@ -1,0 +1,110 @@
+.title-users {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0a0a37;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.form-filters label {
+    font-weight: bold;
+}
+
+.form-filters select,
+.form-filters input[type="date"] {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-filters button,
+.form-filters .reset-link {
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Reddit Sans', sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+/* Bouton filtrer */
+.form-filters button {
+    background-color: #0a0a37;
+    color: white;
+}
+
+.form-filters button:hover {
+    background-color: #111152;
+}
+
+/* Lien réinitialiser */
+.form-filters .reset-link {
+    background-color: #FF0047;
+    color: white;
+    text-decoration: none;
+}
+
+.form-filters .reset-link:hover {
+    background-color: #cc0038;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.btn-action {
+    background-color: #0a0a37;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.btn-action:hover {
+    background-color: #111152;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-disabled {
+    background-color: #ccc;
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: not-allowed;
+    margin-right: 5px;
+}

@@ -19,6 +19,9 @@ use App\Http\Controllers\Admin\SuiviEtudiantController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Coordinateur\CoordinateurController;
 
+use App\Http\Controllers\Professeur\ProfesseurPresenceController;
+use App\Http\Controllers\Professeur\ProfesseurSeanceController;
+use App\Http\Controllers\Professeur\ProfesseurController;
 
 use App\Http\Controllers\Coordinateur\SeanceController;
 use App\Http\Controllers\Coordinateur\PresenceController;
@@ -45,10 +48,10 @@ Route::middleware('auth')->group(function () {
         return view('etudiant.dashboard');
     })->middleware(IsEtudiant::class)->name('etudiant.dashboard');
     
-    Route::get('/professeur/dashboard', function () {
-        return view('professeur.dashboard');
-    })->middleware(IsProfesseur::class)->name('professeur.dashboard');
-    
+  Route::get('/professeur/dashboard', [ProfesseurController::class, 'index'])
+    ->middleware(IsProfesseur::class)
+    ->name('professeur.dashboard');
+
     Route::get('/parent/dashboard', function () {
         return view('parent.dashboard');
     })->middleware(IsParent::class)->name('parent.dashboard');
@@ -208,6 +211,23 @@ Route::prefix('calculs')->name('calculs.')->group(function () {
 });
 
 });
+Route::middleware(['auth', IsProfesseur::class])
+    ->prefix('professeur')
+    ->name('professeur.')
+    ->group(function () {
+
+    
+    Route::get('seances', [ProfesseurSeanceController::class, 'index'])->name('seances.index');
+
+   
+    Route::get('presences', [ProfesseurPresenceController::class, 'index'])->name('presences.index');
+    Route::get('presences/{seance}/edit', [ProfesseurPresenceController::class, 'edit'])->name('presences.edit');
+    Route::put('presences/{seance}', [ProfesseurPresenceController::class, 'update'])->name('presences.update');
+    Route::get('presences/{seance}/show', [ProfesseurPresenceController::class, 'show'])->name('presences.show');
+});
+
+
+
 
 
 
