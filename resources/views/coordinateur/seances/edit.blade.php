@@ -1,16 +1,20 @@
 @extends('layouts.coordinateur')
 
-@section('title', 'Modifier une séance')
+@section('title', 'Modifier la séance')
+
 @vite(['resources/css/coordinateur/seance/seanceaction.css'])
 
 @section('content')
-    <h2 class="form-title">Modifier la séance</h2>
+    <h2 class="form-title">
+        Modifier la séance du {{ \Carbon\Carbon::parse($seance->date)->format('d/m/Y') }}
+    </h2>
 
+    {{--message--}}
     @if ($errors->any())
         <div class="form-alert">
             <ul>
-                @foreach ($errors->all() as $erreur)
-                    <li>{{ $erreur }}</li>
+                @foreach ($errors->all() as $e)
+                    <li>{{ $e }}</li>
                 @endforeach
             </ul>
         </div>
@@ -21,73 +25,74 @@
             @csrf
             @method('PUT')
 
-            <label>Date :</label>
+            {{-- Date --}}
+            <label for="date">Date</label>
             <input type="date" name="date" value="{{ old('date', $seance->date) }}" required>
 
-            <label>Jour :</label>
-            <input type="text" name="jour_semaine" value="{{ old('jour_semaine', $seance->jour_semaine) }}" required>
-
-            <label>Heure de début :</label>
+            {{-- Heure de début --}}
+            <label for="heure_debut">Heure de début</label>
             <input type="time" name="heure_debut" value="{{ old('heure_debut', $seance->heure_debut) }}" required>
 
-            <label>Heure de fin :</label>
+            {{-- Heure de fin --}}
+            <label for="heure_fin">Heure de fin</label>
             <input type="time" name="heure_fin" value="{{ old('heure_fin', $seance->heure_fin) }}" required>
 
-            <label>Classe :</label>
+            {{-- Classe --}}
+            <label for="classe_annee_id">Classe</label>
             <select name="classe_annee_id" required>
-                @foreach ($classes as $classe)
-                    <option value="{{ $classe->id }}" {{ $seance->classe_annee_id == $classe->id ? 'selected' : '' }}>
-                        {{ $classe->classe->nom }} - {{ $classe->anneeAcademique->annee }}
+                <option value="">Choisir une classe</option>
+                @foreach ($classes as $c)
+                    <option value="{{ $c->id }}" {{ old('classe_annee_id', $seance->classe_annee_id) == $c->id ? 'selected' : '' }}>
+                        {{ $c->classe->nom }}
                     </option>
                 @endforeach
             </select>
 
-            <label>Matière :</label>
-            <select name="matiere_id" required>
-                @foreach ($matieres as $matiere)
-                    <option value="{{ $matiere->id }}" {{ $seance->matiere_id == $matiere->id ? 'selected' : '' }}>
-                        {{ $matiere->nom }}
+            {{-- Matière --}}
+            <label for="matiere_id">Matière</label>
+            <select name="matiere_id" id="matiere_id" required>
+                <option value="">Choisir une matière</option>
+                @foreach ($matieres as $m)
+                    <option value="{{ $m->id }}" {{ old('matiere_id', $seance->matiere_id) == $m->id ? 'selected' : '' }}>
+                        {{ $m->nom }}
                     </option>
                 @endforeach
             </select>
 
-            <label>Professeur :</label>
-            <select name="professeur_id" required>
-                @foreach ($professeurs as $professeur)
-                    <option value="{{ $professeur->id }}" {{ $seance->professeur_id == $professeur->id ? 'selected' : '' }}>
-                        {{ $professeur->user->prenom }} {{ $professeur->user->nom }}
+            {{-- Professeur --}}
+            <label for="professeur_id">Professeur (facultatif)</label>
+            <select name="professeur_id" id="professeur_id">
+                <option value="">Choisir un professeur</option>
+                @foreach ($professeurs as $p)
+                    <option value="{{ $p->id }}" {{ old('professeur_id', $seance->professeur_id) == $p->id ? 'selected' : '' }}>
+                        {{ $p->user->nom }} {{ $p->user->prenom }}
                     </option>
                 @endforeach
             </select>
 
-            <label>Type de cours :</label>
-            <select name="type_cours_id" required>
-                @foreach ($types as $type)
-                    <option value="{{ $type->id }}" {{ $seance->type_cours_id == $type->id ? 'selected' : '' }}>
-                        {{ $type->nom }}
+            {{-- Type de cours --}}
+            <label for="type_cours_id">Type de cours</label>
+            <select name="type_cours_id" id="type_cours_id" required>
+                <option value="">Choisir un type</option>
+                @foreach ($types as $t)
+                    <option value="{{ $t->id }}" {{ old('type_cours_id', $seance->type_cours_id) == $t->id ? 'selected' : '' }}>
+                        {{ $t->nom }}
                     </option>
                 @endforeach
             </select>
 
-            <label>Trimestre :</label>
+            {{-- Trimestre --}}
+            <label for="trimestre_id">Trimestre</label>
             <select name="trimestre_id" required>
-                @foreach ($trimestres as $trimestre)
-                    <option value="{{ $trimestre->id }}" {{ $seance->trimestre_id == $trimestre->id ? 'selected' : '' }}>
-                        {{ $trimestre->nom }}
+                <option value="">Choisir un trimestre</option>
+                @foreach ($trimestres as $t)
+                    <option value="{{ $t->id }}" {{ old('trimestre_id', $seance->trimestre_id) == $t->id ? 'selected' : '' }}>
+                        {{ $t->nom }}
                     </option>
                 @endforeach
             </select>
 
-            <label>Statut :</label>
-            <select name="statut_seance_id" required>
-                @foreach ($statuts as $statut)
-                    <option value="{{ $statut->id }}" {{ $seance->statut_seance_id == $statut->id ? 'selected' : '' }}>
-                        {{ $statut->nom }}
-                    </option>
-                @endforeach
-            </select>
-
-            <button type="submit">Mettre à jour</button>
+            <button type="submit">Mettre à jour la séance</button>
         </form>
     </div>
 @endsection

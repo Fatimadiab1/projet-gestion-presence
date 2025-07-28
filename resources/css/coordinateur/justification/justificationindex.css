@@ -1,0 +1,110 @@
+.title-users {
+    font-size: 28px;
+    font-weight: 700;
+    color: #151836;
+    font-family: 'Reddit Sans', sans-serif;
+    margin-bottom: 30px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px 16px;
+    border-left: 4px solid #28a745;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px 16px;
+    border-left: 4px solid #dc3545;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.form-filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.form-filters label {
+    font-weight: 500;
+    font-size: 16px;
+    font-family: 'Reddit Sans', sans-serif;
+    color: #151836;
+}
+
+select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.style-table {
+    width: 100%;
+    font-family: 'Reddit Sans', sans-serif;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.style-table th,
+.style-table td {
+    border: 1px solid #e6e6e6;
+    padding: 12px;
+    text-align: center;
+}
+
+.style-table th {
+    background-color: #f1f1f1;
+    color: #151836;
+    font-weight: bold;
+}
+
+.table-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-warning {
+    background-color: #081030;
+    color:white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.btn-warning:hover {
+    background-color: #FF0047;
+}
+
+.statut-vert {
+    color: green;
+    font-weight: bold;
+}
+
+.statut-rouge {
+    color: red;
+    font-weight: bold;
+}

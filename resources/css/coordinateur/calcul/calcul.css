@@ -1,0 +1,99 @@
+
+.title-users {
+    text-align: center;
+    font-size: 24px;
+    margin: 20px auto;
+    font-family: 'Reddit Sans', sans-serif;
+    color: #0a0c3c;
+}
+
+/* FORMULAIRE */
+.form-filters {
+    max-width: 700px;
+    margin: 20px auto;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.form-filters label {
+    font-weight: bold;
+    font-family: 'Reddit Sans', sans-serif;
+    color: #0a0c3c;
+}
+
+.form-filters select,
+.form-filters input[type="date"] {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-filters button {
+    padding: 6px 15px;
+    background-color: #FF0047;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Reddit Sans', sans-serif;
+    font-weight: bold;
+}
+
+.form-filters button:hover {
+    background-color: #cc0039;
+}
+
+/* TABLEAU */
+.table-style {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.table-style th,
+.table-style td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.table-style th {
+    background-color: #f3f3f3;
+    color: #0a0c3c;
+}
+
+
+.no-data {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+    color: #555;
+}
+
+
+.alert-success {
+    background-color: #d1f3d1;
+    color: #135f13;
+    padding: 10px 15px;
+    margin: 20px auto;
+    border-left: 5px solid #2ecc71;
+    width: 90%;
+    border-radius: 6px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.alert-error {
+    background-color: #fce4e4;
+    color: #a30000;
+    padding: 10px 15px;
+    margin: 20px auto;
+    border-left: 5px solid #e74c3c;
+    width: 90%;
+    border-radius: 6px;
+    font-family: 'Reddit Sans', sans-serif;
+}

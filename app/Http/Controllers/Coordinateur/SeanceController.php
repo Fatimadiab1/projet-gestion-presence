@@ -4,154 +4,250 @@ namespace App\Http\Controllers\Coordinateur;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Seance;
-use App\Models\ClasseAnnee;
 use App\Models\Matiere;
-use App\Models\Professeur;
 use App\Models\TypeCours;
-use App\Models\StatutSeance;
 use App\Models\Trimestre;
+use App\Models\ClasseAnnee;
+use App\Models\StatutSeance;
+use App\Models\AnneeAcademique;
+use Carbon\Carbon;
 
 class SeanceController extends Controller
 {
-    // Afficher toutes les séances avec filtres
+    // Afficher la liste des séances
     public function index(Request $request)
     {
-        $classeChoisie = $request->input('classe_id');
-        $matiereChoisie = $request->input('matiere_id');
-        $trimestreChoisi = $request->input('trimestre_id');
-        $dateDebut = $request->input('date_debut');
-        $dateFin = $request->input('date_fin');
+        $utilisateur = Auth::user();
+        $coordinateur = $utilisateur->coordinateur;
+        $annee = AnneeAcademique::where('est_active', true)->first();
 
-        $seancesQuery = Seance::with([
-            'classeAnnee.classe',
-            'matiere',
-            'professeur.user',
-            'typeCours',
-            'statut',
-            'trimestre'
-        ])->orderByDesc('date');
-
-        if ($classeChoisie) {
-            $seancesQuery->where('classe_annee_id', $classeChoisie);
+        if (!$coordinateur || !$annee) {
+            return redirect()->back()->with('error', 'Coordonnateur ou année académique introuvable.');
         }
 
-        if ($matiereChoisie) {
-            $seancesQuery->where('matiere_id', $matiereChoisie);
-        }
+        $classes = ClasseAnnee::where('coordinateur_id', $coordinateur->id)
+            ->where('annee_academique_id', $annee->id)
+            ->with('classe')
+            ->get();
 
-        if ($trimestreChoisi) {
-            $seancesQuery->where('trimestre_id', $trimestreChoisi);
-        }
+        $classeIds = $classes->pluck('id');
 
-        if ($dateDebut) {
-            $seancesQuery->whereDate('date', '>=', $dateDebut);
-        }
+        $matieres = Matiere::whereHas('seances', function ($filtre) use ($classeIds) {
+            $filtre->whereIn('classe_annee_id', $classeIds);
+        })->get();
 
-        if ($dateFin) {
-            $seancesQuery->whereDate('date', '<=', $dateFin);
-        }
+        $statuts = StatutSeance::orderBy('nom')->get();
 
-        $seances = $seancesQuery->get();
+        $seances = Seance::with(['classeAnnee.classe', 'matiere', 'professeur.user', 'typeCours', 'statutSeance'])
+            ->whereHas('classeAnnee', function ($filtre) use ($coordinateur, $annee) {
+                $filtre->where('coordinateur_id', $coordinateur->id)
+                       ->where('annee_academique_id', $annee->id);
+            })
+            ->when($request->classe_id, function ($filtre) use ($request) {
+                $filtre->where('classe_annee_id', $request->classe_id);
+            })
+            ->when($request->matiere_id, function ($filtre) use ($request) {
+                $filtre->where('matiere_id', $request->matiere_id);
+            })
+            ->when($request->date, function ($filtre) use ($request) {
+                $filtre->whereDate('date', $request->date);
+            })
+            ->when($request->statut_id, function ($filtre) use ($request) {
+                $filtre->where('statut_seance_id', $request->statut_id);
+            })
+            ->orderByDesc('date')
+            ->get();
 
-        $listeClasses = ClasseAnnee::with('classe', 'anneeAcademique')->get();
-        $listeMatieres = Matiere::orderBy('nom')->get();
-        $listeTrimestres = Trimestre::orderBy('date_debut')->get();
-
-        return view('coordinateur.seances.index', [
-            'seances' => $seances,
-            'classes' => $listeClasses,
-            'matieres' => $listeMatieres,
-            'trimestres' => $listeTrimestres,
-        ]);
+        return view('coordinateur.seances.index', compact('seances', 'classes', 'matieres', 'statuts'));
     }
 
-    // Afficher le formulaire de création
+    // creer une séance
     public function create()
     {
-        $listeClasses = ClasseAnnee::with('classe', 'anneeAcademique')->get();
-        $listeMatieres = Matiere::orderBy('nom')->get();
-        $listeProfesseurs = Professeur::with('user')->get();
-        $listeTypes = TypeCours::all();
-        $listeStatuts = StatutSeance::all();
-        $listeTrimestres = Trimestre::orderBy('date_debut')->get();
+        $coordinateurId = Auth::user()->coordinateur->id;
+        $annee = AnneeAcademique::where('est_active', true)->first();
 
-        return view('coordinateur.seances.create', [
-            'classes' => $listeClasses,
-            'matieres' => $listeMatieres,
-            'professeurs' => $listeProfesseurs,
-            'types' => $listeTypes,
-            'statuts' => $listeStatuts,
-            'trimestres' => $listeTrimestres,
-        ]);
+        $classes = ClasseAnnee::where('coordinateur_id', $coordinateurId)
+            ->where('annee_academique_id', $annee->id)
+            ->with('classe')
+            ->get();
+
+        $matieres = Matiere::with('professeurs.user')->orderBy('nom')->get();
+        $types = TypeCours::orderBy('nom')->get();
+        $trimestres = Trimestre::orderBy('date_debut')->get();
+
+        return view('coordinateur.seances.create', compact('classes', 'matieres', 'types', 'trimestres'));
     }
 
-    // Enregistrer une nouvelle séance
+    // enregistrer une séance
     public function store(Request $request)
     {
         $request->validate([
             'date' => 'required|date',
-            'jour_semaine' => 'required|string',
             'heure_debut' => 'required',
             'heure_fin' => 'required',
             'classe_annee_id' => 'required|exists:classe_annee,id',
             'matiere_id' => 'required|exists:matieres,id',
-            'professeur_id' => 'required|exists:professeurs,id',
             'type_cours_id' => 'required|exists:types_cours,id',
-            'statut_seance_id' => 'required|exists:statuts_seance,id',
             'trimestre_id' => 'required|exists:trimestres,id',
+            'professeur_id' => 'nullable|exists:professeurs,id',
         ]);
 
-        Seance::create($request->all());
+        $trimestre = Trimestre::find($request->trimestre_id);
+        $dateSeance = Carbon::parse($request->date);
 
-        return redirect()->route('coordinateur.seances.index')->with('success', 'Séance créée avec succès.');
+        if (!$trimestre) {
+            return back()->with('error', 'Trimestre introuvable.');
+        }
+
+        if ($dateSeance->lt($trimestre->date_debut) || $dateSeance->gt($trimestre->date_fin)) {
+            $debut = $trimestre->date_debut->format('d/m/Y');
+            $fin = $trimestre->date_fin->format('d/m/Y');
+            return back()->with('error', "La date doit être entre $debut et $fin.");
+        }
+
+        $jour = ucfirst($dateSeance->locale('fr')->dayName);
+        $profId = in_array($request->type_cours_id, [3, 4]) ? null : $request->professeur_id;
+
+        $statut = StatutSeance::where('nom', 'Prévue')->first();
+
+        if (!$statut) {
+            return back()->with('error', 'Le statut "Prévue" est introuvable.');
+        }
+
+        Seance::create([
+            'date' => $request->date,
+            'jour_semaine' => $jour,
+            'heure_debut' => $request->heure_debut,
+            'heure_fin' => $request->heure_fin,
+            'classe_annee_id' => $request->classe_annee_id,
+            'matiere_id' => $request->matiere_id,
+            'professeur_id' => $profId,
+            'type_cours_id' => $request->type_cours_id,
+            'statut_seance_id' => $statut->id,
+            'trimestre_id' => $request->trimestre_id,
+        ]);
+
+        return redirect()->route('coordinateur.seances.index')->with('success', 'Séance créée.');
     }
 
-    // Formulaire d'édition
+    // modifier une séance
     public function edit(Seance $seance)
     {
-        $listeClasses = ClasseAnnee::with('classe', 'anneeAcademique')->get();
-        $listeMatieres = Matiere::orderBy('nom')->get();
-        $listeProfesseurs = Professeur::with('user')->get();
-        $listeTypes = TypeCours::all();
-        $listeStatuts = StatutSeance::all();
-        $listeTrimestres = Trimestre::orderBy('date_debut')->get();
+        $classes = ClasseAnnee::with('classe')->get();
+        $matieres = Matiere::with('professeurs.user')->orderBy('nom')->get();
+        $types = TypeCours::orderBy('nom')->get();
+        $trimestres = Trimestre::orderBy('date_debut')->get();
+        $professeurs = $seance->matiere->professeurs()->with('user')->get();
 
-        return view('coordinateur.seances.edit', [
-            'seance' => $seance,
-            'classes' => $listeClasses,
-            'matieres' => $listeMatieres,
-            'professeurs' => $listeProfesseurs,
-            'types' => $listeTypes,
-            'statuts' => $listeStatuts,
-            'trimestres' => $listeTrimestres,
-        ]);
+        return view('coordinateur.seances.edit', compact('seance', 'classes', 'matieres', 'types', 'trimestres', 'professeurs'));
     }
 
-    // Enregistrer la mise à jour
+    // mise a jour d'une séance
     public function update(Request $request, Seance $seance)
     {
         $request->validate([
             'date' => 'required|date',
-            'jour_semaine' => 'required|string',
             'heure_debut' => 'required',
             'heure_fin' => 'required',
             'classe_annee_id' => 'required|exists:classe_annee,id',
             'matiere_id' => 'required|exists:matieres,id',
-            'professeur_id' => 'required|exists:professeurs,id',
             'type_cours_id' => 'required|exists:types_cours,id',
-            'statut_seance_id' => 'required|exists:statuts_seance,id',
             'trimestre_id' => 'required|exists:trimestres,id',
+            'professeur_id' => 'nullable|exists:professeurs,id',
         ]);
 
-        $seance->update($request->all());
+        $trimestre = Trimestre::find($request->trimestre_id);
+        $date = Carbon::parse($request->date);
 
-        return redirect()->route('coordinateur.seances.index')->with('success', 'Séance mise à jour avec succès.');
+        if (!$trimestre || $date->lt($trimestre->date_debut) || $date->gt($trimestre->date_fin)) {
+            return back()->with('error', 'La date ne correspond pas au trimestre.');
+        }
+
+        $jour = ucfirst($date->locale('fr')->dayName);
+        $profId = in_array($request->type_cours_id, [3, 4]) ? null : $request->professeur_id;
+
+        $seance->update([
+            'date' => $request->date,
+            'jour_semaine' => $jour,
+            'heure_debut' => $request->heure_debut,
+            'heure_fin' => $request->heure_fin,
+            'classe_annee_id' => $request->classe_annee_id,
+            'matiere_id' => $request->matiere_id,
+            'professeur_id' => $profId,
+            'type_cours_id' => $request->type_cours_id,
+            'trimestre_id' => $request->trimestre_id,
+        ]);
+
+        return redirect()->route('coordinateur.seances.index')->with('success', 'Séance mise à jour.');
     }
 
-    // Supprimer une séance
+    // annuler une séance
+    public function annuler(Seance $seance)
+    {
+        $statut = StatutSeance::where('nom', 'Annulée')->first();
+
+        if (!$statut) {
+            return back()->with('error', 'Statut "Annulée" introuvable.');
+        }
+
+        $seance->update(['statut_seance_id' => $statut->id]);
+
+        return redirect()->route('coordinateur.seances.index')->with('success', 'Séance annulée.');
+    }
+
+    // formulaire de report d'une séance
+    public function formulaireReport(Seance $seance)
+    {
+        return view('coordinateur.seances.report', compact('seance'));
+    }
+
+   // enregistrer le report d'une séance
+    public function enregistrerReport(Request $request, Seance $seance)
+    {
+        $request->validate([
+            'date' => 'required|date',
+            'heure_debut' => 'required',
+            'heure_fin' => 'required',
+        ]);
+
+        $statutReportee = StatutSeance::where('nom', 'Reportée')->first();
+        $statutPrevue = StatutSeance::where('nom', 'Prévue')->first();
+
+        if (!$statutReportee || !$statutPrevue) {
+            return back()->with('error', 'Statuts introuvables.');
+        }
+
+        $seance->update(['statut_seance_id' => $statutReportee->id]);
+
+        Seance::create([
+            'date' => $request->date,
+            'jour_semaine' => ucfirst(Carbon::parse($request->date)->locale('fr')->dayName),
+            'heure_debut' => $request->heure_debut,
+            'heure_fin' => $request->heure_fin,
+            'classe_annee_id' => $seance->classe_annee_id,
+            'matiere_id' => $seance->matiere_id,
+            'professeur_id' => $seance->professeur_id,
+            'type_cours_id' => $seance->type_cours_id,
+            'statut_seance_id' => $statutPrevue->id,
+            'trimestre_id' => $seance->trimestre_id,
+            'seance_reportee_de_id' => $seance->id,
+        ]);
+
+        return redirect()->route('coordinateur.seances.index')->with('success', 'Séance reportée.');
+    }
+
+    // supprimer une séance
     public function destroy(Seance $seance)
     {
+        $statut = StatutSeance::where('nom', 'Annulée')->first();
+
+        if ($seance->statut_seance_id !== $statut?->id) {
+            return back()->with('error', 'Seules les séances annulées peuvent être supprimées.');
+        }
+
         $seance->delete();
 
         return redirect()->route('coordinateur.seances.index')->with('success', 'Séance supprimée.');

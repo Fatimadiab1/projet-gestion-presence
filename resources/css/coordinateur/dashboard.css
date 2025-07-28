@@ -1,0 +1,230 @@
+.dashboard-container {
+    padding: 20px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+/* carte */
+.stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 180px;
+    background: #ffffff; 
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    text-align: center;
+    color: #000; 
+    transition: ease-in-out 0.3s;
+}
+
+.stat-card p {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #000;
+}
+
+.stat-card h2 {
+    font-size: 35px;
+    font-family: Poppins, sans-serif;
+    font-weight: bold;
+    color: #0a0a37; 
+}
+
+.stat-card .icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+    color: #FF0047; 
+}
+
+.stat-card:hover {
+    background-color: #0a0a37;
+}
+
+.stat-card:hover p,
+.stat-card:hover h2 {
+    color: white;
+}
+
+
+.main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.presence-graph-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.presence-graph-box h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #0a0c3c;
+}
+
+.form-periode {
+    margin-bottom: 20px;
+}
+
+.periode-fields {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.periode-fields input[type="date"],
+.periode-fields button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+.periode-fields button {
+    background: #0a0a37;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.periode-fields button:hover {
+    background: #1c1c59;
+}
+/* list */
+.etudiants-list-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.etudiants-list-box h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #0a0c3c;
+}
+
+.etudiants-list-box select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.etudiant-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.etudiant-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.etudiant-list li:hover {
+    background-color: #f8f9fc;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.avatar {
+    background-color: #d3d3d3; 
+    color: #0a0a37;
+    font-weight: bold;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+
+.etudiant-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nom-prenom {
+    font-weight: 500;
+    color: #FF0047;
+}
+
+.classe {
+    font-size: 12px;
+    color: #888;
+}
+
+/* cour du jour */
+.cours-jour-box {
+    background: white;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.cours-jour-box h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #0a0c3c;
+}
+
+.cours-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cours-list li {
+    display: grid;
+    grid-template-columns: 60px 100px 100px 1fr 150px;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.cours-list li span {
+    font-family: 'Reddit Sans', sans-serif;
+    color: #444;
+}
+
+.heure {
+    font-weight: bold;
+    color: #0a0a37;
+}
+
+.type {
+    font-size: 12px;
+    color: #FF0047;
+    font-weight: 500;
+}

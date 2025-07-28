@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StatutSuivi extends Model
 {
     use HasFactory;
-protected $table = 'statuts_suivi';
+
+    protected $table = 'statuts_suivi';
     protected $fillable = ['nom'];
 
     public function suivis()

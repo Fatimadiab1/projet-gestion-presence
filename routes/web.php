@@ -17,8 +17,17 @@ use App\Http\Controllers\Admin\InscriptionController;
 use App\Http\Controllers\Admin\ProfesseurMatiereController;
 use App\Http\Controllers\Admin\SuiviEtudiantController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Coordinateur\CoordinateurController;
+
+
 use App\Http\Controllers\Coordinateur\SeanceController;
 use App\Http\Controllers\Coordinateur\PresenceController;
+use App\Http\Controllers\Coordinateur\JustificationController;
+use App\Http\Controllers\Coordinateur\StatistiqueController;
+use App\Http\Controllers\Coordinateur\AfficherClasseController;
+use App\Http\Controllers\Coordinateur\CalculController;
+
+
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEtudiant;
 use App\Http\Middleware\IsProfesseur;
@@ -43,9 +52,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/parent/dashboard', function () {
         return view('parent.dashboard');
     })->middleware(IsParent::class)->name('parent.dashboard');
-    Route::get('/coordinateur/dashboard', function () {
-        return view('coordinateur.dashboard');
-    })->middleware(IsCoordinateur::class)->name('coordinateur.dashboard');
+
+    Route::get('/coordinateur/dashboard', [CoordinateurController::class, 'index'])
+    ->middleware(IsCoordinateur::class)
+    ->name('coordinateur.dashboard');
+
 });
 
 Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->group(function () {
@@ -101,19 +112,10 @@ Route::middleware(['auth', IsAdmin::class])->prefix('admin')->name('admin.')->gr
 Route::get('types-cours/{type}/edit', [TypeCoursController::class, 'edit'])->name('types-cours.edit');
 Route::delete('types-cours/{type}', [TypeCoursController::class, 'destroy'])->name('types-cours.destroy');
 
-    Route::get('statuts-seance', [StatutSeanceController::class, 'index'])->name('statuts-seance.index');
-    Route::get('statuts-seance/create', [StatutSeanceController::class, 'create'])->name('statuts-seance.create');
-    Route::post('statuts-seance', [StatutSeanceController::class, 'store'])->name('statuts-seance.store');
-    Route::get('statuts-seance/{statutSeance}/edit', [StatutSeanceController::class, 'edit'])->name('statuts-seance.edit');
-    Route::put('statuts-seance/{statutSeance}', [StatutSeanceController::class, 'update'])->name('statuts-seance.update');
-    Route::delete('statuts-seance/{statutSeance}', [StatutSeanceController::class, 'destroy'])->name('statuts-seance.destroy');
+Route::get('statuts-seance', [StatutSeanceController::class, 'index'])
+    ->name('statuts-seance.index');
 
-    Route::get('statuts-presence', [StatutPresenceController::class, 'index'])->name('statuts-presence.index');
-    Route::get('statuts-presence/create', [StatutPresenceController::class, 'create'])->name('statuts-presence.create');
-    Route::post('statuts-presence', [StatutPresenceController::class, 'store'])->name('statuts-presence.store');
-    Route::get('statuts-presence/{statutPresence}/edit', [StatutPresenceController::class, 'edit'])->name('statuts-presence.edit');
-    Route::put('statuts-presence/{statutPresence}', [StatutPresenceController::class, 'update'])->name('statuts-presence.update');
-    Route::delete('statuts-presence/{statutPresence}', [StatutPresenceController::class, 'destroy'])->name('statuts-presence.destroy');
+ Route::get('statuts-presence', [StatutPresenceController::class, 'index'])->name('statuts-presence.index');
 
     Route::get('statuts-suivi', [StatutSuiviController::class, 'index'])->name('statuts-suivi.index');
     Route::get('statuts-suivi/create', [StatutSuiviController::class, 'create'])->name('statuts-suivi.create');
@@ -157,18 +159,56 @@ Route::delete('annees-classes/{classeAnnee}', [ClasseAnneeController::class, 'de
     Route::get('dashboard', [AdminController::class, 'index'])->name('dashboard');
 });
 
+// ...
+
 Route::middleware(['auth', IsCoordinateur::class])->prefix('coordinateur')->name('coordinateur.')->group(function () {
+  
+
     Route::get('seances', [SeanceController::class, 'index'])->name('seances.index');
     Route::get('seances/create', [SeanceController::class, 'create'])->name('seances.create');
     Route::post('seances', [SeanceController::class, 'store'])->name('seances.store');
     Route::get('seances/{seance}/edit', [SeanceController::class, 'edit'])->name('seances.edit');
     Route::put('seances/{seance}', [SeanceController::class, 'update'])->name('seances.update');
     Route::delete('seances/{seance}', [SeanceController::class, 'destroy'])->name('seances.destroy');
+    Route::get('seances/{seance}/reporter', [SeanceController::class, 'formulaireReport'])->name('seances.formulaire-report');
+    Route::post('seances/{seance}/reporter', [SeanceController::class, 'enregistrerReport'])->name('seances.enregistrer-report');
+    Route::put('seances/{seance}/annuler', [SeanceController::class, 'annuler'])->name('seances.annuler');
 
     Route::get('presences', [PresenceController::class, 'index'])->name('presences.index');
     Route::get('presences/{seance}/edit', [PresenceController::class, 'edit'])->name('presences.edit');
     Route::put('presences/{seance}', [PresenceController::class, 'update'])->name('presences.update');
+    Route::get('presences/{seance}/show', [PresenceController::class, 'show'])->name('presences.show');
+
+
+
+        Route::get('/justifications', [JustificationController::class, 'index'])->name('justifications.index');
+    Route::get('/justifications/create/{presence_id}', [JustificationController::class, 'create'])->name('justifications.create');
+    Route::post('/justifications', [JustificationController::class, 'store'])->name('justifications.store');
+    Route::get('/justifications/{id}/edit', [JustificationController::class, 'edit'])->name('justifications.edit');
+    Route::put('/justifications/{id}', [JustificationController::class, 'update'])->name('justifications.update');
+
+
+
+    Route::get('/statistiques/presence-etudiants', [StatistiqueController::class, 'tauxParEtudiant'])
+    ->name('statistiques.presence-etudiants'); 
+   Route::get('/statistiques/taux-par-classe', [StatistiqueController::class, 'tauxParClasse'])
+    ->name('statistiques.classes'); 
+Route::get('/statistiques/volume-cours', [StatistiqueController::class, 'volumeCoursParType'])
+    ->name('statistiques.volume-cours');
+Route::get('/coordinateur/statistiques/volume-total', [StatistiqueController::class, 'volumeCoursTotalParClasse'])
+->name('statistiques.volume_total');
+
+
+Route::get('/mes-classes', [AfficherClasseController::class, 'index'])->name('classes');
+
+Route::prefix('calculs')->name('calculs.')->group(function () {
+    Route::get('/assiduite', [CalculController::class, 'assiduiteParEtudiantEtMatiere'])->name('assiduite');
+    Route::get('/presence-periode', [CalculController::class, 'presenceParPeriode'])->name('presence.periode');
+    Route::get('/taux-classe-periode', [CalculController::class, 'tauxClasseParPeriode'])->name('taux.classe.periode');
 });
+
+});
+
 
 
 require __DIR__ . '/auth.php';

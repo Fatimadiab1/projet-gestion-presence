@@ -3,19 +3,15 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class IsCoordinateur
 {
-    public function handle(Request $request, Closure $next)
+    public function handle($request, Closure $next)
     {
-        $user = Auth::user();
-
-        if (!$user || $user->role->nom !== 'coordinateur') {
-            return redirect()->route('login')->with('error', 'Accès refusé.');
+        if (Auth::check() && Auth::user()->role && Auth::user()->role->nom === 'coordinateur') {
+            return $next($request);
         }
-
-        return $next($request);
+        return redirect()->route('login');
     }
 }

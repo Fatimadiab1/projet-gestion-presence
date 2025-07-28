@@ -4,58 +4,135 @@ namespace App\Http\Controllers\Coordinateur;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Seance;
 use App\Models\Inscription;
 use App\Models\Presence;
 use App\Models\StatutPresence;
+use App\Models\Matiere;
+use App\Models\ClasseAnnee;
+use App\Models\AnneeAcademique;
 
 class PresenceController extends Controller
 {
-    // Affiche la liste des séances avec bouton "Présences"
-    public function index()
+    // Liste des séances à gérer
+    public function index(Request $request)
     {
-        $seances = Seance::with(['classeAnnee.classe', 'matiere'])->orderBy('date', 'desc')->get();
-        return view('coordinateur.presences.index', compact('seances'));
+        $utilisateur = Auth::user();
+        $coordinateur = $utilisateur->coordinateur;
+        $annee = AnneeAcademique::where('est_active', true)->first();
+
+        $classes = ClasseAnnee::with('classe')
+            ->where('coordinateur_id', $coordinateur->id)
+            ->where('annee_academique_id', $annee->id)
+            ->get();
+
+        $idsClasses = $classes->pluck('id');
+
+        $seances = Seance::with(['classeAnnee.classe', 'matiere', 'statutSeance'])
+            ->whereIn('classe_annee_id', $idsClasses)
+            ->whereHas('statutSeance', function ($filtre) {
+                $filtre->whereNotIn('nom', ['Annulée', 'Reportée']);
+            })
+            ->when($request->classe_id, function ($filtre) use ($request) {
+                $filtre->where('classe_annee_id', $request->classe_id);
+            })
+            ->when($request->matiere_id, function ($filtre) use ($request) {
+                $filtre->where('matiere_id', $request->matiere_id);
+            })
+            ->when($request->date, function ($filtre) use ($request) {
+                $filtre->whereDate('date', $request->date);
+            })
+            ->orderByDesc('date')
+            ->get();
+
+        $matieres = Matiere::orderBy('nom')->get();
+
+        return view('coordinateur.presences.index', [
+            'seances' => $seances,
+            'classes' => $classes,
+            'matieres' => $matieres,
+        ]);
     }
 
-    // Formulaire de gestion des présences pour une séance
+    // Modifier les présences d'une séance
     public function edit($seance_id)
     {
-        $seance = Seance::with('classeAnnee.classe')->findOrFail($seance_id);
+        $seance = Seance::with('classeAnnee.classe', 'matiere', 'statutSeance')->findOrFail($seance_id);
 
-        // Étudiants inscrits dans cette classe_annee
+        if (in_array($seance->statutSeance->nom, ['Annulée', 'Reportée'])) {
+            return redirect()->route('coordinateur.presences.index')
+                ->with('error', 'Impossible de gérer les présences d\'une séance annulée ou reportée.');
+        }
+
         $etudiants = Inscription::with('etudiant.user')
             ->where('classe_annee_id', $seance->classe_annee_id)
             ->get();
 
-        // Statuts possibles (Présent, Absent, Justifié)
         $statuts = StatutPresence::all();
 
-        // Récupère les présences existantes
-        $presencesExistantes = Presence::where('seance_id', $seance_id)->get()->keyBy('inscription_id');
+        $presencesExistantes = Presence::where('seance_id', $seance_id)
+            ->get()
+            ->keyBy('etudiant_id');
 
-        return view('coordinateur.presences.edit', compact('seance', 'etudiants', 'statuts', 'presencesExistantes'));
+        return view('coordinateur.presences.edit', [
+            'seance' => $seance,
+            'etudiants' => $etudiants,
+            'statuts' => $statuts,
+            'presencesExistantes' => $presencesExistantes,
+        ]);
     }
 
-    // Enregistre les présences (ajout ou mise à jour)
+    // Affichage des présences 
+    public function show($seance_id)
+    {
+        $seance = Seance::with('classeAnnee.classe', 'matiere', 'statutSeance')->findOrFail($seance_id);
+
+        if (in_array($seance->statutSeance->nom, ['Annulée', 'Reportée'])) {
+            return redirect()->route('coordinateur.presences.index')
+                ->with('error', 'Cette séance a été annulée ou reportée.');
+        }
+
+        $etudiants = Inscription::with('etudiant.user')
+            ->where('classe_annee_id', $seance->classe_annee_id)
+            ->get();
+
+        $statuts = StatutPresence::all();
+
+        $presencesExistantes = Presence::where('seance_id', $seance_id)
+            ->get()
+            ->keyBy('etudiant_id');
+
+        return view('coordinateur.presences.show', [
+            'seance' => $seance,
+            'etudiants' => $etudiants,
+            'statuts' => $statuts,
+            'presencesExistantes' => $presencesExistantes,
+        ]);
+    }
+
+    // Enregistrer des présences
     public function update(Request $request, $seance_id)
     {
+        $seance = Seance::with('statutSeance')->findOrFail($seance_id);
+
+        if (in_array($seance->statutSeance->nom, ['Annulée', 'Reportée'])) {
+            return redirect()->route('coordinateur.presences.index')
+                ->with('error', 'Impossible d\'enregistrer des présences pour une séance annulée ou reportée.');
+        }
+
         $request->validate([
             'presences' => 'required|array',
         ]);
 
-        foreach ($request->presences as $inscription_id => $statut_presence_id) {
+        foreach ($request->presences as $etudiantId => $statutId) {
             Presence::updateOrCreate(
-                [
-                    'seance_id' => $seance_id,
-                    'inscription_id' => $inscription_id,
-                ],
-                [
-                    'statut_presence_id' => $statut_presence_id,
-                ]
+                ['seance_id' => $seance_id, 'etudiant_id' => $etudiantId],
+                ['statut_presence_id' => $statutId]
             );
         }
 
-        return redirect()->route('coordinateur.presences.index')->with('success', 'Présences enregistrées avec succès.');
+        return redirect()->route('coordinateur.presences.index')
+            ->with('success', 'Présences enregistrées avec succès.');
     }
 }

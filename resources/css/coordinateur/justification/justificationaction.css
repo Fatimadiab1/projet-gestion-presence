@@ -1,0 +1,65 @@
+.form-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #1B1C3A;
+    margin-bottom: 30px;
+    font-family: 'Reddit Sans', sans-serif;
+    text-align: center;
+}
+
+.form-alert {
+    background-color: #fde2e2;
+    color: #9d1c1c;
+    border: 1px solid #f5c2c2;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 0 auto 20px;
+    max-width: 500px;
+    font-size: 14px;
+}
+
+.formulaire-container {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.09);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.formulaire-container label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.formulaire-container textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.btn-submit {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background-color: #1B1C3A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.btn-submit:hover {
+    background-color: #FF0047;
+}

@@ -45,7 +45,7 @@ class Seance extends Model
         return $this->belongsTo(TypeCours::class);
     }
 
-    public function statut()
+   public function statutSeance()
     {
         return $this->belongsTo(StatutSeance::class, 'statut_seance_id');
     }
@@ -64,4 +64,9 @@ class Seance extends Model
     {
         return $this->hasMany(Presence::class);
     }
+    public function statut()
+{
+    return $this->belongsTo(StatutSeance::class, 'statut_seance_id');
+}
+
 }

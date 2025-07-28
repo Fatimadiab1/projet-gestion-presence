@@ -10,10 +10,11 @@ return new class extends Migration
     {
         Schema::create('statuts_presence', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
+            $table->string('nom')->unique(); 
             $table->timestamps();
         });
     }
+
     public function down(): void
     {
         Schema::dropIfExists('statuts_presence');

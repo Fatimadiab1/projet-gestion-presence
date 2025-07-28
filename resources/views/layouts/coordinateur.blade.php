@@ -22,10 +22,40 @@
 
             <nav class="nav-links">
                 <a href="{{ route('coordinateur.dashboard') }}"><i class="bi bi-house-door-fill"></i> Accueil</a>
+                <a href="{{ route('coordinateur.classes') }}"><i class="bi bi-people-fill"></i> Mes classes</a>
                 <a href="{{ route('coordinateur.seances.index') }}"><i class="bi bi-easel2"></i> Séances</a>
                 <a href="{{ route('coordinateur.presences.index') }}"><i class="bi bi-check-square"></i> Présences</a>
-                <a href=""><i class="bi bi-file-earmark-text"></i> Justifications</a>
-                <a href=""><i class="bi bi-bar-chart"></i> Statistiques</a>
+                <a href="{{ route('coordinateur.justifications.index') }}"><i class="bi bi-file-earmark-text"></i> Justifications</a>
+                
+                <div class="dropdown">
+    <a href="#" onclick="toggleDropdown(event, 'calculs-menu')">
+        <i class="bi bi-calculator"></i> Calculs
+        <i class="bi bi-chevron-down"></i>
+    </a>
+    <div id="calculs-menu" class="dropdown-content">
+        <a href="{{ route('coordinateur.calculs.assiduite') }}">Notes d’assiduité</a>
+        <a href="{{ route('coordinateur.calculs.presence.periode') }}">Taux de présence aux cours</a>
+     <a href="{{ route('coordinateur.calculs.taux.classe.periode') }}">Taux de présence par classe</a>
+
+        <a href="">Étudiants droppés</a>
+    </div>
+</div>
+
+                
+                
+                <div class="dropdown">
+    <a href="#" onclick="toggleDropdown(event, 'stats-menu')">
+        <i class="bi bi-bar-chart"></i> Statistiques
+        <i class="bi bi-chevron-down"></i>
+    </a>
+    <div id="stats-menu" class="dropdown-content">
+        <a href="{{ route('coordinateur.statistiques.presence-etudiants')}}">Taux de présence par étudiant</a>
+        <a href="{{ route('coordinateur.statistiques.classes')}}">Taux de présence par classe</a>
+        <a href="{{ route('coordinateur.statistiques.volume-cours')}}">Graphe de volume de cours dispensés</a>
+        <a href="{{route('coordinateur.statistiques.volume_total')}}">Graphe cumulé de volume de cours dispensés</a>
+    </div>
+</div>
+
             </nav>
 
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="logout-link">
@@ -69,6 +99,8 @@
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
     </script>
+    @yield('scripts')
+
 </body>
 
 </html>
