@@ -31,6 +31,12 @@ use App\Http\Controllers\Coordinateur\AfficherClasseController;
 use App\Http\Controllers\Coordinateur\CalculController;
 
 
+use App\Http\Controllers\ParentSpace\ParentDashboardController;
+use App\Http\Controllers\ParentSpace\EmploiDuTempsController;
+use App\Http\Controllers\ParentSpace\AbsenceController;
+use App\Http\Controllers\ParentSpace\ParentCalculController;
+
+
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEtudiant;
 use App\Http\Middleware\IsProfesseur;
@@ -52,9 +58,8 @@ Route::middleware('auth')->group(function () {
     ->middleware(IsProfesseur::class)
     ->name('professeur.dashboard');
 
-    Route::get('/parent/dashboard', function () {
-        return view('parent.dashboard');
-    })->middleware(IsParent::class)->name('parent.dashboard');
+    Route::get('/parent/dashboard',[ParentDashboardController::class, 'index'
+    ])->middleware(IsParent::class)->name('parent.dashboard');
 
     Route::get('/coordinateur/dashboard', [CoordinateurController::class, 'index'])
     ->middleware(IsCoordinateur::class)
@@ -226,7 +231,14 @@ Route::middleware(['auth', IsProfesseur::class])
     Route::get('presences/{seance}/show', [ProfesseurPresenceController::class, 'show'])->name('presences.show');
 });
 
-
+Route::middleware(['auth', IsParent::class])
+    ->prefix('parent')
+    ->name('parent.')
+    ->group(function () {
+    Route::get('/emploi-du-temps', [EmploiDuTempsController::class, 'index'])->name('emploi');
+     Route::get('/absences', [AbsenceController::class, 'index'])->name('absences');
+     Route::get('/assiduite', [ParentCalculController::class, 'assiduite'])->name('assiduite');
+    });
 
 
 

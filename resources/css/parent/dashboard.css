@@ -1,0 +1,94 @@
+.dashboard-parent {
+    padding: 20px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.header-dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f2f2f2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 2px 20px ;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.date-du-jour {
+    color: #0a0c3c;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.message-bienvenue {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.accent {
+    color: #FF0047;
+}
+
+.sous-message {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.image-bienvenue {
+    width: 180px;
+}
+
+.select-enfant {
+    margin-top: 20px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.grid-parent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+
+
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+.stat-card h2 {
+    font-size: 35px;
+    margin-bottom: 10px;
+    color: #0a0c3c;
+}
+.stat-card p {
+    font-size: 18px;
+    color: #0a0c3c;
+}
+.stat-card:hover {
+    background-color: #0a0c3c;
+}
+
+.stat-card:hover h2,
+.stat-card:hover p {
+    color: white;
+}
+
+.stat-card .icon {
+    font-size: 35px;
+    color: #FF0047;
+    margin-bottom: 10px;
+}

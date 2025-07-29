@@ -1,0 +1,91 @@
+.title-users {
+    text-align: center;
+    font-size: 22px;
+    margin: 20px auto;
+    font-family: 'Reddit Sans', sans-serif;
+    color: #0a0a37;
+}
+
+.form-filters {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto 40px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-filters select {
+    padding: 6px;
+    font-size: 16px;
+}
+
+.bloc-absences {
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 700px;
+}
+
+.titre-section {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.titre-section.rouge { color: #FF0047; }
+.titre-section.vert { color: #28a745; }
+.titre-section.bleu { color: #0a0a37; }
+
+.liste-absences {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+.liste-absences li {
+    background: white;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    font-size: 15px;
+}
+
+.texte-vide {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+.table-absences {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.table-absences th,
+.table-absences td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 15px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.table-absences th {
+    background-color: #0a0a37;
+    color: white;
+    text-transform: uppercase;
+}
+
+.table-absences tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.table-absences tbody tr:hover {
+    background-color: #e9e9e9;
+}

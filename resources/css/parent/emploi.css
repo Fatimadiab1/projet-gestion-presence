@@ -1,0 +1,80 @@
+.title-users {
+    text-align: center;
+    font-size: 24px;
+    color: #0a0a37;
+    margin-bottom: 25px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px auto;
+    justify-content: center;
+    background: #f0f0f5;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 900px;
+}
+
+.form-filters label {
+    font-weight: bold;
+    color: #0a0a37;
+}
+
+.form-filters input,
+.form-filters select {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    min-width: 150px;
+}
+
+.form-filters button {
+    background-color: #FF0047;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-filters button:hover {
+    background-color: #cc003a;
+}
+
+.emploi-table {
+    width: 95%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.emploi-table th, .emploi-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.emploi-table th {
+    background-color: #0a0a37;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.emploi-table tr:hover {
+    background-color: #f7f7f7;
+}
+
+.emploi-table td {
+    color: #333;
+    font-size: 15px;
+}
