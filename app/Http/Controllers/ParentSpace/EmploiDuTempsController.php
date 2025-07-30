@@ -3,51 +3,64 @@
 namespace App\Http\Controllers\ParentSpace;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Seance;
-use App\Models\Inscription;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Seance;
 
 class EmploiDuTempsController extends Controller
 {
     public function index(Request $request)
     {
-    $parent = Auth::user()->parentProfile;
+
+        $parent = Auth::user()->parentProfile;
+
+     
+        $message  = null;
+        $seances  = [];
+        $enfant   = null;
+        $enfants  = collect();
 
         if (!$parent) {
-            return back()->with('error', 'Profil parent introuvable.');
+            $message = 'Profil parent introuvable.';
+            return view('parent.emploi', compact('seances', 'enfant', 'enfants', 'message'));
         }
 
+     
         $enfants = $parent->enfants()->with('user')->get();
 
         if ($enfants->isEmpty()) {
-            return back()->with('error', 'Aucun enfant associé à ce compte.');
+            $message = 'Aucun enfant associé à ce compte.';
+            return view('parent.emploi', compact('seances', 'enfant', 'enfants', 'message'));
         }
 
-    
-        $enfant = $enfants->first();
+      
+        $enfantId = $request->input('enfant_id');
+        $enfant   = $enfants->where('id', $enfantId)->first() ?: $enfants->first();
 
-        $seances = [];
+               $debut = $request->input('date_debut')
+            ? Carbon::parse($request->input('date_debut'))->startOfDay()
+            : Carbon::now()->startOfWeek();
 
-        $inscription = Inscription::where('etudiant_id', $enfant->id)->latest()->first();
+        $fin = $request->input('date_fin')
+            ? Carbon::parse($request->input('date_fin'))->endOfDay()
+            : Carbon::now()->endOfWeek();
 
-        if ($inscription) {
-            $debut = $request->date_debut
-                ? Carbon::parse($request->date_debut)->startOfDay()
-                : Carbon::now()->startOfWeek();
+        $inscription = $enfant->inscriptions()->latest()->first();
 
-            $fin = $request->date_fin
-                ? Carbon::parse($request->date_fin)->endOfDay()
-                : Carbon::now()->endOfWeek();
-
-            $seances = Seance::with(['classeAnnee.classe', 'matiere', 'typeCours'])
-                ->where('classe_annee_id', $inscription->classe_annee_id)
-                ->whereBetween('date', [$debut, $fin])
-                ->orderByDesc('date')
-                ->get();
+        if (!$inscription) {
+            $message = 'Aucune inscription trouvée pour cet enfant.';
+            return view('parent.emploi', compact('seances', 'enfant', 'enfants', 'message', 'debut', 'fin'));
         }
 
-        return view('parent.emploi', compact('seances', 'enfant'));
+      
+        $seances = Seance::with(['classeAnnee.classe', 'matiere', 'typeCours'])
+            ->where('classe_annee_id', $inscription->classe_annee_id)
+            ->whereBetween('date', [$debut, $fin])
+            ->orderBy('date')
+            ->orderBy('heure_debut')
+            ->get();
+
+        return view('parent.emploi', compact('seances', 'enfant', 'enfants', 'message', 'debut', 'fin'));
     }
 }

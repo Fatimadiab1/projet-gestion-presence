@@ -12,54 +12,46 @@ class ParentDashboardController extends Controller
 {
     public function index()
     {
-     
-        $parent = Auth::user()->parentProfile;
+        $parent  = Auth::user()->parentProfile;
+        $message = null;
 
         if (!$parent) {
-            return back()->with('error', 'Aucun profil parent trouvé.');
+            $message = 'Aucun profil parent trouvé.';
+            return view('parent.dashboard', compact('message'));
         }
 
-    
         $enfants = $parent->enfants()->with('user')->get();
+        $enfant  = $enfants->count() === 1 ? $enfants->first() : null;
 
-    
-        $enfant = $enfants->count() === 1 ? $enfants->first() : null;
-
-    
         Carbon::setLocale('fr');
         $date = Carbon::now()->translatedFormat('d F Y');
 
-       
-        $absencesJustifiees = 0;
+        $absencesJustifiees    = 0;
         $absencesNonJustifiees = 0;
 
         if ($enfant) {
-   
             $annee = AnneeAcademique::where('est_active', true)->first();
 
             if ($annee) {
                 $presences = Presence::where('etudiant_id', $enfant->id)
-                    ->whereHas('seance', function ($query) use ($annee) {
-                        $query->whereHas('classeAnnee', function ($q) use ($annee) {
-                            $q->where('annee_academique_id', $annee->id);
-                        });
+                    ->whereHas('seance', function ($q) use ($annee) {
+                        $q->whereHas('classeAnnee', fn ($qq) => $qq->where('annee_academique_id', $annee->id));
                     })
                     ->with('statut')
                     ->get();
 
-             
-                $absencesJustifiees = $presences->where('statut.nom', 'absent')->whereNotNull('justification')->count();
+                $absencesJustifiees    = $presences->where('statut.nom', 'absent')->whereNotNull('justification')->count();
                 $absencesNonJustifiees = $presences->where('statut.nom', 'absent')->whereNull('justification')->count();
             }
         }
 
-       
         return view('parent.dashboard', compact(
             'enfants',
             'enfant',
             'date',
             'absencesJustifiees',
-            'absencesNonJustifiees'
+            'absencesNonJustifiees',
+            'message'
         ));
     }
 }

@@ -17,64 +17,59 @@ class ParentCalculController extends Controller
     public function assiduite(Request $request)
     {
         $parent = Auth::user()->parentProfile;
+        $message = null;
 
-        
         if (!$parent) {
-            return back()->with('error', 'Profil parent introuvable.');
+            $message = 'Profil parent introuvable.';
+            return view('parent.assiduite', compact('message'));
         }
 
- 
-        $enfants = $parent->enfants;
-
-        if (!$enfants || $enfants->isEmpty()) {
-            return back()->with('error', 'Aucun enfant associé à ce compte parent.');
+        $enfants = $parent->enfants()->with('user')->get();
+        if ($enfants->isEmpty()) {
+            $message = 'Aucun enfant associé à ce compte parent.';
+            return view('parent.assiduite', compact('message'));
         }
 
-      
-        $annee = AnneeAcademique::where('est_active', true)->first();
-        $trimestres = Trimestre::where('annee_academique_id', $annee->id)->get();
-        $matieres = Matiere::all();
+        $annee      = AnneeAcademique::where('est_active', true)->first();
+        $trimestres = $annee ? Trimestre::where('annee_academique_id', $annee->id)->get() : collect();
+        $matieres   = Matiere::all();
 
-     
-        $enfantId = $request->enfant_id ?? ($enfants->count() === 1 ? $enfants->first()->id : null);
-        $matiereId = $request->matiere_id;
-        $trimestreId = $request->trimestre_id;
+        /* Filtres */
+        $enfantId    = $request->input('enfant_id') ?: ($enfants->count() === 1 ? $enfants->first()->id : null);
+        $matiereId   = $request->input('matiere_id');
+        $trimestreId = $request->input('trimestre_id');
 
         $resultats = [];
 
         if ($enfantId && $matiereId) {
-       
+            /* a) Séances concernées */
             $seances = Seance::where('matiere_id', $matiereId)
-                ->whereHas('classeAnnee.inscriptions', function ($query) use ($enfantId) {
-                    $query->where('etudiant_id', $enfantId);
+                ->whereHas('classeAnnee.inscriptions', function ($q) use ($enfantId) {
+                    $q->where('etudiant_id', $enfantId);
                 });
 
             if ($trimestreId) {
                 $seances->where('trimestre_id', $trimestreId);
             }
 
-            $seanceIds = $seances->pluck('id');
-            $nbSeances = $seanceIds->count();
+            $seanceIds  = $seances->pluck('id');
+            $nbSeances  = $seanceIds->count();
 
-       
+            /* b) Présences de l’élève */
             $nbPresences = Presence::where('etudiant_id', $enfantId)
                 ->whereIn('seance_id', $seanceIds)
-                ->whereHas('statut', function ($q) {
-                    $q->where('nom', 'présent');
-                })
+                ->whereHas('statut', fn ($q) => $q->where('nom', 'présent'))
                 ->count();
 
-      
-            $note = $nbSeances > 0 ? round(($nbPresences / $nbSeances) * 20, 2) : null;
-
+            $note     = $nbSeances ? round($nbPresences / $nbSeances * 20, 2) : null;
             $etudiant = Etudiant::with('user')->find($enfantId);
 
             $resultats[] = [
-                'nom' => $etudiant->user->nom,
-                'prenom' => $etudiant->user->prenom,
+                'nom'          => $etudiant?->user?->nom,
+                'prenom'       => $etudiant?->user?->prenom,
                 'nb_presences' => $nbPresences,
-                'nb_seances' => $nbSeances,
-                'note' => $note,
+                'nb_seances'   => $nbSeances,
+                'note'         => $note,
             ];
         }
 
@@ -85,7 +80,8 @@ class ParentCalculController extends Controller
             'matiereId',
             'trimestres',
             'trimestreId',
-            'resultats'
+            'resultats',
+            'message'
         ));
     }
 }
