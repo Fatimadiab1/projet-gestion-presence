@@ -9,90 +9,75 @@ use App\Models\Etudiant;
 
 class ParentEtudiantController extends Controller
 {
-    // Afficher la liste 
-    public function index(Request $requete)
-    {
-        $recherche = $requete->input('recherche');
+    // Liste de toutes les associations
+   public function index(Request $request)
+{
+    $recherche = $request->input('recherche');
 
-        $liste_parents = ParentModel::with(['user', 'enfants.user'])->get();
-
-        if ($recherche) {
-            $liste_parents = $liste_parents->filter(function ($parent) use ($recherche) {
-                return $parent->enfants->contains(function ($enfant) use ($recherche) {
-                    return str_contains(strtolower($enfant->user->prenom), strtolower($recherche))
-                        || str_contains(strtolower($enfant->user->nom), strtolower($recherche));
-                });
+    $parents = ParentModel::with(['user', 'enfants.user'])
+        ->when($recherche, function ($filtre) use ($recherche) {
+            $filtre->whereHas('enfants.user', function ($filtres) use ($recherche) {
+                $filtres->where('prenom', 'like', '%' . $recherche . '%')
+                         ->orWhere('nom', 'like', '%' . $recherche . '%');
             });
-        }
+        })
+        ->orderBy('id', 'desc')
+        ->paginate(10);
 
-        return view('admin.parents.index', [
-            'parents' => $liste_parents,
-            'recherche' => $recherche
-        ]);
-    }
+    return view('admin.parents.index', [
+        'parents' => $parents,
+        'recherche' => $recherche
+    ]);
+}
 
-    // Créer une association
+
+    // Creer une association
     public function create()
     {
-        // Récupère tous les parents avec leurs noms, triés par ordre alphabétique
-        $liste_parents = ParentModel::with('user')->get()->sortBy('user.nom');
+        // Charger les parents et étudiants avec leurs utilisateurs liés, triés par nom
+        $parents = ParentModel::with('user')->get()->sortBy('user.nom');
+        $etudiants = Etudiant::with('user')->get()->sortBy('user.nom');
 
-        // Récupère tous les étudiants avec leurs noms, triés aussi
-        $liste_etudiants = Etudiant::with('user')->get()->sortBy('user.nom');
-
-        return view('admin.parents.create', [
-            'parents' => $liste_parents,
-            'etudiants' => $liste_etudiants
-        ]);
+        return view('admin.parents.create', compact('parents', 'etudiants'));
     }
 
     // Enregistrer une association
-    public function store(Request $requete)
+    public function store(Request $request)
     {
-        $requete->validate([
+        $request->validate([
             'parent_id' => 'required|exists:parents,id',
             'etudiants' => 'required|array',
             'etudiants.*' => 'exists:etudiants,id',
         ]);
 
+        $parent = ParentModel::findOrFail($request->parent_id);
+        $parent->enfants()->sync($request->etudiants);
 
-        $parent = ParentModel::find($requete->parent_id);
-
-        $parent->enfants()->sync($requete->etudiants);
-
-        return redirect()->route('admin.parents.index')->with('success', 'Association enregistrée.');
+        return redirect()->route('admin.parents.index')
+            ->with('success', 'Association enregistrée avec succès.');
     }
 
-    // Modifier une association
+    // modifier une association
     public function edit($id)
     {
-
         $parent = ParentModel::with(['user', 'enfants'])->findOrFail($id);
+        $etudiants = Etudiant::with('user')->get()->sortBy('user.nom');
 
-
-        $liste_etudiants = Etudiant::with('user')->get()->sortBy('user.nom');
-
-        return view('admin.parents.edit', [
-            'parent' => $parent,
-            'etudiants' => $liste_etudiants
-        ]);
+        return view('admin.parents.edit', compact('parent', 'etudiants'));
     }
 
-    // Mise a jour de l'association
-    public function update(Request $requete, $id)
+    // Mettre à jour l’association
+    public function update(Request $request, $id)
     {
-
-        $requete->validate([
+        $request->validate([
             'etudiants' => 'required|array',
             'etudiants.*' => 'exists:etudiants,id',
         ]);
 
-
         $parent = ParentModel::findOrFail($id);
+        $parent->enfants()->sync($request->etudiants);
 
-
-        $parent->enfants()->sync($requete->etudiants);
-
-        return redirect()->route('admin.parents.index')->with('success', 'Association mise à jour.');
+        return redirect()->route('admin.parents.index')
+            ->with('success', 'Association mise à jour avec succès.');
     }
 }

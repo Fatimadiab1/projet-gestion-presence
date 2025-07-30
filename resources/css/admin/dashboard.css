@@ -3,13 +3,14 @@ body {
     background-color: #f9f9f9;
 }
 
+
 .dashboard-container {
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
     margin: 20px;
 }
-
+/* les cards */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -57,6 +58,7 @@ body {
     gap: 20px;
 }
 
+/* Annee */
 .academic-year-box,
 .user-list-box {
     background-color: #F7F7F7;
@@ -104,6 +106,7 @@ body {
     color: #FF0047;
 }
 
+/* list des users */
 .user-list-box .header {
     display: flex;
     justify-content: space-between;
@@ -163,4 +166,53 @@ body {
 .user-list .role {
     font-size: 13px;
     color: #777;
+}
+
+
+
+/* list roles */
+.role-stats-box {
+    background-color: #F7F7F7;
+    padding: 25px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.role-stats-box h4 {
+    font-size: 28px;
+    color: #0a0a37;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.role-stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.role-stats-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #0a0a37;
+}
+
+.role-name {
+    font-weight: 500;
+}
+
+.role-count {
+    background-color: #FF0047;
+    color: #fff;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
 }

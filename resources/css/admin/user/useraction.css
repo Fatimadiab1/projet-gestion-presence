@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans&display=swap');
 /* formulaire */
 .form-title {
-    font-size:30px;
+    font-size: 28px;
     font-weight: bold;
-    color: #1B1C3A;
-
+    color: #0a0a37;
     margin-bottom: 30px;
-    font-family: 'Reddit Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .form-alert {
@@ -14,54 +17,108 @@
     border: 1px solid #f5c2c2;
     padding: 10px 20px;
     border-radius: 8px;
-    margin: 0 auto 20px;
-    max-width: 500px;
+    margin-bottom: 20px;
     font-size: 14px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .form-container {
-    background-color: #fff;
-    padding: 20px;
+    background-color: white;
+    padding: 25px;
     max-width: 500px;
     margin: 0 auto;
     border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.09);
-    display: flex;
-    flex-direction: column;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
     font-family: 'Reddit Sans', sans-serif;
 }
 
 .form-container label {
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     color: #333;
+    margin-top: 10px;
+    display: block;
 }
 
 .form-container input,
 .form-container select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-    margin-top: 8px;
-    margin-bottom: 16px;
     width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.email-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.email-group input {
+    flex: 1;
+}
+
+.email-group span {
+    font-size: 14px;
+    color: #333;
 }
 
 .form-container button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 12px;
-    background-color: #1B1C3A;
+    background-color: #FF0047;
     color: white;
+    padding: 12px;
     border: none;
-    border-radius: 8px;
     font-size: 15px;
+    font-weight: bold;
+    border-radius: 8px;
     cursor: pointer;
-    transition:0.4s;
+    transition: background-color 0.3s;
+    margin-top: 15px;
 }
 
 .form-container button:hover {
-    background-color: #FF0047;
+    background-color: #0a0a37;
+}
+
+.current-photo {
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+.current-photo img {
+    max-width: 120px;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+.input-password {
+    position: relative;
+}
+
+.input-password input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #FF0047;
 }

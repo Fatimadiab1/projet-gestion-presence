@@ -228,3 +228,51 @@
     color: #FF0047;
     font-weight: 500;
 }
+.popup-alert {
+    position: fixed;
+    top: 60px;
+    right: 30px;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: #fff3f3;
+    border: 1px solid #e74c3c;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.popup-alert h3 {
+    color: #a30000;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.popup-alert ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.popup-alert ul li {
+    padding: 5px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.popup-alert button {
+    background-color: #FF0047;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    float: right;
+}
+
+.popup-alert button:hover {
+    background-color: #cc0039;
+}

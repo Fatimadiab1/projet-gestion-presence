@@ -3,10 +3,10 @@
     padding: 20px;
 }
 
-.association-container h2 {
+.association-container h1 {
     font-size: 30px;
     font-weight: bold;
-    color: #151836;
+    color: #0a0a37;
     margin-bottom: 30px;
 }
 
@@ -14,23 +14,34 @@
     background-color: #d4edda;
     color: #155724;
     padding: 12px 16px;
-    border-left: 4px solid #28a745;
+    border-left: 5px solid #28a745;
     border-radius: 6px;
     margin-bottom: 20px;
 }
+
 .btn-ajouter {
-    background-color: #151836;
+    background-color: #0a0a37;
     color: white;
     padding: 10px 16px;
-    text-decoration: none;
-    border-radius: 6px;
     font-size: 14px;
-    display: inline-block;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-bottom: 20px;
+    transition: background-color 0.3s;
 }
 
 .btn-ajouter:hover {
     background-color: #FF0047;
+}
+
+.table-wrapper {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Tableau */
@@ -38,9 +49,6 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    background-color: white;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    margin-top: 10px;
 }
 
 .table th,
@@ -51,20 +59,28 @@
 }
 
 .table th {
-    background-color: #f7f7f7;
+    background-color: #f8f8f8;
     font-weight: bold;
-    color: #151836;
+    color: #0a0a37;
 }
 
 .table tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Bouton */
-.btn-delete {
-    font-size: 16px;
-    background: none;
-    border: none;
-    color: #dc3545;
+.table-actions i {
+    font-size: 18px;
+    color: #151836;
     cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+}
+
+.table-actions i:hover {
+    color: #FF0047;
+    transform: scale(1.2);
+}
+
+.pagination-wrapper {
+    margin-top: 25px;
+    text-align: center;
 }

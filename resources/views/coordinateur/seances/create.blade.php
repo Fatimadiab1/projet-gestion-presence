@@ -5,7 +5,7 @@
 @vite(['resources/css/coordinateur/seance/seanceaction.css'])
 
 @section('content')
-    <h2 class="form-title">Ajouter une séance</h2>
+    <h2 class="form-title"><i class="bi bi-plus-circle"></i> Ajouter une séance</h2>
 
     {{--message--}}
     @if ($errors->any())

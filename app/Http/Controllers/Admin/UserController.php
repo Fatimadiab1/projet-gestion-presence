@@ -14,62 +14,54 @@ use App\Models\ParentModel;
 use App\Models\Coordinateur;
 use App\Models\ClasseAnnee;
 
-
-
 class UserController extends Controller
 {
-    // Afficher la liste des users
-public function index(Request $request)
-{
-    $filtreRole = $request->input('role');
-    $classeAnneeId = $request->input('classe_annee_id');
-    $limiteParPage = $request->input('entries', 10);
+    // Liste des utilisateurs 
+    public function index(Request $request)
+    {
+        $filtreRole = $request->input('role');
+        $classeAnneeId = $request->input('classe_annee_id');
+        $limiteParPage = $request->input('entries', 10);
 
-    $utilisateursFiltres = User::with('role')->orderBy('created_at', 'desc');
+        $utilisateurs = User::with('role')
+            ->orderBy('created_at', 'desc');
 
-    if (!empty($filtreRole)) {
-        $utilisateursFiltres->whereHas('role', function ($filtrageParRole) use ($filtreRole) {
-            $filtrageParRole->where('nom', $filtreRole);
-        });
-
-        // Si on filtre les étudiants par classe_annee_id
-        if ($classeAnneeId && $filtreRole === 'etudiant') {
-            $utilisateursFiltres->whereHas('etudiant.inscriptions', function ($filtrageEtudiant) use ($classeAnneeId) {
-                $filtrageEtudiant->where('classe_annee_id', $classeAnneeId);
+        // Filtrer roles
+        if ($filtreRole) {
+            $utilisateurs->whereHas('role', function ($query) use ($filtreRole) {
+                $query->where('nom', $filtreRole);
             });
+
+            // Filtrer étudiants
+            if ($classeAnneeId && $filtreRole === 'etudiant') {
+                $utilisateurs->whereHas('etudiant.inscriptions', function ($query) use ($classeAnneeId) {
+                    $query->where('classe_annee_id', $classeAnneeId);
+                });
+            }
+
+            // Filtrer coordinateurs
+            if ($classeAnneeId && $filtreRole === 'coordinateur') {
+                $utilisateurs->whereHas('coordinateur.classeAnnees', function ($query) use ($classeAnneeId) {
+                    $query->where('id', $classeAnneeId);
+                });
+            }
         }
 
-        // Si on filtre les coordinateurs par classe_annee_id
-        if ($classeAnneeId && $filtreRole === 'coordinateur') {
-            $utilisateursFiltres->whereHas('coordinateur.classeAnnees', function ($filtrageCoordinateur) use ($classeAnneeId) {
-                $filtrageCoordinateur->where('id', $classeAnneeId);
-            });
-        }
+        $utilisateurs = $utilisateurs->paginate($limiteParPage);
+        $roles = Role::where('nom', '!=', 'admin')->get();
+        $classeAnnees = ClasseAnnee::with(['classe', 'anneeAcademique'])->get();
+
+        return view('admin.users.index', compact('utilisateurs', 'roles', 'classeAnnees', 'filtreRole', 'limiteParPage'));
     }
 
-    $utilisateurs = $utilisateursFiltres->paginate($limiteParPage);
-    $roles = Role::where('nom', '!=', 'admin')->get();
-    $classeAnnees = ClasseAnnee::with(['classe', 'anneeAcademique'])->get();
-
-    return view('admin.users.index', [
-        'utilisateurs' => $utilisateurs,
-        'roles' => $roles,
-        'classeAnnees' => $classeAnnees,
-        'filtreRole' => $filtreRole,
-        'limiteParPage' => $limiteParPage
-    ]);
-}
-
-
-
-    // Creation du user
+    // Créer un nouvel utilisateur
     public function create()
     {
         $roles = Role::where('nom', '!=', 'admin')->get();
         return view('admin.users.create', compact('roles'));
     }
 
-    // Enregistrer un user
+    // Enregistrer un utilisateur
     public function store(Request $request)
     {
         $request->merge([
@@ -86,13 +78,14 @@ public function index(Request $request)
             'photo' => 'nullable|image|max:2048',
         ]);
 
-        // Gestion de l'upload de la photo 
+        // Upload photo 
         $cheminPhoto = null;
         if ($request->hasFile('photo')) {
             $cheminPhoto = $request->file('photo')->store('photos', 'public');
         }
 
-        $user = User::create([
+
+        $utilisateur = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
@@ -101,26 +94,26 @@ public function index(Request $request)
             'photo' => $cheminPhoto,
         ]);
 
-        $this->creerProfilPour($user);
+
+        $this->creerProfil($utilisateur);
 
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur ajouté avec succès.');
     }
 
-    // Modifier un user
+    // Modifier un utilisateur
     public function edit(User $user)
     {
         $roles = Role::where('nom', '!=', 'admin')->get();
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
-    // Mise a jour du user
+    // Mettre à jour un utilisateur
     public function update(Request $request, User $user)
     {
         $request->merge([
             'email' => strtolower(trim($request->email_prefix)) . '@ifran.ci'
         ]);
 
-        // Validation
         $request->validate([
             'nom' => 'required|string|min:2|max:50',
             'prenom' => 'required|string|min:2|max:50',
@@ -131,6 +124,7 @@ public function index(Request $request)
             'photo' => 'nullable|image|max:2048',
         ]);
 
+
         if ($request->hasFile('photo')) {
             if ($user->photo) {
                 Storage::disk('public')->delete($user->photo);
@@ -138,35 +132,32 @@ public function index(Request $request)
             $user->photo = $request->file('photo')->store('photos', 'public');
         }
 
-
+        // Mise à jour des champs
         $user->nom = $request->nom;
         $user->prenom = $request->prenom;
         $user->email = $request->email;
 
-
+        // Mise à jour du mot de passe 
         if ($request->filled('mot_de_passe')) {
             $user->password = Hash::make($request->mot_de_passe);
         }
 
 
         if ($user->role_id != $request->role_id) {
-            $this->supprimerAncienProfil($user);
+            $this->supprimerProfil($user);
             $user->role_id = $request->role_id;
         }
 
         $user->save();
-
-        $this->creerProfilPour($user);
+        $this->creerProfil($user);
 
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur mis à jour.');
     }
 
-    // Supprimer un user
+    // Supprimer un utilisateur
     public function destroy(User $user)
     {
-
-        $this->supprimerAncienProfil($user);
-
+        $this->supprimerProfil($user);
 
         if ($user->photo) {
             Storage::disk('public')->delete($user->photo);
@@ -177,7 +168,10 @@ public function index(Request $request)
         return redirect()->route('admin.users.index')->with('error', 'Utilisateur supprimé.');
     }
 
-    private function creerProfilPour(User $user)
+
+
+    // Crée le bon profil *
+    private function creerProfil(User $user)
     {
         $role = $user->role->nom;
 
@@ -192,7 +186,8 @@ public function index(Request $request)
         }
     }
 
-    private function supprimerAncienProfil(User $user)
+    // Supprime tous les profils 
+    private function supprimerProfil(User $user)
     {
         Etudiant::where('user_id', $user->id)->delete();
         Professeur::where('user_id', $user->id)->delete();

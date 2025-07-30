@@ -9,14 +9,17 @@ use App\Models\AnneeAcademique;
 
 class TrimestreController extends Controller
 {
-    // Afficher la liste des trimestres
+    // Affiche la liste des trimestres
     public function index()
     {
-        $trimestres = Trimestre::with('anneeAcademique')->orderBy('created_at', 'desc')->get();
+        $trimestres = Trimestre::with('anneeAcademique')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); 
+
         return view('admin.trimestres.index', compact('trimestres'));
     }
 
-    // Créer un trimestre
+    // Creer un nouveau trimestre
     public function create()
     {
         $annees = AnneeAcademique::orderBy('date_debut', 'desc')->get();
@@ -27,7 +30,7 @@ class TrimestreController extends Controller
     // Enregistrer un trimestre
     public function store(Request $request)
     {
-      
+        // Validation
         $request->validate([
             'nom' => 'required|string',
             'date_debut' => 'required|date',
@@ -44,7 +47,6 @@ class TrimestreController extends Controller
             ])->withInput();
         }
 
-       
         Trimestre::create([
             'nom' => $request->nom,
             'date_debut' => $request->date_debut,
@@ -52,10 +54,11 @@ class TrimestreController extends Controller
             'annee_academique_id' => $request->annee_academique_id,
         ]);
 
-        return redirect()->route('admin.trimestres.index')->with('success', 'Trimestre ajouté.');
+        return redirect()->route('admin.trimestres.index')
+            ->with('success', 'Trimestre ajouté avec succès.');
     }
 
-    // Modifier un trimestre
+    // Modifer un trimestre 
     public function edit(Trimestre $trimestre)
     {
         $annees = AnneeAcademique::orderBy('date_debut', 'desc')->get();
@@ -63,10 +66,10 @@ class TrimestreController extends Controller
         return view('admin.trimestres.edit', compact('trimestre', 'annees'));
     }
 
-    // Mise à jour d'un trimestre
+    // Mise à jour d’un trimestre
     public function update(Request $request, Trimestre $trimestre)
     {
-      
+
         $request->validate([
             'nom' => 'required|string',
             'date_debut' => 'required|date',
@@ -82,6 +85,7 @@ class TrimestreController extends Controller
                     $annee->date_debut . ' et le ' . $annee->date_fin . ' pour l’année ' . $annee->annee . '.'
             ])->withInput();
         }
+
         $trimestre->update([
             'nom' => $request->nom,
             'date_debut' => $request->date_debut,
@@ -89,14 +93,16 @@ class TrimestreController extends Controller
             'annee_academique_id' => $request->annee_academique_id,
         ]);
 
-        return redirect()->route('admin.trimestres.index')->with('success', 'Trimestre modifié.');
+        return redirect()->route('admin.trimestres.index')
+            ->with('success', 'Trimestre modifié avec succès.');
     }
 
-    // Supprime un trimestre
+    // Supprimer un trimestre
     public function destroy(Trimestre $trimestre)
     {
         $trimestre->delete();
 
-        return redirect()->route('admin.trimestres.index')->with('success', 'Trimestre supprimé.');
+        return redirect()->route('admin.trimestres.index')
+            ->with('success', 'Trimestre supprimé avec succès.');
     }
 }

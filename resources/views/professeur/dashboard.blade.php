@@ -6,6 +6,19 @@
 
 @section('content')
 <div class="dashboard-container">
+@if (!empty($alertes))
+    <div class="popup-alert">
+        <div class="popup-content">
+            <h3>Étudiants droppés</h3>
+            <ul>
+                @foreach ($alertes as $a)
+                    <li>{!! $a !!}</li>
+                @endforeach
+            </ul>
+            <button onclick="document.querySelector('.popup-alert').style.display='none'">Fermer</button>
+        </div>
+    </div>
+@endif
 
     <div class="stats-grid">
         <div class="stat-card">
@@ -71,6 +84,10 @@
                 @endforeach
             </ul>
         @endif
+            <div class="pagination-box">
+        {{ $matieres->links() }}
+    </div>
+
     </div>
 
 </div>

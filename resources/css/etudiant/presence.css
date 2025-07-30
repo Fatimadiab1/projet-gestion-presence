@@ -1,0 +1,122 @@
+.title-users {
+    text-align: center;
+    font-size: 22px;
+    margin: 20px auto;
+    font-family: 'Reddit Sans', sans-serif;
+    color: #0a0a37;
+}
+
+.form-filters {
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto 40px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-filters select {
+    padding: 6px;
+    font-size: 16px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin: 30px auto 50px;
+    width: 90%;
+    max-width: 900px;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+.stat-card h2 {
+    font-size: 35px;
+    margin-bottom: 10px;
+    color: #0a0c3c;
+}
+
+.stat-card p {
+    font-size: 18px;
+    color: #0a0c3c;
+}
+
+.stat-card:hover {
+    background-color: #0a0c3c;
+}
+
+.stat-card:hover h2,
+.stat-card:hover p {
+    color: white;
+}
+
+.stat-card .icon {
+    font-size: 35px;
+    color: #FF0047;
+    margin-bottom: 10px;
+}
+
+.bloc-absences {
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 700px;
+}
+
+.titre-section {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.titre-section.rouge { color: #FF0047; }
+.titre-section.vert { color: #28a745; }
+.titre-section.bleu { color: #0a0a37; }
+
+.texte-vide {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.table-absences {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.table-absences th,
+.table-absences td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 15px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.table-absences th {
+    background-color: #0a0a37;
+    color: white;
+    text-transform: uppercase;
+}
+
+.table-absences tbody tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+
+.table-absences tbody tr:hover {
+    background-color: #e9e9e9;
+}

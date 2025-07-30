@@ -38,17 +38,21 @@
                             <td>
                                 @php
                                     $presence = $presencesExistantes[$etudiant->id] ?? null;
-                                    $statutNom = $presence ? $statuts->firstWhere('id', $presence->statut_presence_id)?->nom : 'Non renseigné';
+                                    $statutNom = $presence ? $statuts->firstWhere('id', $presence->statut_presence_id)?->nom : null;
                                 @endphp
 
-                                @if (strtolower($statutNom) === 'présent')
-                                    <span class="statut-text present">{{ $statutNom }}</span>
-                                @elseif (strtolower($statutNom) === 'absent')
-                                    <span class="statut-text absent">{{ $statutNom }}</span>
-                                @elseif (strtolower($statutNom) === 'en retard')
-                                    <span class="statut-text retard">{{ $statutNom }}</span>
+                                @if ($statutNom)
+                                    @if (strtolower($statutNom) === 'présent')
+                                        <span class="statut-text present">{{ $statutNom }}</span>
+                                    @elseif (strtolower($statutNom) === 'absent')
+                                        <span class="statut-text absent">{{ $statutNom }}</span>
+                                    @elseif (strtolower($statutNom) === 'en retard')
+                                        <span class="statut-text retard">{{ $statutNom }}</span>
+                                    @else
+                                        <span class="statut-text">{{ $statutNom }}</span>
+                                    @endif
                                 @else
-                                    <span class="statut-text">{{ $statutNom }}</span>
+                                    <span class="statut-text">Non renseigné</span>
                                 @endif
                             </td>
                         </tr>

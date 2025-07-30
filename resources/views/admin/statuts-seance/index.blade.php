@@ -3,37 +3,44 @@
 @section('title', 'Statuts de séance')
 @section('header', 'Liste des statuts de séance')
 
-@section('content')
 @vite(['resources/css/admin/statutseance/statutseanceindex.css'])
 
-<div class="statut-seance-container">
-    <h2 class="titre-page">Liste des statuts de séance</h2>
+@section('content')
+<div class="role-header">
+    <h1 class="title-roles"><i class="bi bi-collection"></i> Statuts de séance</h1>
+</div>
+{{-- Message  --}}
+@if(session('success'))
+    <div class="alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 
-    {{-- message --}}
-    @if(session('success'))
-        <div class="alerte-succes">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    {{-- tableau --}}
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
+{{-- Tableau --}}
+<div class="table-container">
+    <table class="style-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($statuts as $statut)
                 <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
+                    <td>#{{ $statut->id }}</td>
+                    <td>{{ $statut->nom }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($statuts as $statut)
-                    <tr>
-                        <td>#{{ $statut->id }}</td>
-                        <td>{{ $statut->nom }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+            @empty
+                <tr>
+                    <td colspan="2" class="text-center text-muted">Aucun statut trouvé.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <div class="pagination-wrapper">
+        {{ $statuts->links() }}
     </div>
 </div>
 @endsection

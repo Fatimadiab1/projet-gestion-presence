@@ -11,11 +11,11 @@ class MatiereController extends Controller
     // Afficher la liste des matières
     public function index()
     {
-        $matieres = Matiere::orderByDesc('created_at')->get();
+        $matieres = Matiere::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.matieres.index', compact('matieres'));
     }
 
-    // Créer une matière
+    // Creer une matière
     public function create()
     {
         return view('admin.matieres.create');
@@ -29,10 +29,7 @@ class MatiereController extends Controller
             'volume_horaire_prevu' => 'required|integer|min:1',
         ]);
 
-        Matiere::create([
-            'nom' => $request->nom,
-            'volume_horaire_prevu' => $request->volume_horaire_prevu,
-        ]);
+        Matiere::create($request->only('nom', 'volume_horaire_prevu'));
 
         return redirect()->route('admin.matieres.index')->with('success', 'Matière ajoutée avec succès.');
     }
@@ -43,7 +40,7 @@ class MatiereController extends Controller
         return view('admin.matieres.edit', compact('matiere'));
     }
 
-    // Mise à jour d'une matière
+    // Mettre à jour une matière
     public function update(Request $request, Matiere $matiere)
     {
         $request->validate([
@@ -51,10 +48,7 @@ class MatiereController extends Controller
             'volume_horaire_prevu' => 'required|integer|min:1',
         ]);
 
-        $matiere->update([
-            'nom' => $request->nom,
-            'volume_horaire_prevu' => $request->volume_horaire_prevu,
-        ]);
+        $matiere->update($request->only('nom', 'volume_horaire_prevu'));
 
         return redirect()->route('admin.matieres.index')->with('success', 'Matière modifiée avec succès.');
     }

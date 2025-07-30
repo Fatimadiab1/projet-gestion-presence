@@ -1,57 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Reddit+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Reddit Sans', sans-serif;
-    background-color: white;
+    font-family: 'Poppins', sans-serif;
+    color: #0a0a37;
 }
 
-/* Top bar */
+/* Barre du haut */
 .top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
+    background-color: #ffffff;
 }
 
 .logo-container img {
-    height:100px;
-    object-fit: contain;
+    height: 120px;
 }
 
 .top-links a {
     text-decoration: none;
-    color: #181C38;
-    font-weight: 500;
-    font-size:17px;
+    color: #0a0a37;
+    font-weight: 600;
+    font-size: 16px;
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: color 0.3s;
 }
 
 .top-links a:hover {
     color: #FF0047;
 }
 
-/* Main content */
+
+/* Contenu principal */
 .main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    padding: 60px 20px;
 }
 
 .title-box {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .title-box h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 32px;
-    font-weight:bold;
-    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .title-box .highlight {
@@ -59,119 +60,120 @@ body {
 }
 
 .title-box p {
-    font-size: 19px;
-    margin-top: 8px;
+    font-size: 18px;
+    color: #555;
 }
 
-/* Login box */
 .login-box {
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    padding: 40px 30px;
     width: 100%;
     max-width: 500px;
 }
 
 .login-box h2 {
-    margin-bottom: 20px;
     font-size: 24px;
-    font-family: Poppins, sans-serif;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: #0a0a37;
 }
 
 .login-box label {
     display: block;
-    margin: 10px 0 5px;
+    margin-top: 15px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
 }
 
-.login-box input {
+.fill {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 14px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    margin-top: 6px;
     box-sizing: border-box;
+    background-color: #fff;
+    transition: border 0.3s, box-shadow 0.3s;
 }
+
+.fill:focus {
+    border-color: #FF0047;
+    box-shadow: 0 0 6px rgba(255, 0, 71, 0.3);
+    outline: none;
+}
+
+.input-password {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    cursor: pointer;
+}
+
 .login-box button {
     width: 100%;
     background-color: #FF0047;
     color: white;
-    padding: 12px;
+    padding: 14px;
     border: none;
-    border-radius: 6px;
-    font-weight: bold;
+    border-radius: 8px;
     font-size: 16px;
-    margin-top: 20px;
+    font-weight: 600;
+    margin-top: 30px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .login-box button:hover {
-    background-color: #2B2F4D;
-}
-.input-password {
-    position: relative;
+    background-color: #0a0a37;
 }
 
-.input-password input {
-    width: 100%;
-    padding-right: 40px;
+.form-alert {
+    background-color: #ffe5e5;
+    color: #b80000;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
 }
 
-.lock-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #555;
-    pointer-events: none;
-}
-.input-password {
-    position: relative;
+.extra-links {
+    margin-top: 18px;
+    text-align: right;
 }
 
-.input-password input {
-    width: 100%;
-    padding-right: 40px;
+.extra-links a {
+    color: #0a0a37;
+    font-size: 13px;
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.lock-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #0b0838;
-    pointer-events: none;
-}
-.input-password {
-    position: relative;
+.extra-links a:hover {
+    text-decoration: underline;
 }
 
-.input-password input {
-    width: 100%;
-    padding-right: 40px; 
-    box-sizing: border-box;
-}
-
-.lock-icon {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #0e023f;
-    pointer-events: none;
-}
-
-
-/* Responsive */
 @media (max-width: 600px) {
     .top-bar {
         flex-direction: column;
-        gap: 10px;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .logo-container img {
+        height: 90px;
     }
 
     .login-box {
-        padding: 20px;
+        padding: 30px 20px;
     }
 }

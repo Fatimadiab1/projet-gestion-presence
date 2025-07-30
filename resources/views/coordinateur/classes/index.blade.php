@@ -4,7 +4,7 @@
 @vite(['resources/css/coordinateur/classe/index.css'])
 
 @section('content')
-    <h2 class="title-roles">Liste des étudiants</h2>
+    <h1 class="title-roles"><i class="bi bi-people-fill"></i> Liste des étudiants</h1>
 
     {{-- Message --}}
     @if (session('success'))
@@ -19,7 +19,6 @@
         </div>
     @endif
 
-    {{-- Filtre --}}
     <form method="GET" action="{{ route('coordinateur.classes') }}">
         <div class="form-filters">
             <label for="classe_id">Classe :</label>
@@ -34,7 +33,7 @@
         </div>
     </form>
 
-    {{-- Liste --}}
+    {{-- Tableau --}}
     @if ($etudiants->isEmpty())
         <p class="text">Aucun étudiant trouvé.</p>
     @else

@@ -16,15 +16,15 @@ use Carbon\Carbon;
 
 class SeanceController extends Controller
 {
-    // Afficher la liste des séances
+    // Liste des séances
     public function index(Request $request)
     {
-        $utilisateur = Auth::user();
-        $coordinateur = $utilisateur->coordinateur;
+        $user = Auth::user();
+        $coordinateur = $user->coordinateur;
         $annee = AnneeAcademique::where('est_active', true)->first();
 
         if (!$coordinateur || !$annee) {
-            return redirect()->back()->with('error', 'Coordonnateur ou année académique introuvable.');
+            return redirect()->back()->with('error', 'Coordonnateur ou année introuvable.');
         }
 
         $classes = ClasseAnnee::where('coordinateur_id', $coordinateur->id)
@@ -34,36 +34,36 @@ class SeanceController extends Controller
 
         $classeIds = $classes->pluck('id');
 
-        $matieres = Matiere::whereHas('seances', function ($filtre) use ($classeIds) {
-            $filtre->whereIn('classe_annee_id', $classeIds);
+        $matieres = Matiere::whereHas('seances', function ($query) use ($classeIds) {
+            $query->whereIn('classe_annee_id', $classeIds);
         })->get();
 
         $statuts = StatutSeance::orderBy('nom')->get();
 
         $seances = Seance::with(['classeAnnee.classe', 'matiere', 'professeur.user', 'typeCours', 'statutSeance'])
-            ->whereHas('classeAnnee', function ($filtre) use ($coordinateur, $annee) {
-                $filtre->where('coordinateur_id', $coordinateur->id)
-                       ->where('annee_academique_id', $annee->id);
+            ->whereHas('classeAnnee', function ($query) use ($coordinateur, $annee) {
+                $query->where('coordinateur_id', $coordinateur->id)
+                      ->where('annee_academique_id', $annee->id);
             })
-            ->when($request->classe_id, function ($filtre) use ($request) {
-                $filtre->where('classe_annee_id', $request->classe_id);
+            ->when($request->classe_id, function ($query) use ($request) {
+                $query->where('classe_annee_id', $request->classe_id);
             })
-            ->when($request->matiere_id, function ($filtre) use ($request) {
-                $filtre->where('matiere_id', $request->matiere_id);
+            ->when($request->matiere_id, function ($query) use ($request) {
+                $query->where('matiere_id', $request->matiere_id);
             })
-            ->when($request->date, function ($filtre) use ($request) {
-                $filtre->whereDate('date', $request->date);
+            ->when($request->date, function ($query) use ($request) {
+                $query->whereDate('date', $request->date);
             })
-            ->when($request->statut_id, function ($filtre) use ($request) {
-                $filtre->where('statut_seance_id', $request->statut_id);
+            ->when($request->statut_id, function ($query) use ($request) {
+                $query->where('statut_seance_id', $request->statut_id);
             })
             ->orderByDesc('date')
-            ->get();
+            ->paginate(10); 
 
         return view('coordinateur.seances.index', compact('seances', 'classes', 'matieres', 'statuts'));
     }
 
-    // creer une séance
+    // Creer une séance
     public function create()
     {
         $coordinateurId = Auth::user()->coordinateur->id;
@@ -81,7 +81,7 @@ class SeanceController extends Controller
         return view('coordinateur.seances.create', compact('classes', 'matieres', 'types', 'trimestres'));
     }
 
-    // enregistrer une séance
+    // Enregistrer une séance
     public function store(Request $request)
     {
         $request->validate([
@@ -96,25 +96,18 @@ class SeanceController extends Controller
         ]);
 
         $trimestre = Trimestre::find($request->trimestre_id);
-        $dateSeance = Carbon::parse($request->date);
+        $date = Carbon::parse($request->date);
 
-        if (!$trimestre) {
-            return back()->with('error', 'Trimestre introuvable.');
+        if (!$trimestre || $date->lt($trimestre->date_debut) || $date->gt($trimestre->date_fin)) {
+            return back()->with('error', 'La date ne correspond pas à la période du trimestre.');
         }
 
-        if ($dateSeance->lt($trimestre->date_debut) || $dateSeance->gt($trimestre->date_fin)) {
-            $debut = $trimestre->date_debut->format('d/m/Y');
-            $fin = $trimestre->date_fin->format('d/m/Y');
-            return back()->with('error', "La date doit être entre $debut et $fin.");
-        }
-
-        $jour = ucfirst($dateSeance->locale('fr')->dayName);
+        $jour = ucfirst($date->locale('fr')->dayName);
         $profId = in_array($request->type_cours_id, [3, 4]) ? null : $request->professeur_id;
-
         $statut = StatutSeance::where('nom', 'Prévue')->first();
 
         if (!$statut) {
-            return back()->with('error', 'Le statut "Prévue" est introuvable.');
+            return back()->with('error', 'Statut "Prévue" introuvable.');
         }
 
         Seance::create([
@@ -133,7 +126,7 @@ class SeanceController extends Controller
         return redirect()->route('coordinateur.seances.index')->with('success', 'Séance créée.');
     }
 
-    // modifier une séance
+    // Modifier une séance
     public function edit(Seance $seance)
     {
         $classes = ClasseAnnee::with('classe')->get();
@@ -145,7 +138,7 @@ class SeanceController extends Controller
         return view('coordinateur.seances.edit', compact('seance', 'classes', 'matieres', 'types', 'trimestres', 'professeurs'));
     }
 
-    // mise a jour d'une séance
+    // Mettre à jour une séance
     public function update(Request $request, Seance $seance)
     {
         $request->validate([
@@ -163,7 +156,7 @@ class SeanceController extends Controller
         $date = Carbon::parse($request->date);
 
         if (!$trimestre || $date->lt($trimestre->date_debut) || $date->gt($trimestre->date_fin)) {
-            return back()->with('error', 'La date ne correspond pas au trimestre.');
+            return back()->with('error', 'La date ne correspond pas à la période du trimestre.');
         }
 
         $jour = ucfirst($date->locale('fr')->dayName);
@@ -184,7 +177,7 @@ class SeanceController extends Controller
         return redirect()->route('coordinateur.seances.index')->with('success', 'Séance mise à jour.');
     }
 
-    // annuler une séance
+    // Annuler une séance
     public function annuler(Seance $seance)
     {
         $statut = StatutSeance::where('nom', 'Annulée')->first();
@@ -198,13 +191,13 @@ class SeanceController extends Controller
         return redirect()->route('coordinateur.seances.index')->with('success', 'Séance annulée.');
     }
 
-    // formulaire de report d'une séance
+    // Formulaire de report
     public function formulaireReport(Seance $seance)
     {
         return view('coordinateur.seances.report', compact('seance'));
     }
 
-   // enregistrer le report d'une séance
+    // Enregistrer un report
     public function enregistrerReport(Request $request, Seance $seance)
     {
         $request->validate([
@@ -239,7 +232,7 @@ class SeanceController extends Controller
         return redirect()->route('coordinateur.seances.index')->with('success', 'Séance reportée.');
     }
 
-    // supprimer une séance
+    // Supprimer une séance
     public function destroy(Seance $seance)
     {
         $statut = StatutSeance::where('nom', 'Annulée')->first();

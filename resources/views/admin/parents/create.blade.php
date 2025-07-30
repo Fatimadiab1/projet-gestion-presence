@@ -3,11 +3,23 @@
 @section('title', 'Associer un parent')
 @section('header', 'Associer un parent à des enfants')
 
-@section('content')
-    @vite(['resources/css/admin/parent/parentaction.css'])
+@vite(['resources/css/admin/parent/parentaction.css'])
 
-    <h2 class="form-title">Associer un parent à un ou plusieurs enfants</h2>
-{{-- formulaire --}}
+@section('content')
+    <h1 class="form-title"><i class="bi bi-link-45deg"></i> Associer un parent à des enfants</h1>
+
+    {{-- Message --}}
+    @if ($errors->any())
+        <div class="form-alert" role="alert">
+            <ul>
+                @foreach ($errors->all() as $e)
+                    <li>{{ $e }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Formulaire --}}
     <form method="POST" action="{{ route('admin.parents.store') }}" class="form-container">
         @csrf
 
@@ -20,7 +32,8 @@
                 </option>
             @endforeach
         </select>
-        <label for="etudiants">Sélectionner un ou plusieurs enfants</label>
+
+        <label for="etudiants">Enfants à associer</label>
         <select name="etudiants[]" id="etudiants" multiple required>
             @foreach($etudiants as $etudiant)
                 <option value="{{ $etudiant->id }}">
@@ -28,8 +41,7 @@
                 </option>
             @endforeach
         </select>
-        <button type="submit">
-            Associer
-        </button>
+
+        <button type="submit">Associer</button>
     </form>
 @endsection

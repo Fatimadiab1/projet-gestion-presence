@@ -2,22 +2,20 @@
 
 @section('title', 'Types de cours')
 @section('header', 'Liste des types de cours')
+
 @vite(['resources/css/admin/typecours/typecoursindex.css'])
 
 @section('content')
-<div class="type-cours-container">
-    <h2 class="titre-page">Liste des types de cours</h2>
-
-    {{-- message --}}
+    <div class="role-header">
+        <h1 class="title-roles"><i class="bi bi-easel-fill"></i> Types de cours</h1>
+    </div>
+{{-- Message  --}}
     @if(session('success'))
-        <div class="alerte-succes">
-            {{ session('success') }}
-        </div>
+        <div class="alert-success">{{ session('success') }}</div>
     @endif
-
-    {{-- tableau --}}
-    <div class="table-responsive">
-        <table class="table">
+{{-- Tableau --}}
+    <div class="table-container">
+        <table class="style-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -25,15 +23,21 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($typesCours as $type)
+                @forelse($typesCours as $type)
                     <tr>
                         <td>#{{ $type->id }}</td>
                         <td>{{ $type->nom }}</td>
-                   
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="2" class="text-muted text-center">Aucun type de cours trouvé.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
+
+        <div class="pagination-wrapper">
+            {{ $typesCours->links() }}
+        </div>
     </div>
-</div>
 @endsection

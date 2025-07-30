@@ -1,15 +1,41 @@
-.trimestre-container {
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans&display=swap');
+
+body {
     font-family: 'Reddit Sans', sans-serif;
+}
+.trimestre-container {
     padding: 20px;
 }
 
 .trimestre-container h2 {
-    font-size: 30px;
-    font-weight: bold;
-    color: #151836;
+    font-size: 28px;
+    font-weight: 700;
+    color: #0a0a37;
     margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
+.btn-ajouter {
+    background-color: #0a0a37;
+    color: white;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    display: inline-block;
+    margin-bottom: 20px;
+    transition: 0.3s ease;
+}
+
+.btn-ajouter:hover {
+    background-color: #FF0047;
+}
+
+.btn-ajouter i {
+    margin-right: 6px;
+}
 .alert-success {
     background-color: #d4edda;
     color: #155724;
@@ -19,32 +45,26 @@
     margin-bottom: 20px;
 }
 
-.btn-ajouter {
-    background-color: #151836;
-    color: white;
-    padding: 10px 16px;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 14px;
-    display: inline-block;
-    margin-bottom: 20px;
-}
-
-.btn-ajouter:hover {
-    background-color: #FF0047;
-}
-
 /* Tableau */
+.table-wrapper {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    overflow-x: auto;
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
+    color: #0a0a37;
 }
 
 .table th,
 .table td {
+    border: 1px solid #e6e6e6;
     padding: 12px;
-    border: 1px solid #ddd;
     text-align: center;
 }
 
@@ -54,7 +74,7 @@
 }
 
 .table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
 }
 
 .table-actions {
@@ -63,11 +83,71 @@
     gap: 12px;
 }
 
-.btn-edit,
+.btn-edit{
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0a0a37;
+    transition: 0.2s ease;
+}
 .btn-delete {
     font-size: 18px;
     background: none;
     border: none;
     cursor: pointer;
-    color: #151836;
+    color: #FF0047;
+    transition: 0.2s ease;
+}
+
+.btn-edit:hover {
+    color: #FF0047;
+    transform: scale(1.1);
+}
+
+.btn-delete:hover {
+    color: #dc3545;
+    transform: scale(1.1);
+}
+
+.empty-message {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+}
+
+
+.pagination-wrapper {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.pagination-wrapper .pagination {
+    display: inline-flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 6px;
+    gap: 5px;
+}
+
+.pagination-wrapper .page-link {
+    padding: 8px 12px;
+    color: #0a0a37;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.pagination-wrapper .page-item.active .page-link {
+    background-color: #FF0047;
+    color: white;
+    border-color: #FF0047;
+}
+
+.pagination-wrapper .page-link:hover {
+    background-color: #0a0a37;
+    color: white;
 }

@@ -4,11 +4,11 @@
 @vite(['resources/css/admin/inscription/nonreinscrits.css'])
 
 @section('content')
-    <h2 class="titre-tableau">
-        Étudiants non réinscrits pour {{ $anneeActuelle->annee ?? 'année inconnue' }}
-    </h2>
+    <h1 class="titre-tableau">
+        <i class="bi bi-person-x-fill"></i> Étudiants non réinscrits pour {{ $anneeActuelle->annee ?? 'année inconnue' }}
+    </h1>
 
-    {{-- Filtres année & classe --}}
+  
     <form method="GET" action="{{ route('admin.inscriptions.non_reinscrits') }}" class="form-filtres mb-6">
         <label for="annee_id" class="label-filtre">Année :</label>
         <select name="annee_id" id="annee_id" onchange="this.form.submit()" class="select-filtre">
@@ -50,7 +50,7 @@
                             <td>{{ $etudiant->user->prenom }}</td>
                             <td>
                                 <a href="{{ route('admin.inscriptions.reinscrire', $etudiant->id) }}" class="lien-modifier">
-                                    Réinscrire
+                                    <i class="bi bi-arrow-repeat"></i> Réinscrire
                                 </a>
                             </td>
                         </tr>

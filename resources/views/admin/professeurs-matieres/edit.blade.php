@@ -5,9 +5,8 @@
 @vite(['resources/css/admin/prof/profaction.css'])
 
 @section('content')
-<h2 class="form-title">Modifier l'association</h2>
-
-{{-- Message d'erreur --}}
+<h1 class="form-title"><i class="bi bi-pencil-square"></i> Modifier l'association</h1>
+{{-- message --}}
 @if ($errors->any())
     <div class="form-alert">
         <ul>
@@ -17,7 +16,6 @@
         </ul>
     </div>
 @endif
-
 {{-- Formulaire --}}
 <div class="formulaire-container">
     <form method="POST" action="{{ route('admin.professeurs-matieres.update', [$professeur->id, $matiere->id]) }}">
@@ -40,7 +38,7 @@
             @endforeach
         </select>
 
-        <button type="submit" class="btn-ajouter" style="margin-top: 20px;">Mettre à jour</button>
+        <button type="submit">Mettre à jour</button>
     </form>
 </div>
 @endsection

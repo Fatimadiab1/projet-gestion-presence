@@ -1,21 +1,18 @@
-/* Formulaire */
-.formulaire-container {
-    max-width: 500px;
-    margin: 0 auto;
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans&display=swap');
+
+body {
     font-family: 'Reddit Sans', sans-serif;
 }
 
-
 .form-title {
-    font-size: 30px;
-    font-weight: 600;
-    color: #151836;
-    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #0a0a37;
     font-family: 'Reddit Sans', sans-serif;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .form-alert {
@@ -28,28 +25,38 @@
     font-size: 14px;
 }
 
-/* Champs du formulaire */
+.formulaire-container {
+    background-color: white;
+    padding: 25px;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Reddit Sans', sans-serif;
+}
+
 .formulaire-container label {
     font-weight: 500;
     margin-bottom: 6px;
     display: block;
     color: #333;
+    margin-top: 12px;
 }
 
 .formulaire-container input {
     width: 100%;
     padding: 10px;
-    margin-bottom: 18px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 18px;
     box-sizing: border-box;
 }
 
-/* Bouton */
 .formulaire-container button {
     width: 100%;
-    background-color: #151836;
+    background-color: #0a0a37;
     color: white;
     padding: 12px;
     border: none;

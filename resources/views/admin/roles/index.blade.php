@@ -4,12 +4,16 @@
 
 @section('content')
     @vite(['resources/css/admin/role.css'])
-    <h2 class="title-roles">Liste des rôles disponibles</h2>
+
+    <div class="role-header">
+        <h1 class="title-roles"><i class="bi bi-shield-lock"></i> Liste des rôles disponibles</h1>
+    </div>
+
     @if ($roles->isEmpty())
         <p class="text">Aucun rôle trouvé.</p>
     @else
         <div class="table-container">
-            <table class="style-table">
+            <table class="style-table" aria-label="Liste des rôles dans le système">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -20,7 +24,7 @@
                     @foreach ($roles as $role)
                         <tr>
                             <td>#{{ $role->id }}</td>
-                            <td>{{ ucfirst($role->nom) }}</td>
+                            <td> {{ ucfirst($role->nom) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

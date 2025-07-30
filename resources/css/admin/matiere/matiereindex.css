@@ -3,7 +3,7 @@
     padding: 20px;
 }
 
-.matiere-container h2 {
+.matiere-container h1 {
     font-size: 30px;
     font-weight: bold;
     color: #151836;
@@ -19,22 +19,42 @@
     margin-bottom: 20px;
 }
 
-.btn-ajouter {
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-ajouter,
+.btn-associer {
     background-color: #151836;
     color: white;
     padding: 10px 16px;
     text-decoration: none;
     border-radius: 6px;
     font-size: 14px;
-    display: inline-block;
-    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
 }
 
-.btn-ajouter:hover {
+.btn-associer {
+    background-color: #030c2d;
+}
+
+.btn-ajouter:hover,
+.btn-associer:hover {
     background-color: #FF0047;
 }
 
-/* Tableau */
+.table-wrapper {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
 .table-responsive {
     overflow-x: auto;
 }
@@ -43,8 +63,6 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    background-color: white;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .table th,
@@ -61,7 +79,7 @@
 }
 
 .table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
 }
 
 .table-actions {
@@ -78,22 +96,12 @@
     cursor: pointer;
     color: #151836;
 }
-.bi-trash3-fill {
+
+.btn-delete .bi-trash3-fill {
     color: #dc3545;
 }
-.btn-associer {
-    background-color: #030c2d;
-    color: white;
-    padding: 10px 16px;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 14px;
-    display: inline-block;
-    margin-bottom: 20px;
-    margin-right: 12px;
-    transition: background-color 0.3s ease;
-}
 
-.btn-associer:hover {
-    background-color: #1B4B65;
+.pagination-wrapper {
+    margin-top: 20px;
+    text-align: center;
 }

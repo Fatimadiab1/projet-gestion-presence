@@ -11,10 +11,11 @@ use App\Models\Presence;
 use App\Models\Seance;
 use App\Models\AnneeAcademique;
 use Carbon\Carbon;
+use App\Models\Matiere;
 
 class CoordinateurController extends Controller
 {
-// Afficher tableau de bord du coordinateur
+    // Afficher tableau de bord du coordinateur
     public function index(Request $request)
     {
         $utilisateur = Auth::user();
@@ -25,7 +26,6 @@ class CoordinateurController extends Controller
             return back()->with('error', 'Coordonnateur ou année académique introuvable.');
         }
 
-        // Récupérer les classes du coordinateur 
         $classes = ClasseAnnee::where('coordinateur_id', $coordinateur->id)
             ->where('annee_academique_id', $annee->id)
             ->with('classe')
@@ -33,15 +33,15 @@ class CoordinateurController extends Controller
 
         $classeIds = $classes->pluck('id');
 
-        // Compter les étudiants
+
         $nombreEtudiants = Etudiant::whereHas('inscriptions', function ($filtre) use ($classeIds) {
             $filtre->whereIn('classe_annee_id', $classeIds);
         })->count();
 
-        // Date du jour
+
         $aujourdhui = Carbon::today()->toDateString();
 
-        // Nombre d'absents aujourd'hui
+
         $absentsAujourdhui = Presence::whereDate('created_at', $aujourdhui)
             ->whereHas('etudiant.inscriptions', function ($filtre) use ($classeIds) {
                 $filtre->whereIn('classe_annee_id', $classeIds);
@@ -51,13 +51,11 @@ class CoordinateurController extends Controller
             })
             ->count();
 
-        // Présences à enregistrer
         $presencesAEnregistrer = Seance::whereIn('classe_annee_id', $classeIds)
             ->whereDate('date', $aujourdhui)
             ->whereDoesntHave('presences')
             ->count();
 
-        // Absences non justifiées
         $absencesNonJustifiees = Presence::whereIn('etudiant_id', Etudiant::pluck('id'))
             ->whereHas('statut', function ($filtre) {
                 $filtre->where('nom', 'absent');
@@ -99,8 +97,8 @@ class CoordinateurController extends Controller
                 $filtre->where('classe_annee_id', $classeFiltre);
             }
         })
-        ->with('user')
-        ->get();
+            ->with('user')
+            ->get();
 
         // Cours du jour
         $coursDuJour = Seance::with(['classeAnnee.classe', 'matiere', 'typeCours', 'professeur.user'])
@@ -108,6 +106,42 @@ class CoordinateurController extends Controller
             ->whereDate('date', $aujourdhui)
             ->orderBy('heure_debut')
             ->get();
+
+// étudiants droppés
+$alertes = [];
+
+foreach ($classes as $classe) {
+    $inscriptions = $classe->inscriptions()->with('etudiant.user')->get();
+    $matieres = Matiere::all(); 
+
+    foreach ($matieres as $matiere) {
+        $seanceIds = Seance::where('classe_annee_id', $classe->id)
+            ->where('matiere_id', $matiere->id)
+            ->pluck('id');
+
+        $totalSeances = count($seanceIds);
+        if ($totalSeances === 0) continue;
+
+        foreach ($inscriptions as $inscription) {
+            $etudiant = $inscription->etudiant;
+
+            $nbPresences = Presence::where('etudiant_id', $etudiant->id)
+                ->whereIn('seance_id', $seanceIds)
+                ->whereHas('statut', function ($query) {
+                    $query->whereIn('nom', ['présent', 'retard']);
+                })
+                ->count();
+
+            $taux = round(($nbPresences / $totalSeances) * 100, 2);
+
+            if ($taux < 30) {
+                $alertes[] = "L'étudiant <strong>{$etudiant->user->prenom} {$etudiant->user->nom}</strong> est droppé de la matière <strong>{$matiere->nom}</strong> (taux : {$taux}%)";
+            }
+        }
+    }
+}
+
+
 
         return view('coordinateur.dashboard', [
             'nombreEtudiants' => $nombreEtudiants,
@@ -120,6 +154,7 @@ class CoordinateurController extends Controller
             'dateDebut' => $dateDebut,
             'dateFin' => $dateFin,
             'coursDuJour' => $coursDuJour,
+            'alertes' => $alertes,
         ]);
     }
 }

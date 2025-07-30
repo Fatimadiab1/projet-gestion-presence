@@ -1,7 +1,7 @@
 @extends('layouts.coordinateur')
 
 @section('title', 'Taux de présence par étudiant')
-@vite('resources/css/statistique/presence.css')
+@vite(['resources/css/coordinateur/statistique/presence.css'])
 @section('content')
     <h2 class="title-users">Taux de présence par étudiant</h2>
 

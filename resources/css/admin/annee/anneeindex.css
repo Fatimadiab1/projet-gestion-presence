@@ -1,13 +1,22 @@
-.annee-container {
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans&display=swap');
+
+body {
     font-family: 'Reddit Sans', sans-serif;
+}
+
+/* top bar */
+.annee-container {
     padding: 20px;
 }
 
 .annee-container h2 {
-    font-size: 30px;
-    font-weight: bold;
-    color: #151836;
-    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #0a0a37;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
 }
 
 .alert-success {
@@ -19,27 +28,35 @@
     margin-bottom: 20px;
 }
 
-
 .btn-ajouter {
-    background-color: #151836;
+    background-color: #0a0a37;
     color: white;
     padding: 10px 16px;
-    text-decoration: none;
     border-radius: 6px;
     font-size: 14px;
+    text-decoration: none;
     display: inline-block;
     margin-bottom: 20px;
+    transition: 0.3s;
 }
 
 .btn-ajouter:hover {
     background-color: #FF0047;
 }
 
-/* Tableau */
+/* tableau */
+.table-wrapper {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    overflow-x: auto;
+}
 .table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
+    color: #0a0a37;
 }
 
 .table th,
@@ -55,7 +72,14 @@
 }
 
 .table tr:hover {
-    background-color: #f1f1f1;
+    background-color: #f9f9f9;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 15px;
+    font-style: italic;
+    color: #888;
 }
 
 .table-actions {
@@ -64,30 +88,54 @@
     gap: 12px;
 }
 
-.btn-edit,
+.btn-edit{
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0a0a37;
+    transition: 0.2s ease;
+}
 .btn-delete {
     font-size: 18px;
     background: none;
     border: none;
     cursor: pointer;
-    color: #151836;
+    color: #FF0047;
+    transition: 0.2s ease;
 }
+
+.btn-edit:hover {
+    color: #FF0047;
+    transform: scale(1.1);
+}
+
+.btn-delete:hover {
+    color: #dc3545;
+    transform: scale(1.1);
+}
+
+
 .etat-en-cours {
     color: #198754;
     font-weight: bold;
     font-size: 14px;
-    margin-left: 8px;
 }
 
 .etat-inactive {
     background: none;
     border: none;
-    color: #545454; 
+    color: #555;
     font-size: 14px;
     cursor: pointer;
-    margin-left: 8px;
 }
 
 .etat-inactive:hover {
-    color: #495057;
+    color: #0a0a37;
+}
+
+.pagination-wrapper {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
 }

@@ -1,89 +1,106 @@
 .form-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
     text-align: center;
-    font-size: 22px;
-    margin-bottom: 20px;
-    color: #0a0a37;
-    font-family: 'Arial', sans-serif;
+    color: #1B1C3A;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-title small {
+    font-size: 16px;
+    font-weight: normal;
+    color: #666;
 }
 
 .presence-container {
-    width: 95%;
-    max-width: 1000px;
-    margin: 0 auto 40px;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+    overflow-x: auto;
 }
 
 .presence-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.presence-table thead {
+    background-color: #0a0a37;
+    color: white;
 }
 
 .presence-table th,
 .presence-table td {
-    padding: 12px;
-    border: 1px solid #e0e0e0;
-    text-align: center;
+    padding: 14px 16px;
+    text-align: left;
     font-size: 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
 }
 
-.presence-table th {
-    background-color: #f5f5f5;
-    font-weight: bold;
+.presence-table tbody tr:hover {
+    background-color: #f8f9fc;
 }
 
 .etudiant-photo {
-    width: 45px;
-    height: 45px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #0a0a37;
 }
 
 .statut-text {
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: 25px;
+    font-size: 13px;
     font-weight: bold;
-    font-size: 14px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    text-transform: uppercase;
     display: inline-block;
+    min-width: 100px;
 }
 
 .statut-text.present {
-    background-color: #d4f8e8;
-    color: #1e7e34;
-}
-
-.statut-text.absent {
-    background-color: #fde2e2;
-    color: #c82333;
+    background-color: #28a745;
 }
 
 .statut-text.retard {
-    background-color: #fff3cd;
-    color: #856404;
+    background-color: #fd7e14;
+}
+
+.statut-text.absent {
+    background-color: #dc3545;
 }
 
 .no-student {
     text-align: center;
-    font-style: italic;
-    color: #666;
+    color: #7f8c8d;
+    font-size: 16px;
+    margin-top: 30px;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 40px;
 }
 
 .btn-return {
     display: inline-block;
-    margin-top: 30px;
+    padding: 12px 24px;
+    background-color: #0a0a37;
+    color: white;
     text-decoration: none;
-    padding: 10px 20px;
-    background-color: #FF0047;
-    color: #fff;
-    border-radius: 8px;
-    transition: background 0.3s ease;
-    font-weight: bold;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-return:hover {
-    background-color: #c60038;
+    background-color: #FF0047;
 }

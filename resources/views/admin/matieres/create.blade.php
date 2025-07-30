@@ -1,33 +1,37 @@
 @extends('layouts.admin')
 
 @section('title', 'Ajouter une matière')
-@section('header', 'Ajouter une matière')
-@vite(['resources/css/admin/matiere/matiereaction.css'])
+@section('header', 'Nouvelle matière')
 
 @section('content')
-<h2 class="form-title">Ajouter une matière</h2>
-{{-- message --}}
-@if($errors->any())
-    <div class="form-alert">
-        <ul>
-            @foreach($errors->all() as $e)
-                <li>{{ $e }}</li>
-            @endforeach
-        </ul>
+    @vite(['resources/css/admin/matiere/matiereaction.css'])
+
+    <h1 class="form-title"><i class="bi bi-plus-circle"></i> Ajouter une matière</h1>
+
+{{-- Message --}}
+    @if ($errors->any())
+        <div class="form-alert">
+            <ul>
+                @foreach ($errors->all() as $e)
+                    <li>{{ $e }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Formulaire --}}
+
+    <div class="formulaire-container">
+        <form action="{{ route('admin.matieres.store') }}" method="POST">
+            @csrf
+
+            <label for="nom">Nom de la matière</label>
+            <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required>
+
+            <label for="volume_horaire_prevu">Volume horaire prévu (en heures)</label>
+            <input type="number" id="volume_horaire_prevu" name="volume_horaire_prevu" value="{{ old('volume_horaire_prevu') }}" min="1" required>
+
+            <button type="submit">Enregistrer</button>
+        </form>
     </div>
-@endif
-{{-- Formulaire --}}
-<div class="formulaire-container">
-    <form action="{{ route('admin.matieres.store') }}" method="POST">
-        @csrf
-
-        <label>Nom de la matière</label>
-        <input type="text" name="nom" value="{{ old('nom') }}" required>
-
-        <label>Volume horaire prévu (en heures)</label>
-        <input type="number" name="volume_horaire_prevu" value="{{ old('volume_horaire_prevu') }}" min="1" required>
-
-        <button type="submit">Enregistrer</button>
-    </form>
-</div>
 @endsection

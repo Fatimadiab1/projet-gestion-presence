@@ -3,13 +3,25 @@
 @section('title', 'Modifier une association')
 @section('header', 'Modifier une association')
 
-@section('content')
-    @vite(['resources/css/admin/parent/parentaction.css'])
+@vite(['resources/css/admin/parent/parentaction.css'])
 
-    <h2 class="form-title">
+@section('content')
+    <h1 class="form-title">
+        <i class="bi bi-pencil-square"></i>
         Modifier l’association du parent : {{ $parent->user->prenom }} {{ $parent->user->nom }}
-    </h2>
-   {{-- formulaire --}}
+    </h1>
+{{-- Message --}}
+    @if ($errors->any())
+        <div class="form-alert" role="alert">
+            <ul>
+                @foreach ($errors->all() as $e)
+                    <li>{{ $e }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {{-- Formulaire --}}
     <form method="POST" action="{{ route('admin.parents.update', $parent->id) }}" class="form-container">
         @csrf
         @method('PUT')
@@ -22,6 +34,7 @@
                 </option>
             @endforeach
         </select>
+
         <button type="submit">
             Mettre à jour
         </button>

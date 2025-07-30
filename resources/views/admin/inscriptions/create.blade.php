@@ -4,7 +4,7 @@
 @vite(['resources/css/admin/inscription/inscriptionaction.css'])
 
 @section('content')
-    <h2 class="form-title">Nouvelle inscription</h2>
+    <h2 class="form-title"><i class="bi bi-plus-circle"></i> Nouvelle inscription</h2>
 
 {{-- message --}}
     @if ($errors->any())

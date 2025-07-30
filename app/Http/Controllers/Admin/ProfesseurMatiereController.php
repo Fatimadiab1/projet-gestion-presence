@@ -3,28 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Professeur;
 use App\Models\Matiere;
-use Illuminate\Http\Request;
 
 class ProfesseurMatiereController extends Controller
 {
-    // Afficher la liste 
+    // Afficher les associations 
     public function index()
     {
-        $professeurs = Professeur::with(['user', 'matieres'])->get();
+        $professeurs = Professeur::with(['user', 'matieres'])->paginate(10);
         return view('admin.professeurs-matieres.index', compact('professeurs'));
     }
 
-    // créer une association 
+    // Créer une association
     public function create()
     {
-        $professeurs = Professeur::with('user')
-            ->join('users', 'professeurs.user_id', '=', 'users.id')
-            ->orderBy('users.nom')
-            ->select('professeurs.*')
-            ->get();
-
+        $professeurs = Professeur::with('user')->get()->sortBy('user.nom');
         $matieres = Matiere::orderBy('nom')->get();
 
         return view('admin.professeurs-matieres.create', compact('professeurs', 'matieres'));
@@ -38,19 +33,18 @@ class ProfesseurMatiereController extends Controller
             'matiere_id' => 'required|exists:matieres,id',
         ]);
 
-        $professeur = Professeur::findOrFail($request->professeur_id);
+        $professeur = Professeur::find($request->professeur_id);
 
-      
         if ($professeur->matieres()->where('matiere_id', $request->matiere_id)->exists()) {
-            return redirect()->back()->withErrors(['matiere_id' => 'Cette matière est déjà associée à ce professeur.']);
+            return back()->withErrors(['matiere_id' => 'Cette matière est déjà associée à ce professeur.'])->withInput();
         }
 
         $professeur->matieres()->attach($request->matiere_id);
 
-        return redirect()->route('admin.professeurs-matieres.index')->with('success', 'Matière associée au professeur.');
+        return redirect()->route('admin.professeurs-matieres.index')->with('success', 'Matière associée avec succès.');
     }
 
-    // modifier l'association
+    // Modifier l'association
     public function edit($professeur_id, $matiere_id)
     {
         $professeur = Professeur::with('user')->findOrFail($professeur_id);
@@ -60,7 +54,7 @@ class ProfesseurMatiereController extends Controller
         return view('admin.professeurs-matieres.edit', compact('professeur', 'matiere', 'matieres'));
     }
 
-    // Mise à jour de l'association
+    // Mettre à jour l'association
     public function update(Request $request, $professeur_id, $matiere_id)
     {
         $request->validate([
@@ -69,12 +63,9 @@ class ProfesseurMatiereController extends Controller
 
         $professeur = Professeur::findOrFail($professeur_id);
 
-      
         $professeur->matieres()->detach($matiere_id);
-
-        
         $professeur->matieres()->attach($request->nouvelle_matiere_id);
 
-        return redirect()->route('admin.professeurs-matieres.index')->with('success', 'Matière mise à jour pour le professeur.');
+        return redirect()->route('admin.professeurs-matieres.index')->with('success', 'Matière mise à jour.');
     }
 }

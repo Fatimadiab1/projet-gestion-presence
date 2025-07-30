@@ -37,6 +37,11 @@ use App\Http\Controllers\ParentSpace\AbsenceController;
 use App\Http\Controllers\ParentSpace\ParentCalculController;
 
 
+use App\Http\Controllers\EtudiantSpace\EtudiantEmploiController;
+use App\Http\Controllers\EtudiantSpace\EtudiantPresenceController;
+use App\Http\Controllers\EtudiantSpace\EtudiantAssiduiteController;
+use App\Http\Controllers\EtudiantSpace\EtudiantController;
+
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsEtudiant;
 use App\Http\Middleware\IsProfesseur;
@@ -50,9 +55,9 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->middleware(IsAdmin::class)->name('admin.dashboard');
     
-    Route::get('/etudiant/dashboard', function () {
-        return view('etudiant.dashboard');
-    })->middleware(IsEtudiant::class)->name('etudiant.dashboard');
+Route::get('/etudiant/dashboard', [EtudiantController::class, 'index'])
+    ->middleware(IsEtudiant::class)
+    ->name('etudiant.dashboard');
     
   Route::get('/professeur/dashboard', [ProfesseurController::class, 'index'])
     ->middleware(IsProfesseur::class)
@@ -213,6 +218,8 @@ Route::prefix('calculs')->name('calculs.')->group(function () {
     Route::get('/assiduite', [CalculController::class, 'assiduiteParEtudiantEtMatiere'])->name('assiduite');
     Route::get('/presence-periode', [CalculController::class, 'presenceParPeriode'])->name('presence.periode');
     Route::get('/taux-classe-periode', [CalculController::class, 'tauxClasseParPeriode'])->name('taux.classe.periode');
+    Route::get('/droppes', [CalculController::class, 'etudiantsDroppesParMatiere'])->name('droppes');
+
 });
 
 });
@@ -240,6 +247,13 @@ Route::middleware(['auth', IsParent::class])
      Route::get('/assiduite', [ParentCalculController::class, 'assiduite'])->name('assiduite');
     });
 
+
+
+   Route::middleware(['auth', IsEtudiant::class])->prefix('etudiant')->name('etudiant.')->group(function () {
+    Route::get('/emploi-du-temps', [EtudiantEmploiController::class, 'index'])->name('emploi');
+    Route::get('/presences', [EtudiantPresenceController::class, 'index'])->name('presences');
+    Route::get('/assiduite', [EtudiantAssiduiteController::class, 'index'])->name('assiduite');   
+}); 
 
 
 

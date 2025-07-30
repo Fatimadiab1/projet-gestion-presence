@@ -1,58 +1,76 @@
+
 .title-users {
-    text-align: center;
-    font-size: 22px;
-    margin: 20px auto;
-    font-family: 'Reddit Sans', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
     color: #0a0c3c;
+    font-family: 'Reddit Sans', sans-serif;
+    text-align: center;
+    margin: 30px auto 40px;
+    letter-spacing: 0.5px;
 }
+
 
 .bloc-type-cours {
-    background: #f0f2f5;
-    margin: 30px auto;
-    padding: 20px;
-    border-radius: 12px;
+    background: #ffffff;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 16px;
     width: 95%;
-    max-width: 1200px;
+    max-width: 1100px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid #eee;
 }
 
+
 .titre-type {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #0a0c3c;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: #FF0047;
     text-align: center;
     text-transform: uppercase;
+    font-family: 'Reddit Sans', sans-serif;
+    letter-spacing: 0.6px;
 }
+
 
 .grille-graphes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 10px;
 }
 
+
 .graphe-container {
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    height: 300px;
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    height: 330px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
 }
+
+
+.titre-trimestre {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0a0c3c;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
 
 .texte-vide {
     text-align: center;
     font-style: italic;
-    color: #888;
-    padding: 10px;
-}
-
-.titre-trimestre {
-    text-align: center;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: #1e3a8a;
-    font-family: 'Reddit Sans', sans-serif;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+    color: #777;
+    font-size: 14px;
+    margin-top: 10px;
 }

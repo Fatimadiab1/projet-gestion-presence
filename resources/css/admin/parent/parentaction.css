@@ -1,14 +1,32 @@
-/* Formulaire */
-.form-title {
-    font-size: 30px;
-    font-weight: bold;
-    color: #1B1C3A;
-    margin-bottom: 30px;
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans&display=swap');
+
+body {
     font-family: 'Reddit Sans', sans-serif;
 }
+.form-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #0a0a37;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
+.form-alert {
+    background-color: #fde2e2;
+    color: #9d1c1c;
+    border: 1px solid #f5c2c2;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 0 auto 20px;
+    max-width: 500px;
+    font-size: 14px;
+}
+
+/* Formulaire */
 .form-container {
-    background-color: #fff;
+    background-color: white;
     padding: 20px;
     max-width: 500px;
     margin: 0 auto;
@@ -19,6 +37,7 @@
     font-family: 'Reddit Sans', sans-serif;
 }
 
+
 .form-container label {
     font-size: 15px;
     font-weight: 500;
@@ -26,8 +45,8 @@
     margin-top: 12px;
 }
 
-.form-container input,
-.form-container select {
+.form-container select,
+.form-container input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -38,6 +57,7 @@
     box-sizing: border-box;
 }
 
+
 .form-container select[multiple] {
     height: 140px;
     padding: 10px;
@@ -46,31 +66,15 @@
 .form-container button {
     margin-top: 20px;
     padding: 12px;
-    background-color: #1B1C3A;
+    background-color: #0a0a37;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 15px;
     cursor: pointer;
-    transition: 0.4s;
+    transition: 0.3s;
 }
 
 .form-container button:hover {
     background-color: #FF0047;
-}
-
-.btn-secondary {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 16px;
-    background-color: #ccc;
-    color: #1B1C3A;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: 0.3s;
-    text-align: center;
-}
-.btn-secondary:hover {
-    background-color: #999;
 }

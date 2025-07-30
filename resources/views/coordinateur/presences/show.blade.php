@@ -11,7 +11,7 @@
     </h2>
 
     <div class="presence-container">
-        @if ($etudiants->isEmpty())
+       @if (empty($etudiants))
             <p class="no-student">Aucun étudiant inscrit à cette classe.</p>
         @else
             <table class="presence-table">

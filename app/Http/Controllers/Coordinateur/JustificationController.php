@@ -12,17 +12,17 @@ use App\Models\Seance;
 
 class JustificationController extends Controller
 {
-    // Liste des absences 
+    // Afficher la liste des absences
     public function index(Request $request)
     {
-        $coordinateurId = Auth::user()->coordinateur->id;
-        $classes = ClasseAnnee::where('coordinateur_id', $coordinateurId)->pluck('id');
-        $seances = Seance::whereIn('classe_annee_id', $classes)->pluck('id');
+        $coordinateur = Auth::user()->coordinateur;
+        $classeIds = ClasseAnnee::where('coordinateur_id', $coordinateur->id)->pluck('id');
+        $seanceIds = Seance::whereIn('classe_annee_id', $classeIds)->pluck('id');
 
         $absences = Presence::with(['etudiant.user', 'seance.matiere', 'justification', 'statut'])
-            ->whereIn('seance_id', $seances)
-            ->whereHas('statut', function ($statut) {
-                $statut->where('nom', 'Absent');
+            ->whereIn('seance_id', $seanceIds)
+            ->whereHas('statut', function ($query) {
+                $query->where('nom', 'Absent');
             });
 
         if ($request->justifie === 'oui') {
@@ -31,12 +31,12 @@ class JustificationController extends Controller
             $absences->doesntHave('justification');
         }
 
-        $absences = $absences->get();
+        $absences = $absences->orderByDesc('id')->paginate(10)->withQueryString();
 
         return view('coordinateur.justifications.index', compact('absences'));
     }
 
-    // Créer une justification
+    // Création d'une justification
     public function create($presenceId)
     {
         $presence = Presence::with(['etudiant.user', 'seance.matiere'])->findOrFail($presenceId);
@@ -52,7 +52,7 @@ class JustificationController extends Controller
         return view('coordinateur.justifications.create', compact('presence'));
     }
 
-    // Enregistrer la justification
+    // Enregistrer une justification
     public function store(Request $request)
     {
         $request->validate([
@@ -83,7 +83,7 @@ class JustificationController extends Controller
         return view('coordinateur.justifications.edit', compact('justification'));
     }
 
-    // Mise à jour
+    // Mise à jour d'une justification
     public function update(Request $request, $id)
     {
         $request->validate([

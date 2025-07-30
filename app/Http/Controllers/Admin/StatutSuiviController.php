@@ -10,7 +10,7 @@ class StatutSuiviController extends Controller
     // Afficher la liste des statuts de suivi
     public function index()
     {
-        $statuts = StatutSuivi::orderBy('id')->get(); 
+        $statuts = StatutSuivi::orderBy('id')->paginate(10);
         return view('admin.statuts-suivi.index', compact('statuts'));
     }
 }

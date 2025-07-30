@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Reddit+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     @vite('resources/css/sidebar.css')
+    @vite('resources/css/app.css')
+
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 </head>
 
@@ -37,7 +39,7 @@
         <a href="{{ route('coordinateur.calculs.presence.periode') }}">Taux de présence aux cours</a>
      <a href="{{ route('coordinateur.calculs.taux.classe.periode') }}">Taux de présence par classe</a>
 
-        <a href="">Étudiants droppés</a>
+        <a href="{{ route('coordinateur.calculs.droppes') }}">Étudiants droppés</a>
     </div>
 </div>
 

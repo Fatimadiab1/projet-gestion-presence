@@ -7,7 +7,6 @@
 @section('content')
     <h2 class="title-users">Volume total de cours par classe</h2>
 
-    {{-- Filtre de trimestre --}}
     <div class="trimestre-filtre">
         <label for="selectTrimestre">Afficher :</label>
         <select id="selectTrimestre" onchange="updateChart()">

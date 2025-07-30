@@ -1,28 +1,33 @@
 .form-title {
-    font-size: 22px;
+    font-size: 28px;
+    font-weight: bold;
     text-align: center;
-    margin-bottom: 25px;
-    color: #0a0a37;
+    margin-bottom: 30px;
+    color: #1B1C3A;
     font-family: 'Reddit Sans', sans-serif;
+}
+
+.form-title small {
+    display: block;
+    font-size: 16px;
+    color: #666;
+    margin-top: 6px;
 }
 
 .form-alert {
     background-color: #ffe0e0;
-    color: #a30000;
-    padding: 12px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto 20px;
+    border: 1px solid #ff6b6b;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: #a70000;
+    font-size: 14px;
+    margin-bottom: 30px;
     font-family: 'Reddit Sans', sans-serif;
 }
 
 .formulaire-container {
     max-width: 900px;
     margin: 0 auto;
-    background-color: #f8f8f8;
-    padding: 25px;
-    border-radius: 12px;
 }
 
 .presence-table {
@@ -35,95 +40,107 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 10px;
+    background: #fff;
+    padding: 18px 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    font-family: 'Reddit Sans', sans-serif;
 }
 
 .etudiant-info {
     display: flex;
     align-items: center;
     gap: 15px;
-    flex: 1;
 }
 
 .etudiant-photo {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
-    border: 2px solid #ccc;
+    border-radius: 50%;
 }
 
 .etudiant-nom {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 16px;
-    color: #0a0a37;
+    color: #1B1C3A;
 }
 
+/* Boutons de statut */
 .statut-buttons {
     display: flex;
-    gap: 10px;
+    gap: 12px;
 }
 
-.checkbox-statut {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.statut-carre {
+    display: inline-block;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background-color: #888;
+    border-radius: 8px;
     cursor: pointer;
-    font-family: 'Reddit Sans', sans-serif;
+    user-select: none;
+    font-family: 'Poppins', sans-serif;
+    transition: 0.2s ease-in-out;
+    border: 2px solid transparent;
 }
 
-.checkbox-statut input[type="radio"] {
-    accent-color: #0a0a37;
-    cursor: pointer;
+.statut-carre input[type="radio"] {
+    display: none;
 }
 
-/* Couleurs des statuts */
-.present {
-    background-color: #c6f7d0;
-    color: #0a7a35;
-    padding: 5px 10px;
-    border-radius: 5px;
+.statut-carre.présent {
+    background-color: #28a745;
 }
 
-.absent {
-    background-color: #ffe0e0;
-    color: #a30000;
-    padding: 5px 10px;
-    border-radius: 5px;
+.statut-carre.retard {
+    background-color: #fd7e14;
 }
 
-.retard {
-    background-color: #fff2cc;
-    color: #a36d00;
-    padding: 5px 10px;
-    border-radius: 5px;
+.statut-carre.absent {
+    background-color: #dc3545;
 }
 
-.no-student {
-    text-align: center;
-    font-style: italic;
-    color: #777;
+.statut-carre input[type="radio"]:checked + label,
+.statut-carre:has(input[type="radio"]:checked) {
+    border: 2px solid #0a0a37;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
 }
 
+/* Actions */
 .form-actions {
-    margin-top: 30px;
     text-align: center;
+    margin-top: 40px;
 }
 
 .btn-submit {
     background-color: #0a0a37;
-    color: white;
+    color: #fff;
+    padding: 14px 28px;
     border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Reddit Sans', sans-serif;
     cursor: pointer;
-    font-size: 15px;
-    transition: background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .btn-submit:hover {
-    background-color: #111152;
+    background-color: #FF0047;
+    transform: scale(1.05);
+}
+
+.no-student {
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 15px;
+    margin-top: 20px;
 }

@@ -5,53 +5,49 @@
 @vite(['resources/css/coordinateur/seance/seanceindex.css'])
 
 @section('content')
-    <h2 class="title-users">Liste des séances</h2>
+    <h1 class="title-users"><i class="bi bi-easel2"></i> Liste des séances</h1>
 
-    {{-- Message --}}
+    {{-- Messages --}}
     @if (session('success'))
-        <div class="alert-success">{{ session('success') }}</div>
+        <div class="alert-success" role="alert">{{ session('success') }}</div>
     @endif
 
-    {{-- Message --}}
     @if (session('error'))
-        <div class="alert-error">{{ session('error') }}</div>
+        <div class="alert-error" role="alert">{{ session('error') }}</div>
     @endif
 
-  
-    <a href="{{ route('coordinateur.seances.create') }}" class="btn-create">
+    <a href="{{ route('coordinateur.seances.create') }}" class="btn-create" title="Ajouter une nouvelle séance">
         <i class="bi bi-plus-lg"></i> Ajouter une séance
     </a>
 
-    {{-- Filtres --}}
+
     <form method="GET" action="{{ route('coordinateur.seances.index') }}">
         <div class="form-filters">
-            {{-- Filtre Classe --}}
+
             <div>
                 <label for="classe_id">Classe :</label>
                 <select name="classe_id" id="classe_id">
                     <option value="">-- Toutes --</option>
-                    @foreach ($classes as $c)
-                        <option value="{{ $c->id }}" {{ request('classe_id') == $c->id ? 'selected' : '' }}>
-                            {{ $c->classe->nom }}
+                    @foreach ($classes as $classe)
+                        <option value="{{ $classe->id }}" {{ request('classe_id') == $classe->id ? 'selected' : '' }}>
+                            {{ $classe->classe->nom }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            {{-- Filtre Matière --}}
             <div>
                 <label for="matiere_id">Matière :</label>
                 <select name="matiere_id" id="matiere_id">
                     <option value="">-- Toutes --</option>
-                    @foreach ($matieres as $m)
-                        <option value="{{ $m->id }}" {{ request('matiere_id') == $m->id ? 'selected' : '' }}>
-                            {{ $m->nom }}
+                    @foreach ($matieres as $matiere)
+                        <option value="{{ $matiere->id }}" {{ request('matiere_id') == $matiere->id ? 'selected' : '' }}>
+                            {{ $matiere->nom }}
                         </option>
                     @endforeach
                 </select>
             </div>
 
-            {{-- Filtre Statut --}}
             <div>
                 <label for="statut_id">Statut :</label>
                 <select name="statut_id" id="statut_id">
@@ -64,7 +60,6 @@
                 </select>
             </div>
 
-            {{-- Filtre Date --}}
             <div>
                 <label for="date">Date :</label>
                 <input type="date" name="date" value="{{ request('date') }}">
@@ -72,11 +67,10 @@
         </div>
 
         <div class="filter-buttons">
-            <button type="submit" class="btn-filter">
-                <i class="bi bi-funnel-fill"></i> Filtrer
+            <button type="submit" class="btn-filter" title="Appliquer les filtres">
+                Filtrer
             </button>
-
-            <a href="{{ route('coordinateur.seances.index') }}" class="btn-reset">
+            <a href="{{ route('coordinateur.seances.index') }}" class="btn-reset" title="Réinitialiser les filtres">
                 <i class="bi bi-arrow-clockwise"></i> Réinitialiser
             </a>
         </div>
@@ -84,58 +78,54 @@
 
     {{-- Tableau --}}
     <div class="table-container">
-        <table class="style-table">
+        <table class="style-table" aria-label="Liste des séances">
             <thead>
                 <tr>
-                    <th>Date</th>
-                    <th>Jour</th>
-                    <th>Heure</th>
-                    <th>Classe</th>
-                    <th>Matière</th>
-                    <th>Professeur</th>
-                    <th>Type</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Jour</th>
+                    <th scope="col">Heure</th>
+                    <th scope="col">Classe</th>
+                    <th scope="col">Matière</th>
+                    <th scope="col">Professeur</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($seances as $s)
+                @forelse ($seances as $seance)
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($s->date)->format('d/m/Y') }}</td>
-                        <td>{{ $s->jour_semaine }}</td>
-                        <td>{{ $s->heure_debut }} - {{ $s->heure_fin }}</td>
-                        <td>{{ $s->classeAnnee->classe->nom ?? 'N/A' }}</td>
-                        <td>{{ $s->matiere->nom ?? 'N/A' }}</td>
-                        <td>{{ $s->professeur->user->nom ?? '' }} {{ $s->professeur->user->prenom ?? '' }}</td>
-                        <td>{{ $s->typeCours->nom ?? 'N/A' }}</td>
-                        <td>{{ $s->statutSeance->nom ?? 'Non défini' }}</td>
+                        <td>{{ \Carbon\Carbon::parse($seance->date)->format('d/m/Y') }}</td>
+                        <td>{{ $seance->jour_semaine }}</td>
+                        <td>{{ $seance->heure_debut }} - {{ $seance->heure_fin }}</td>
+                        <td>{{ $seance->classeAnnee->classe->nom ?? 'N/A' }}</td>
+                        <td>{{ $seance->matiere->nom ?? 'N/A' }}</td>
+                        <td>{{ $seance->professeur->user->nom ?? '' }} {{ $seance->professeur->user->prenom ?? '' }}</td>
+                        <td>{{ $seance->typeCours->nom ?? 'N/A' }}</td>
+                        <td>{{ $seance->statutSeance->nom ?? 'Non défini' }}</td>
                         <td class="table-actions">
-                      
-                            @if($s->statutSeance && $s->statutSeance->nom === 'Annulée')
-                                <form action="{{ route('coordinateur.seances.destroy', $s->id) }}" method="POST">
+                            @if($seance->statutSeance && $seance->statutSeance->nom === 'Annulée')
+                                <form action="{{ route('coordinateur.seances.destroy', $seance->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-delete" onclick="return confirm('Supprimer cette séance annulée ?')">
+                                    <button type="submit" class="btn-delete" title="Supprimer" onclick="return confirm('Supprimer cette séance annulée ?')">
                                         <i class="bi bi-trash-fill"></i>
                                     </button>
                                 </form>
                             @else
-                           
-                                <a href="{{ route('coordinateur.seances.edit', $s->id) }}" class="btn-edit" title="Modifier">
+                                <a href="{{ route('coordinateur.seances.edit', $seance->id) }}" class="btn-edit" title="Modifier">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
 
-                        
-                                <form action="{{ route('coordinateur.seances.annuler', $s->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('coordinateur.seances.annuler', $seance->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn-delete" onclick="return confirm('Annuler cette séance ?')">
+                                    <button type="submit" class="btn-delete" title="Annuler" onclick="return confirm('Annuler cette séance ?')">
                                         <i class="bi bi-x-circle"></i>
                                     </button>
                                 </form>
 
-                       
-                                <a href="{{ route('coordinateur.seances.formulaire-report', $s->id) }}" class="btn-edit" title="Reporter">
+                                <a href="{{ route('coordinateur.seances.formulaire-report', $seance->id) }}" class="btn-edit" title="Reporter">
                                     <i class="bi bi-arrow-repeat"></i>
                                 </a>
                             @endif
@@ -148,5 +138,9 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="pagination-container">
+        {{ $seances->withQueryString()->links() }}
     </div>
 @endsection

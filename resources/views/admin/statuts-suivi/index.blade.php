@@ -3,41 +3,43 @@
 @section('title', 'Statuts de suivi')
 @section('header', 'Liste des statuts de suivi')
 
+@vite(['resources/css/admin/statutsuivi/statutsuiviindex.css'])
+
 @section('content')
-    @vite(['resources/css/admin/statutsuivi/statutsuiviindex.css'])
-
-    <div class="statut-suivi-container">
-        <h2 class="titre-page">Liste des statuts de suivi</h2>
-
-        {{-- Message --}}
-        @if(session('success'))
-            <div class="alerte-succes">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        {{-- Tableau --}}
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nom</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($statuts as $statut)
-                        <tr>
-                            <td>#{{ $statut->id }}</td>
-                            <td>{{ $statut->nom }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="2">Aucun statut enregistré.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+<div class="role-header">
+    <h1 class="title-roles"><i class="bi bi-graph-up"></i> Statuts de suivi</h1>
+</div>
+{{-- Message --}}
+@if(session('success'))
+    <div class="alert-success">
+        {{ session('success') }}
     </div>
+@endif
+{{-- Tableau --}}
+<div class="table-container">
+    <table class="style-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($statuts as $statut)
+                <tr>
+                    <td>#{{ $statut->id }}</td>
+                    <td>{{ $statut->nom }}</td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="2" class="text-center text-muted">Aucun statut enregistré.</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <div class="pagination-wrapper">
+        {{ $statuts->links() }}
+    </div>
+</div>
 @endsection

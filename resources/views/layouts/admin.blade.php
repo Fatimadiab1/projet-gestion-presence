@@ -46,13 +46,13 @@
                     présence</a>
                 <a href="{{ route('admin.statuts-suivi.index') }}"><i class="bi bi-clipboard-data"></i> Statut de
                     suivi</a>
-                        <a href="{{ route('admin.inscriptions.index') }}"><i class="bi bi-diagram-3"></i>Inscriptions</a>
+                <a href="{{ route('admin.inscriptions.index') }}"><i class="bi bi-diagram-3"></i>Inscriptions</a>
                 <a href="{{ route('admin.suivi-etudiants.index') }}"><i class="bi bi-person-check-fill"></i> Suivi des
                     étudiants</a>
-            
-               <a href="{{ route('admin.inscriptions.non_reinscrits') }}">
-    <i class="bi bi-exclamation-triangle"></i> Non inscrits / Réinscrire
-</a>
+
+                <a href="{{ route('admin.inscriptions.non_reinscrits') }}">
+                    <i class="bi bi-exclamation-triangle"></i> Non inscrits / Réinscrire
+                </a>
 
             </nav>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
@@ -93,6 +93,7 @@
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         }
     </script>
+    @yield('scripts')
 </body>
 
 </html>

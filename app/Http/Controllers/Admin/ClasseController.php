@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Classe;
 use Illuminate\Http\Request;
+use App\Models\Classe;
 
 class ClasseController extends Controller
 {
     // Afficher la liste des classes
     public function index()
     {
-        $classes = Classe::orderByDesc('created_at')->get();
+        $classes = Classe::orderBy('nom')->paginate(10); 
         return view('admin.typeclasse.index', compact('classes'));
     }
 
-    // Creer une classe
+    // Créer une classe
     public function create()
     {
         return view('admin.typeclasse.create');
@@ -41,7 +41,7 @@ class ClasseController extends Controller
         return view('admin.typeclasse.edit', compact('classe'));
     }
 
-    // Mise à jour d'une classe
+    // Mettre à jour une classe
     public function update(Request $request, Classe $classe)
     {
         $request->validate([
@@ -59,7 +59,6 @@ class ClasseController extends Controller
     public function destroy(Classe $classe)
     {
         $classe->delete();
-
         return redirect()->route('admin.typeclasse.index')->with('success', 'Classe supprimée.');
     }
 }

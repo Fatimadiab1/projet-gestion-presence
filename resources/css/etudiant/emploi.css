@@ -1,0 +1,59 @@
+.title-users {
+    text-align: center;
+    font-size: 24px;
+    color: #0a0a37;
+    margin-bottom: 25px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.alert-error {
+    background-color: #ffe6e6;
+    color: #cc0033;
+    border: 1px solid #cc0033;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 10px auto;
+    max-width: 800px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.no-seance {
+    text-align: center;
+    font-family: 'Reddit Sans', sans-serif;
+    color: #444;
+    font-size: 16px;
+}
+
+.emploi-table {
+    width: 95%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.emploi-table th, .emploi-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.emploi-table th {
+    background-color: #0a0a37;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.emploi-table tr:hover {
+    background-color: #f7f7f7;
+}
+
+.emploi-table td {
+    color: #333;
+    font-size: 15px;
+}

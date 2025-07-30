@@ -1,0 +1,135 @@
+.dashboard-parent {
+    padding: 20px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.header-dashboard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f2f2f2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 2px 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.date-du-jour {
+    color: #0a0c3c;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.message-bienvenue {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.accent {
+    color: #FF0047;
+}
+
+.sous-message {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.image-bienvenue {
+    width: 180px;
+}
+
+.fiche-identite p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+.stat-card h2 {
+    font-size: 35px;
+    margin-bottom: 10px;
+    color: #0a0c3c;
+}
+
+.stat-card p {
+    font-size: 18px;
+    color: #0a0c3c;
+}
+
+.stat-card:hover {
+    background-color: #0a0c3c;
+}
+
+.stat-card:hover h2,
+.stat-card:hover p {
+    color: white;
+}
+
+.stat-card .icon {
+    font-size: 35px;
+    color: #FF0047;
+    margin-bottom: 10px;
+}
+
+.popup-alert {
+    position: fixed;
+    top: 60px;
+    right: 30px;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background-color: #fff3f3;
+    border: 1px solid #e74c3c;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-family: 'Reddit Sans', sans-serif;
+}
+
+.popup-alert h3 {
+    color: #a30000;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.popup-alert ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.popup-alert ul li {
+    padding: 5px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.popup-alert button {
+    background-color: #FF0047;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    float: right;
+}
+
+.popup-alert button:hover {
+    background-color: #cc0039;
+}

@@ -8,10 +8,10 @@ use App\Models\AnneeAcademique;
 
 class AnneeAcademiqueController extends Controller
 {
-    // Afficher la liste des années académiques
+    // Liste des années académiques
     public function index()
     {
-        $annees = AnneeAcademique::orderBy('created_at', 'desc')->get();
+        $annees = AnneeAcademique::orderBy('created_at', 'desc')->paginate(8);
 
         return view('admin.annees-academiques.index', compact('annees'));
     }
@@ -25,62 +25,51 @@ class AnneeAcademiqueController extends Controller
     // Enregistrer une année académique
     public function store(Request $request)
     {
-
         $request->validate([
-            'annee' => 'required|unique:annees_academiques,annee', 
+            'annee' => 'required|unique:annees_academiques,annee',
             'date_debut' => 'required|date',
-            'date_fin' => 'required|date|after:date_debut', 
-
-        ]);
-        AnneeAcademique::create([
-            'annee' => $request->annee,
-            'date_debut' => $request->date_debut,
-            'date_fin' => $request->date_fin,
+            'date_fin' => 'required|date|after:date_debut',
         ]);
 
-        return redirect()->route('admin.annees-academiques.index')->with('success', 'Année ajoutée.');
+        AnneeAcademique::create($request->only(['annee', 'date_debut', 'date_fin']));
+
+        return redirect()->route('admin.annees-academiques.index')->with('success', 'Année ajoutée avec succès.');
     }
 
-    // Modifer une année académique
+    // Modifier une année académique
     public function edit(AnneeAcademique $annee)
     {
         return view('admin.annees-academiques.edit', compact('annee'));
     }
 
-    // Mise a jour d'une année académique
+    // Mettre à jour une année académique
     public function update(Request $request, AnneeAcademique $annee)
     {
-
         $request->validate([
             'annee' => 'required|unique:annees_academiques,annee,' . $annee->id,
             'date_debut' => 'required|date',
             'date_fin' => 'required|date|after:date_debut',
         ]);
 
-        $annee->update([
-            'annee' => $request->annee,
-            'date_debut' => $request->date_debut,
-            'date_fin' => $request->date_fin,
-        ]);
+        $annee->update($request->only(['annee', 'date_debut', 'date_fin']));
 
-        return redirect()->route('admin.annees-academiques.index')->with('success', 'Année mise à jour.');
+        return redirect()->route('admin.annees-academiques.index')->with('success', 'Année mise à jour avec succès.');
     }
 
-    // Supprimer une année académique
+    // Supprimer une année
     public function destroy(AnneeAcademique $annee)
     {
         $annee->delete();
-
         return redirect()->route('admin.annees-academiques.index')->with('success', 'Année supprimée.');
     }
-    
+
+    // Activer une année
     public function activer(AnneeAcademique $annee)
-{
-    AnneeAcademique::where('est_active', true)->update(['est_active' => false]);
+    {
+        AnneeAcademique::where('est_active', true)->update(['est_active' => false]);
+        $annee->update(['est_active' => true]);
 
-    $annee->update(['est_active' => true]);
-    return redirect()->route('admin.annees-academiques.index')
-        ->with('success', "L'année {$annee->annee} est maintenant l'année en cours.");
-}
-
+        return redirect()->route('admin.annees-academiques.index')
+            ->with('success', "L'année {$annee->annee} est maintenant active.");
+    }
 }

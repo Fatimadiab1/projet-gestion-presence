@@ -12,7 +12,6 @@ use App\Models\Classe;
 
 class InscriptionController extends Controller
 {
-    // Afficher la liste des inscriptions
     public function index(Request $request)
     {
         $classes = Classe::orderBy('nom')->get();
@@ -21,13 +20,17 @@ class InscriptionController extends Controller
         $classe_id = $request->classe_id;
         $annee_id = $request->annee_id;
 
-        $classeAnnees = ClasseAnnee::when($classe_id, function ($filtre) use ($classe_id) {
-                $filtre->where('classe_id', $classe_id);
-            })
-            ->when($annee_id, function ($filtre) use ($annee_id) {
-                $filtre->where('annee_academique_id', $annee_id);
-            })
-            ->pluck('id');
+        $classeAnnees = ClasseAnnee::query();
+
+        if ($classe_id) {
+            $classeAnnees->where('classe_id', $classe_id);
+        }
+
+        if ($annee_id) {
+            $classeAnnees->where('annee_academique_id', $annee_id);
+        }
+
+        $classeAnneesIds = $classeAnnees->pluck('id');
 
         $inscriptions = Inscription::with([
                 'etudiant.user',
@@ -35,13 +38,19 @@ class InscriptionController extends Controller
                 'classeAnnee.anneeAcademique',
                 'suivis.statutSuivi'
             ])
-            ->whereIn('classe_annee_id', $classeAnnees)
+            ->whereIn('classe_annee_id', $classeAnneesIds)
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10); 
 
-        return view('admin.inscriptions.index', compact('inscriptions', 'classes', 'annees', 'classe_id', 'annee_id'));
+        return view('admin.inscriptions.index', compact(
+            'inscriptions',
+            'classes',
+            'annees',
+            'classe_id',
+            'annee_id'
+        ));
     }
-    // Créer une inscription
+
     public function create()
     {
         $etudiants = Etudiant::with('user')->get();
@@ -49,7 +58,7 @@ class InscriptionController extends Controller
 
         return view('admin.inscriptions.create', compact('etudiants', 'classesAnnees'));
     }
-    // Enregistrer une inscription
+
     public function store(Request $request)
     {
         $request->validate([
@@ -71,7 +80,7 @@ class InscriptionController extends Controller
 
         return redirect()->route('admin.inscriptions.index')->with('success', 'Inscription créée avec succès.');
     }
-    // Modifier une inscription
+
     public function edit(Inscription $inscription)
     {
         $etudiants = Etudiant::with('user')->get();
@@ -79,7 +88,7 @@ class InscriptionController extends Controller
 
         return view('admin.inscriptions.edit', compact('inscription', 'etudiants', 'classesAnnees'));
     }
-    // Mettre à jour une inscription
+
     public function update(Request $request, Inscription $inscription)
     {
         $request->validate([
@@ -92,13 +101,14 @@ class InscriptionController extends Controller
 
         return redirect()->route('admin.inscriptions.index')->with('success', 'Inscription mise à jour.');
     }
-    // Supprimer une inscription
+
     public function destroy(Inscription $inscription)
     {
         $inscription->delete();
+
         return redirect()->route('admin.inscriptions.index')->with('success', 'Inscription supprimée.');
     }
-    // Réinscrire un étudiant
+
     public function reinscrire($etudiant_id)
     {
         $etudiant = Etudiant::with('user')->findOrFail($etudiant_id);
@@ -106,7 +116,7 @@ class InscriptionController extends Controller
 
         return view('admin.inscriptions.reinscrire', compact('etudiant', 'classesAnnees'));
     }
-    // Enregistrer la réinscription d'un étudiant
+
     public function reinscrireStore(Request $request, $etudiant_id)
     {
         $request->validate([
@@ -131,7 +141,7 @@ class InscriptionController extends Controller
 
         return redirect()->route('admin.inscriptions.index')->with('success', 'Étudiant réinscrit avec succès.');
     }
-    // Afficher les étudiants non réinscrits
+
     public function nonReinscrits(Request $request)
     {
         $annees = AnneeAcademique::orderByDesc('date_debut')->get();

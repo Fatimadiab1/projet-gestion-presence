@@ -4,10 +4,10 @@
 @vite('resources/css/professeur/seance.css')
 
 @section('content')
-    <h2 class="title-users">Mes séances</h2>
+    <h1 class="title-users">Mes séances</h1>
 
     {{-- Formulaire de filtres --}}
-    <form method="GET" class="form-filters" style="margin-bottom: 20px;">
+    <form method="GET" class="form-filters">
         <label for="date">Date :</label>
         <input type="date" name="date" value="{{ request('date') }}">
 
@@ -21,35 +21,46 @@
             @endforeach
         </select>
 
-        <button type="submit">Filtrer</button>
-      <a href="{{ route('professeur.seances.index') }}" class="reset-link">Réinitialiser</a>
+        <div class="filter-buttons">
+            <button type="submit" class="btn-filter">
+                <i class="fas fa-filter"></i> Filtrer
+            </button>
+            <a href="{{ route('professeur.seances.index') }}" class="btn-reset">
+                <i class="fas fa-undo"></i> Réinitialiser
+            </a>
+        </div>
     </form>
 
     {{-- Tableau --}}
     @if($seances->isEmpty())
         <p>Aucune séance trouvée.</p>
     @else
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Heure</th>
-                    <th>Classe</th>
-                    <th>Matière</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($seances as $seance)
+        <div class="table-container">
+            <table class="style-table">
+                <thead>
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($seance->date)->format('d/m/Y') }}</td>
-                        <td>{{ $seance->heure_debut }} - {{ $seance->heure_fin }}</td>
-                        <td>{{ $seance->classeAnnee->classe->nom ?? '-' }}</td>
-                        <td>{{ $seance->matiere->nom ?? '-' }}</td>
-                        <td>{{ $seance->typeCours->nom ?? '-' }}</td>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Classe</th>
+                        <th>Matière</th>
+                        <th>Type</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach($seances as $seance)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($seance->date)->format('d/m/Y') }}</td>
+                            <td>{{ $seance->heure_debut }} - {{ $seance->heure_fin }}</td>
+                            <td>{{ $seance->classeAnnee->classe->nom ?? '-' }}</td>
+                            <td>{{ $seance->matiere->nom ?? '-' }}</td>
+                            <td>{{ $seance->typeCours->nom ?? '-' }}</td>
+                        </tr>
+                    @endforeach
+                    <div class="pagination-box">
+                        {{ $seances->links() }}
+                    </div>
+                </tbody>
+            </table>
+        </div>
     @endif
 @endsection

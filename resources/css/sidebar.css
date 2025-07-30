@@ -171,6 +171,7 @@ body {
     gap: 40px;
 }
 
+
 /* responsive */
 @media (max-width: 768px) {
     .sidebar {
@@ -213,4 +214,4 @@ body {
     .search-form input {
         width: 100%;
     }
-}
+} 

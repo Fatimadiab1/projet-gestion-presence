@@ -35,7 +35,7 @@ class ProfesseurSeanceController extends Controller
         }
 
  
-        $seances = $seances->orderByDesc('date')->get();
+      $seances = $seances->orderByDesc('date')->paginate(5);
 
         return view('professeur.seances.index', [
             'seances' => $seances,

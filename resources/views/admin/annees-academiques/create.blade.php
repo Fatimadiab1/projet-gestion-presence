@@ -6,10 +6,10 @@
 @section('content')
     @vite(['resources/css/admin/annee/anneeaction.css'])
 
-    <h2 class="form-title">Créer une année académique</h2>
-{{-- message --}}
+    <h1 class="form-title"><i class="bi bi-calendar-plus"></i> Créer une année académique</h1>
+{{-- Message --}}
     @if ($errors->any())
-        <div class="form-alert">
+        <div class="form-alert" role="alert">
             <ul>
                 @foreach ($errors->all() as $erreur)
                     <li>{{ $erreur }}</li>
@@ -22,14 +22,14 @@
         <form method="POST" action="{{ route('admin.annees-academiques.store') }}">
             @csrf
 
-            <label>Année</label>
-            <input type="text" name="annee" placeholder="ex : 2024-2025" value="{{ old('annee') }}" required>
+            <label for="annee">Année</label>
+            <input type="text" id="annee" name="annee" placeholder="ex : 2024-2025" value="{{ old('annee') }}" required>
 
-            <label>Date de début</label>
-            <input type="date" name="date_debut" value="{{ old('date_debut') }}" required>
+            <label for="date_debut">Date de début</label>
+            <input type="date" id="date_debut" name="date_debut" value="{{ old('date_debut') }}" required>
 
-            <label>Date de fin</label>
-            <input type="date" name="date_fin" value="{{ old('date_fin') }}" required>
+            <label for="date_fin">Date de fin</label>
+            <input type="date" id="date_fin" name="date_fin" value="{{ old('date_fin') }}" required>
 
             <button type="submit">Ajouter</button>
         </form>

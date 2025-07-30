@@ -1,7 +1,8 @@
 @extends('layouts.coordinateur')
 
 @section('title', 'Taux de présence par classe')
-@vite('resources/css/statistique/presence.css')
+
+
 @section('content')
     <h2 class="title-users">Taux de présence par classe</h2>
 

@@ -4,21 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\{
-    Classe,
-    Matiere,
-    User,
-    Role,
-    Etudiant,
-    Professeur,
-    ParentModel,
-    Coordinateur,
-    AnneeAcademique
-};
+use App\Models\Classe;
+use App\Models\Matiere;
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Etudiant;
+use App\Models\Professeur;
+use App\Models\ParentModel;
+use App\Models\Coordinateur;
+use App\Models\AnneeAcademique;
 
 class AdminController extends Controller
 {
-    public function index(Request $requete)
+    
+    public function index(Request $request)
     {
         $nombreClasses       = Classe::count();
         $nombreMatieres      = Matiere::count();
@@ -28,16 +27,9 @@ class AdminController extends Controller
         $nombreCoordinateurs = Coordinateur::count();
         $nombreUtilisateurs  = User::count();
 
-        $listeRoles = Role::all();
-
-
-        $filtre = $requete->input('filtre_role');
-        $utilisateurs = $filtre
-            ? User::where('role_id', $filtre)->get()
-            : User::all();
-
+        $listeRoles    = Role::withCount('users')->get();
         $anneeActuelle = AnneeAcademique::where('est_active', true)->first();
-
+        $utilisateurs  = User::with('role')->orderBy('created_at', 'desc')->take(3)->get();
 
         return view('admin.dashboard', compact(
             'nombreClasses',

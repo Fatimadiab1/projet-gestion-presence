@@ -11,11 +11,9 @@
 @if(session('success'))
     <div class="alert-success">{{ session('success') }}</div>
 @endif
-
 @if(session('error'))
     <div class="alert-error">{{ session('error') }}</div>
 @endif
-
 @if($errors->any())
     <div class="alert-error">
         <ul>
@@ -26,37 +24,43 @@
     </div>
 @endif
 
-{{-- Formulaire --}}
+{{-- Filtres --}}
 <form method="GET" class="form-filters">
-    <label for="classe_id">Classe :</label>
-    <select name="classe_id" onchange="this.form.submit()">
-        <option value="">-- Choisir une classe --</option>
-        @foreach ($classes as $classe)
-            <option value="{{ $classe->id }}" {{ $classeId == $classe->id ? 'selected' : '' }}>
-                {{ $classe->classe->nom }}
-            </option>
-        @endforeach
-    </select>
+    <fieldset>
+        <legend>Filtrer les résultats</legend>
 
-    <label for="matiere_id">Matière :</label>
-    <select name="matiere_id" onchange="this.form.submit()">
-        <option value="">-- Choisir une matière --</option>
-        @foreach ($matieres as $matiere)
-            <option value="{{ $matiere->id }}" {{ $matiereId == $matiere->id ? 'selected' : '' }}>
-                {{ $matiere->nom }}
-            </option>
-        @endforeach
-    </select>
+        <label for="classe_id">Classe :</label>
+        <select name="classe_id" id="classe_id">
+            <option value="">-- Choisir une classe --</option>
+            @foreach ($classes as $classe)
+                <option value="{{ $classe->id }}" {{ $classeId == $classe->id ? 'selected' : '' }}>
+                    {{ $classe->classe->nom }}
+                </option>
+            @endforeach
+        </select>
 
-    <label for="trimestre_id">Trimestre :</label>
-    <select name="trimestre_id" onchange="this.form.submit()">
-        <option value="">-- Choisir un trimestre --</option>
-        @foreach ($trimestres as $t)
-            <option value="{{ $t->id }}" {{ $trimestreId == $t->id ? 'selected' : '' }}>
-                {{ $t->nom }}
-            </option>
-        @endforeach
-    </select>
+        <label for="matiere_id">Matière :</label>
+        <select name="matiere_id" id="matiere_id">
+            <option value="">-- Choisir une matière --</option>
+            @foreach ($matieres as $matiere)
+                <option value="{{ $matiere->id }}" {{ $matiereId == $matiere->id ? 'selected' : '' }}>
+                    {{ $matiere->nom }}
+                </option>
+            @endforeach
+        </select>
+
+        <label for="trimestre_id">Trimestre :</label>
+        <select name="trimestre_id" id="trimestre_id">
+            <option value="">-- Choisir un trimestre --</option>
+            @foreach ($trimestres as $t)
+                <option value="{{ $t->id }}" {{ $trimestreId == $t->id ? 'selected' : '' }}>
+                    {{ $t->nom }}
+                </option>
+            @endforeach
+        </select>
+
+        <button type="submit">Filtrer</button>
+    </fieldset>
 </form>
 
 {{-- Résultats --}}

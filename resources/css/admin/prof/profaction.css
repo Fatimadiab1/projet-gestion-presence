@@ -1,18 +1,16 @@
-/* Formulaire */
 .form-title {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: bold;
     color: #151836;
     margin-bottom: 30px;
     font-family: 'Reddit Sans', sans-serif;
-    text-align: center;
 }
 
 .form-alert {
     background-color: #fde2e2;
     color: #9d1c1c;
     border: 1px solid #f5c2c2;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border-radius: 8px;
     margin: 0 auto 20px;
     max-width: 500px;
@@ -20,12 +18,12 @@
 }
 
 .formulaire-container {
-    background-color: #fff;
-    padding: 20px;
+    background-color: white;
+    padding: 25px;
     max-width: 500px;
     margin: 0 auto;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     font-family: 'Reddit Sans', sans-serif;
 }
 
@@ -39,22 +37,26 @@
 .formulaire-container input[type="text"],
 .formulaire-container select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px;
     margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
 }
 
+.formulaire-container input:disabled {
+    background-color: #f1f1f1;
+    color: #555;
+}
+
 .formulaire-container button {
     background-color: #151836;
     color: white;
-    padding: 10px 16px;
+    padding: 12px;
     border: none;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
-    display: block;
     width: 100%;
     transition: background-color 0.3s ease;
 }
